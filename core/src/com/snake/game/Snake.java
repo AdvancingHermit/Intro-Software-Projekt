@@ -32,7 +32,7 @@ public class Snake {
      }
 
 
-    private void move() {
+    public void move() {
         if (Gdx.input.isKeyPressed(keys[0]) && vel.equals(new Vector(0, 1)) ) { //Default W
             vel = new Vector(0, -1);
         }
