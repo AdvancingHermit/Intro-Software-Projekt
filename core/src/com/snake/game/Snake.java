@@ -33,16 +33,16 @@ public class Snake {
 
 
     public void move() {
-        if (Gdx.input.isKeyPressed(keys[0]) && vel.equals(new Vector(0, 1)) ) { //Default W
+        if (Gdx.input.isKeyPressed(keys[0]) && !vel.equals(new Vector(0, 1)) ) { //Default W
             vel = new Vector(0, -1);
         }
-        if (Gdx.input.isKeyPressed(keys[1]) && vel.equals( new Vector(1, 0))) { //Default A
+        if (Gdx.input.isKeyPressed(keys[1]) && !vel.equals( new Vector(1, 0))) { //Default A
             vel = new Vector(-1, 0);
         }
-        if (Gdx.input.isKeyPressed(keys[2]) && vel.equals(new Vector(0, -1))) { //Default S
+        if (Gdx.input.isKeyPressed(keys[2]) && !vel.equals(new Vector(0, -1))) { //Default S
             vel = new Vector(0, 1);
         }
-        if (Gdx.input.isKeyPressed(keys[3]) && vel.equals(new Vector(-1, 0))) { //Default D
+        if (Gdx.input.isKeyPressed(keys[3]) && !vel.equals(new Vector(-1, 0))) { //Default D
             vel = new Vector(1, 0);
         }
         positions.add(positions.get(positions.size()-1).add(vel));
