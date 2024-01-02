@@ -1,9 +1,15 @@
+package com.snake.game.util;
+
 public class Vector{
     public int x;
     public int y;
 
-    Vector(int x, int y){
+    public Vector(int x, int y){
         this.x = x;
         this.y = y;
+    }
+
+    public Vector add(Vector other) {
+        return new Vector(x + other.x, y + other.y);
     }
 }
