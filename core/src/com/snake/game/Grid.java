@@ -28,8 +28,8 @@ public class Grid {
             for(int j = 0; j < bodies[i].length; j++){
                 bodies[i][j] = new Rectangle();
                 System.out.println(i + " hello " + j);
-                bodies[i][j].x = snakes[i].getPositions().get(j).x + i * snakeSize;
-                bodies[i][j].y = snakes[i].getPositions().get(j).y + j * snakeSize;
+                bodies[i][j].x = snakes[i].getPositions().get(j).x + i * snakeSize + 1;
+                bodies[i][j].y = snakes[i].getPositions().get(j).y + 1;
             }
         }
         return bodies;
