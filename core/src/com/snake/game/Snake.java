@@ -13,10 +13,11 @@ public class Snake {
     private boolean hasEaten;
 
 
+
     public Snake(int x, int y) {
         Vector pos = new Vector(x / 2, y / 2);
         positions = new ArrayList<Vector>();
-        for (int i = 4; i >= 0; i--) {
+        for (int i = 150; i >= 0; i--) {
             Vector position = new Vector(pos.x, pos.y-i);
             this.positions.add(position);
         }
@@ -54,9 +55,22 @@ public class Snake {
         
     }
 
+    public boolean checkCollision() {
+        for (int i = 0; i > positions.size() -1; i++) {
+            if (positions.get(positions.size() -1).equals(positions.get(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean checkCollision(Vector pos) {
+        return positions.get(positions.size()-1).equals(pos);
+    }
+
     public void setHasEaten() {
         this.hasEaten = true;
     }
+
     public ArrayList<Vector> getPositions(){
         return positions;
     }
