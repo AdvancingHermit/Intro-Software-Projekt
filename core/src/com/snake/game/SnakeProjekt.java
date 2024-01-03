@@ -46,11 +46,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		grid = new Grid(gridsize, snakeAmount);
 		shape = new ShapeRenderer();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1920, 1080);
+		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(1920, 1080, camera);
 		Fruit apple = new Fruit(new Vector(100, 100), appleSprite);
 		// fruits.add(apple);
-
 
 	}
 
@@ -137,11 +136,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
-
 				shape.begin(ShapeType.Filled);
-				shape.rect(viewport.getWorldWidth()/2-100, viewport.getWorldHeight()/2-100, 200, 200);
-				if (Gdx.input.getX() >=  viewport.getWorldWidth()/2-100 && Gdx.input.getX() <=  viewport.getWorldWidth()/2+100 
-				&& 	Gdx.input.getY() <= viewport.getWorldHeight()/2+100 && 	Gdx.input.getY() >= viewport.getWorldHeight()/2-100 && Gdx.input.isButtonPressed(Input.Buttons.LEFT) ){
+				shape.rect(viewport.getScreenWidth() / 2 - 100, viewport.getScreenHeight() / 2 - 100, 200, 200);
+				
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+					System.out.println(viewport.getScreenHeight()  +" || " + viewport.getScreenWidth() );
+					System.out.println(Gdx.input.getY() +" " + Gdx.input.getX());
+				}
+				if (Gdx.input.getX() >= viewport.getScreenWidth() / 2 - 100
+						&& Gdx.input.getX() <= viewport.getScreenWidth() / 2 + 100
+						&& Gdx.input.getY() <= viewport.getScreenHeight() / 2 + 100
+						&& Gdx.input.getY() >= viewport.getScreenHeight() / 2 - 100
+						&& Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 					currentSceen = Scene.Main_Game;
 				}
 				shape.end();
