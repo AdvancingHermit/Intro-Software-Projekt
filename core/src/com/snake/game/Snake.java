@@ -97,7 +97,7 @@ public class Snake {
     }
 
     public boolean checkCollision(Vector pos) {
-        return positions.get(positions.size() - 1).equals(pos);
+        return (positions.get(positions.size() - 1)).equals(pos);
     }
 
     public void setHasEaten() {

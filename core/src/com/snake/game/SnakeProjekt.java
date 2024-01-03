@@ -1,6 +1,7 @@
 package com.snake.game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.lang.String;
@@ -27,7 +28,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	Scene currentSceen = Scene.Main_Scene;
-	final private int gridsize = 20;
+	final private int gridsize = 18;
 	final private int snakeAmount = 1;
 	SpriteBatch batch;
 	Texture img;
@@ -45,7 +46,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		img = new Texture("badlogic.jpg");
-		grid = new Grid(gridsize, snakeAmount);
+		grid = new Grid(gridsize, snakeAmount, Gdx.graphics.getHeight());
 		shape = new ShapeRenderer();
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
@@ -100,18 +101,35 @@ public class SnakeProjekt extends ApplicationAdapter {
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 				ArrayList<Vector> positions = grid.snakes[0].getPositions();
 				batch.begin();
-
-				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f*viewport.getScreenHeight());
-
+				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f * viewport.getScreenHeight());
 				batch.end();
-                for (Rectangle[] rectangles : shower) {
-                    for (Rectangle rectangle : rectangles) {
 
-                        shape.setColor(Color.WHITE);
-                        shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
+				if (fruits.isEmpty()) {
+					int randx = random.nextInt(1, gridsize + 1);
+					int randy = random.nextInt(1, gridsize + 1);
+					for (Vector pos : grid.snakes[0].getPositions()) {
+						if (new Vector(randx, randy).equals(pos)) {
+							break;
+						}
+					}
+					//fruits.add(new Fruit(new Vector(randx, randy), appleSprite));
+				}
 
-                    }
-                }
+				for (Rectangle[] rectangles : shower) {
+					for (Rectangle rectangle : rectangles) {
+
+						shape.setColor(Color.WHITE);
+						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
+						if (fruits.isEmpty()) {
+							int randx = random.nextInt(1, gridsize) + 1;
+							int randy = random.nextInt(1, gridsize) + 1;
+							fruits.add(new Fruit(new Vector((int) ((rectangle.x - 960) + grid.squareSize * randx), (int) (rectangle.y - 600) + (grid.squareSize * randy)), appleSprite));
+						}
+
+
+
+					}
+				}
 				for (int k = 0; k < positions.size(); k++) {
 					int cx = positions.get(k).x;
 					int cy = positions.get(k).y;
@@ -134,31 +152,24 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				shape.end();
 
-				if (fruits.isEmpty()) {
-					int randx = random.nextInt(1, gridsize + 1) * 40;
-					int randy = randx + 40;
-					for (Vector pos : grid.snakes[0].getPositions()) {
-						if (new Vector(randx, randy).equals(pos)) {
-							break;
-						}
-					}
-					fruits.add(new Fruit(new Vector(randx, randy), appleSprite));
-				}
+
 
 				batch.begin();
-				// batch.draw(appleSprite, 195,135,90f,90f);
 				for (Fruit fruit : fruits) {
-					batch.draw(fruit.getSprite(), fruit.getPosition().x, fruit.getPosition().y, (float) 90, (float) 90);
+					batch.draw(fruit.getSprite(), fruit.getPosition().x, fruit.getPosition().y, grid.squareSize, grid.squareSize);
 				}
 
 				batch.end();
-				for (Fruit fruit : fruits) {
+				Iterator<Fruit> fruitIterator = fruits.iterator();
+				while (fruitIterator.hasNext()) {
+					Fruit fruit = fruitIterator.next();
 					if (grid.snakes[0].checkCollision(fruit.getPosition())) {
+						System.out.println("Nom nom");
 						// grid.snakes[0].setScore(grid.snakes[0].getScore + 1)
 						fruits.remove(fruit);
 					}
+					break;
 				}
-				break;
 		}
 	}
 
@@ -166,5 +177,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public void dispose() {
 		batch.dispose();
 		img.dispose();
+		shape.dispose();
+		appleSprite.dispose();
 	}
 }
