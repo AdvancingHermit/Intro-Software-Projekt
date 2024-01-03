@@ -3,6 +3,7 @@ package com.snake.game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.lang.String;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -33,7 +35,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	ShapeRenderer shape;
 	public static OrthographicCamera camera;
 	FitViewport viewport;
-
+	BitmapFont font;
 	Texture appleSprite;
 	List<Fruit> fruits = new ArrayList<>();
 	Random random = new Random();
@@ -48,6 +50,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(1920, 1080, camera);
+		font = new BitmapFont(); 
+
+		
 
 		Fruit apple = new Fruit(new Vector(100, 100), appleSprite);
 		// fruits.add(apple);
@@ -75,7 +80,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 				ArrayList<Vector> positions = grid.snakes[0].getPositions();
+				batch.begin();
 
+				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f*viewport.getScreenHeight());
+
+				batch.end();
 				for (int i = 0; i < shower.length; i++) {
 					for (int j = 0; j < shower[i].length; j++) {
 
