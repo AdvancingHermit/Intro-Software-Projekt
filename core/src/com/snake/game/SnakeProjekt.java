@@ -121,11 +121,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.setColor(Color.WHITE);
 						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 						if (fruits.isEmpty()) {
-							int randx = random.nextInt(1, gridsize) + 1;
-							int randy = random.nextInt(1, gridsize) + 1;
-							fruits.add(new Fruit(new Vector((int) ((rectangle.x - 960) + grid.squareSize * randx), (int) (rectangle.y - 600) + (grid.squareSize * randy)), appleSprite));
+							int randx = random.nextInt(1, gridsize);
+							int randy = random.nextInt(1, gridsize);
+							fruits.add(new Fruit(new Vector((int) ((rectangle.x - viewport.getScreenWidth()/2) + grid.squareSize * randx), (int) (rectangle.y - viewport.getScreenHeight()/2) + (grid.squareSize * randy)), appleSprite));
 						}
-
+ 
 
 
 					}
