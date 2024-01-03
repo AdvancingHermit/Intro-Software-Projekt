@@ -52,7 +52,7 @@ public class Snake {
             key = 'D';
         }
         if (counter % 30 == 0) {
-            
+
             switch (key) {
                 case ('W'):
                     vel = new Vector(0, 1);
@@ -71,7 +71,7 @@ public class Snake {
             positions.add(positions.get(positions.size() - 1).add(vel));
             if (checkCollision()) {
                 isDead = true;
-                positions.remove(positions.size()-1);
+                positions.remove(positions.size() - 1);
             }
             if (hasEaten) {
                 counter++;
@@ -84,7 +84,7 @@ public class Snake {
             }
 
         }
-        counter++;      
+        counter++;
     }
 
     public boolean checkCollision() {
@@ -111,9 +111,10 @@ public class Snake {
     public void setPositions(ArrayList<Vector> positions) {
         this.positions = positions;
     }
-    public double getScore(){
+
+    public double getScore() {
         System.out.println(startTime);
         System.out.println(System.currentTimeMillis());
-        return (double)(System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30;
+        return (double) (System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30;
     }
 }
