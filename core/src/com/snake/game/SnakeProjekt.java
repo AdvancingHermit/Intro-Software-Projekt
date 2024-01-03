@@ -64,6 +64,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Rectangle[][] shower = grid.show();
 		ArrayList<Vector> positions = grid.snakes[0].getPositions();
 
+
 		for (int i = 0; i < shower.length; i++) {
 			for (int j = 0; j < shower[i].length; j++) {
 
@@ -75,6 +76,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 		for (int k = 0; k < positions.size(); k++) {
 			int cx = positions.get(k).x;
 			int cy = positions.get(k).y;
+
+			if(cx == grid.gridSize || cx == -1){
+				//Skiftes til i, når vi looper over slanger.
+				cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize - Math.abs(cx);
+			}
+			if(cy == grid.gridSize || cy == -1){
+				//Skiftes til i, når vi looper over slanger.
+				cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize - Math.abs(cy);
+			}
+
 			if (k == positions.size()-1) {
 				shape.setColor(Color.BLACK);
 			} else {
@@ -82,9 +93,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 			}
 			shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.snakeSize, grid.snakeSize);
 		}
-		
-
-
 		shape.end();
 
 

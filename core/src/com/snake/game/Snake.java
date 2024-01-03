@@ -14,6 +14,8 @@ public class Snake {
     private boolean hasEaten;
     public boolean isDead;
     private int counter = 0;
+    private double startTime = System.currentTimeMillis();
+    private int fruitsEaten = 0;
 
     public Snake(int x, int y) {
         Vector pos = new Vector(x / 2, y / 2);
@@ -73,6 +75,7 @@ public class Snake {
             }
             if (hasEaten) {
                 counter++;
+                fruitsEaten++;
                 hasEaten = false;
                 return;
             }
@@ -81,10 +84,7 @@ public class Snake {
             }
 
         }
-        counter++;
-
-        
-
+        counter++;      
     }
 
     public boolean checkCollision() {
@@ -111,5 +111,9 @@ public class Snake {
     public void setPositions(ArrayList<Vector> positions) {
         this.positions = positions;
     }
-
+    public double getScore(){
+        System.out.println(startTime);
+        System.out.println(System.currentTimeMillis());
+        return (double)(System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30;
+    }
 }
