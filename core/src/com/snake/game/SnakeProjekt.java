@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -55,7 +56,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 	@Override
 	public void render() {
 		ScreenUtils.clear(0, 0, 1, 1);
-
+		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+			Gdx.app.exit();
+		}
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 
