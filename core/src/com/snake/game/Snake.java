@@ -90,6 +90,7 @@ public class Snake {
     public boolean checkCollision() {
         for (int i = 0; i < positions.size() - 1; i++) {
             if (positions.get(positions.size() - 1).equals(positions.get(i))) {
+                isDead = true;
                 return true;
             }
         }
@@ -112,7 +113,7 @@ public class Snake {
         this.positions = positions;
     }
 
-    public double getScore() {
-        return (double) (System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30;
+    public int getScore() {
+        return (int)((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
     }
 }

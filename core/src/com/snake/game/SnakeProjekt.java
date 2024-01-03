@@ -117,10 +117,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (cx == grid.gridSize || cx == -1) {
 						// Skiftes til i, når vi looper over slanger.
 						cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize - Math.abs(cx);
+						grid.snakes[0].checkCollision();
 					}
 					if (cy == grid.gridSize || cy == -1) {
 						// Skiftes til i, når vi looper over slanger.
 						cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize - Math.abs(cy);
+						grid.snakes[0].checkCollision();
 					}
 
 					if (k == positions.size() - 1) {
