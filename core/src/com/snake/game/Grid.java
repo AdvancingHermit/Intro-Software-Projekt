@@ -2,6 +2,8 @@ package com.snake.game;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.snake.game.Snake;
+import com.snake.game.util.Vector;
+
 import java.util.ArrayList;
 
 public class Grid {
@@ -28,11 +30,12 @@ public class Grid {
                 
             }
         }
-
+        double xOffset = (1920 / 2) - (snakeSize*gridSize*0.6);
+        double yOffset = (1080 / 2) - (snakeSize*gridSize* 0.6 );
         Rectangle[][] rects = new Rectangle[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
-                rects[i][j] = new Rectangle(i * snakeSize + i * 2, j * snakeSize + j * 2, snakeSize, snakeSize);
+                rects[i][j] = new Rectangle((int)(i * snakeSize*1.2 + xOffset), (int)(j * snakeSize*1.2 + yOffset), snakeSize, snakeSize);
             }
         }
         return rects;
