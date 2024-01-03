@@ -73,7 +73,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				shape.begin(ShapeType.Filled);
 
-				Rectangle[][] shower = grid.show();
+				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 				ArrayList<Vector> positions = grid.snakes[0].getPositions();
 
 				for (int i = 0; i < shower.length; i++) {
