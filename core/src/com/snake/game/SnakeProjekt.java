@@ -48,8 +48,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(1920, 1080, camera);
+
 		Fruit apple = new Fruit(new Vector(100, 100), appleSprite);
 		// fruits.add(apple);
+
 
 	}
 
