@@ -54,7 +54,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		ScreenUtils.clear(1, 0, 0, 1);
+		ScreenUtils.clear(0, 0, 1, 1);
 
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
@@ -87,11 +87,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		shape.end();
 
+
         if (fruits.isEmpty()){
 			int randx = random.nextInt(1, gridsize + 1) * 40;
 			int randy = randx + 40;
 			for (Vector pos : grid.snakes[0].getPositions()){
-				if (!new Vector(randx,randy).equals(pos)){
+				if (new Vector(randx,randy).equals(pos)){
 					break;
 				}
 			}
@@ -110,6 +111,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 
 		batch.end();
+		for (Fruit fruit : fruits) {
+			if (grid.snakes[0].checkCollision(fruit.getPosition())){
+			//	grid.snakes[0].setScore(grid.snakes[0].getScore + 1)
+				fruits.remove(fruit);
+			}
+		}
 
 	}
 
