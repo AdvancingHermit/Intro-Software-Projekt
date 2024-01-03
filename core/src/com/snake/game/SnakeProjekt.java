@@ -27,7 +27,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	Scene currentSceen = Scene.Main_Scene;
-	final private int gridsize = 20;
+	final private int gridsize = 50;
 	final private int snakeAmount = 1;
 	SpriteBatch batch;
 	Texture img;
@@ -45,18 +45,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		img = new Texture("badlogic.jpg");
-		grid = new Grid(gridsize, snakeAmount);
 		shape = new ShapeRenderer();
+		grid = new Grid(gridsize, snakeAmount,  Gdx.graphics.getHeight() );
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-		font = new BitmapFont(); 
-
 		
+		font = new BitmapFont();
 
 		Fruit apple = new Fruit(new Vector(100, 100), appleSprite);
 		// fruits.add(apple);
-
 
 	}
 
@@ -101,17 +99,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 				ArrayList<Vector> positions = grid.snakes[0].getPositions();
 				batch.begin();
 
-				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f*viewport.getScreenHeight());
+				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f * viewport.getScreenHeight());
 
 				batch.end();
-                for (Rectangle[] rectangles : shower) {
-                    for (Rectangle rectangle : rectangles) {
+				for (Rectangle[] rectangles : shower) {
+					for (Rectangle rectangle : rectangles) {
 
-                        shape.setColor(Color.WHITE);
-                        shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
+						shape.setColor(Color.WHITE);
+						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 
-                    }
-                }
+					}
+				}
 				for (int k = 0; k < positions.size(); k++) {
 					int cx = positions.get(k).x;
 					int cy = positions.get(k).y;
