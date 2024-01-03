@@ -77,11 +77,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
 				shape.rect(viewport.getScreenWidth() / 2 - 100, viewport.getScreenHeight() / 2 - 100, 200, 200);
-				
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-					System.out.println(viewport.getScreenHeight()  +" || " + viewport.getScreenWidth() );
-					System.out.println(Gdx.input.getY() +" " + Gdx.input.getX());
-				}
+
 				if (Gdx.input.getX() >= viewport.getScreenWidth() / 2 - 100
 						&& Gdx.input.getX() <= viewport.getScreenWidth() / 2 + 100
 						&& Gdx.input.getY() <= viewport.getScreenHeight() / 2 + 100

@@ -113,8 +113,6 @@ public class Snake {
     }
 
     public double getScore() {
-        System.out.println(startTime);
-        System.out.println(System.currentTimeMillis());
         return (double) (System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30;
     }
 }
