@@ -63,6 +63,29 @@ public class SnakeProjekt extends ApplicationAdapter {
 	@Override
 	public void render() {
 		switch (currentSceen) {
+			case Main_Scene:
+				ScreenUtils.clear(0, 0, 1, 1);
+				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+					Gdx.app.exit();
+				}
+				camera.update();
+				batch.setProjectionMatrix(camera.combined);
+				shape.begin(ShapeType.Filled);
+				shape.rect(viewport.getScreenWidth() / 2 - 100, viewport.getScreenHeight() / 2 - 100, 200, 200);
+				
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+					System.out.println(viewport.getScreenHeight()  +" || " + viewport.getScreenWidth() );
+					System.out.println(Gdx.input.getY() +" " + Gdx.input.getX());
+				}
+				if (Gdx.input.getX() >= viewport.getScreenWidth() / 2 - 100
+						&& Gdx.input.getX() <= viewport.getScreenWidth() / 2 + 100
+						&& Gdx.input.getY() <= viewport.getScreenHeight() / 2 + 100
+						&& Gdx.input.getY() >= viewport.getScreenHeight() / 2 - 100
+						&& Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+					currentSceen = Scene.Main_Game;
+				}
+				shape.end();
+				break;
 			case Main_Game:
 				ScreenUtils.clear(0, 0, 1, 1);
 				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -130,29 +153,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						fruits.remove(fruit);
 					}
 				}
-				break;
-			case Main_Scene:
-				ScreenUtils.clear(0, 0, 1, 1);
-				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-					Gdx.app.exit();
-				}
-				camera.update();
-				batch.setProjectionMatrix(camera.combined);
-				shape.begin(ShapeType.Filled);
-				shape.rect(viewport.getScreenWidth() / 2 - 100, viewport.getScreenHeight() / 2 - 100, 200, 200);
-				
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-					System.out.println(viewport.getScreenHeight()  +" || " + viewport.getScreenWidth() );
-					System.out.println(Gdx.input.getY() +" " + Gdx.input.getX());
-				}
-				if (Gdx.input.getX() >= viewport.getScreenWidth() / 2 - 100
-						&& Gdx.input.getX() <= viewport.getScreenWidth() / 2 + 100
-						&& Gdx.input.getY() <= viewport.getScreenHeight() / 2 + 100
-						&& Gdx.input.getY() >= viewport.getScreenHeight() / 2 - 100
-						&& Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-					currentSceen = Scene.Main_Game;
-				}
-				shape.end();
 				break;
 		}
 	}
