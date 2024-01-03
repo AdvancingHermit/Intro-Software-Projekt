@@ -27,7 +27,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	Scene currentSceen = Scene.Main_Scene;
-	final private int gridsize = 50;
+	final private int gridsize = 20;
 	final private int snakeAmount = 1;
 	SpriteBatch batch;
 	Texture img;

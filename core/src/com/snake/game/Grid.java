@@ -16,7 +16,7 @@ public class Grid {
     Grid(int gridSize, int snakeAmount, int screenHeight) {
         snakes = new Snake[snakeAmount];
         System.out.println(gridSize + " " + screenHeight);
-        squareSize = (screenHeight * 65) / 100 / gridSize;
+        squareSize = (screenHeight * 70) / 100 / gridSize;
         this.gridSize = gridSize;
         for (int i = 0; i < snakeAmount; i++) {
             snakes[i] = new Snake(gridSize, gridSize);
@@ -29,13 +29,13 @@ public class Grid {
                 snakes[i].move();
             }
         }
-        double xOffset = ((game_width / 2) - (squareSize*gridSize*0.6)) * 1000;
-        double yOffset = ((game_height / 2) - (squareSize*gridSize* 0.6 )) * 1000;
+        double xOffset = ((game_width / 2) - (squareSize*gridSize) / 2);
+        double yOffset = ((game_height / 2) - (squareSize*gridSize) / 2);
   
         Rectangle[][] rects = new Rectangle[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
-                rects[i][j] = new Rectangle((int)((i * squareSize * 1200 + xOffset) / 1000), (int)((j * squareSize * 1200 + yOffset) / 1000), squareSize, squareSize);
+                rects[i][j] = new Rectangle(i * squareSize + (int)xOffset, j * squareSize + (int)yOffset, squareSize, squareSize);
             }
         }
         return rects;
