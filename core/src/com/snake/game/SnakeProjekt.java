@@ -108,7 +108,7 @@ public class SnakeProjekt extends ApplicationAdapter {
                     for (Rectangle rectangle : rectangles) {
 
                         shape.setColor(Color.WHITE);
-                        shape.rect(rectangle.x, rectangle.y, grid.snakeSize, grid.snakeSize);
+                        shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 
                     }
                 }
@@ -130,7 +130,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					} else {
 						shape.setColor(Color.GREEN);
 					}
-					shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.snakeSize, grid.snakeSize);
+					shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.squareSize, grid.squareSize);
 				}
 				shape.end();
 
