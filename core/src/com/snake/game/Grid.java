@@ -36,23 +36,6 @@ public class Grid {
             }
         }
         return rects;
-
-        /*
-         * Rectangle[][] bodies = new Rectangle[snakes.length][];
-         * for(int i = 0; i < snakes.length; i++){
-         * snakes[i].move();
-         * 
-         * bodies[i] = new Rectangle[snakes[i].getPositions().size()];
-         * 
-         * for(int j = 0; j < bodies[i].length; j++){
-         * bodies[i][j] = new Rectangle();
-         * System.out.println(i + " hello " + j);
-         * bodies[i][j].x = snakes[i].getPositions().get(j).x + i * snakeSize + 1;
-         * bodies[i][j].y = snakes[i].getPositions().get(j).y + 1;
-         * }
-         * }
-         * return bodies;
-         */
     }
 
 }

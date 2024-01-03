@@ -81,10 +81,7 @@ public class Snake {
             }
 
         }
-        counter++;
-
-        
-
+        counter++;      
     }
 
     public boolean checkCollision() {
@@ -111,5 +108,4 @@ public class Snake {
     public void setPositions(ArrayList<Vector> positions) {
         this.positions = positions;
     }
-
 }
