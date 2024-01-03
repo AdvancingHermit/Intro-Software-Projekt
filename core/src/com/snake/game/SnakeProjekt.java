@@ -49,7 +49,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape = new ShapeRenderer();
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
-		viewport = new FitViewport(1920, 1080, camera);
+		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		font = new BitmapFont(); 
 
 		
@@ -108,14 +108,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f*viewport.getScreenHeight());
 
 				batch.end();
-				for (int i = 0; i < shower.length; i++) {
-					for (int j = 0; j < shower[i].length; j++) {
+                for (Rectangle[] rectangles : shower) {
+                    for (Rectangle rectangle : rectangles) {
 
-						shape.setColor(Color.WHITE);
-						shape.rect(shower[i][j].x, shower[i][j].y, grid.snakeSize, grid.snakeSize);
+                        shape.setColor(Color.WHITE);
+                        shape.rect(rectangle.x, rectangle.y, grid.snakeSize, grid.snakeSize);
 
-					}
-				}
+                    }
+                }
 				for (int k = 0; k < positions.size(); k++) {
 					int cx = positions.get(k).x;
 					int cy = positions.get(k).y;
