@@ -22,7 +22,7 @@ public class Grid {
 
     }
 
-    public Rectangle[][] show() {
+    public Rectangle[][] show(float game_width, float game_height) {
 
         for (int i = 0; i < snakes.length; i++) {
             
@@ -30,8 +30,8 @@ public class Grid {
                 snakes[i].move();
             }
         }
-        double xOffset = (1920 / 2) - (snakeSize*gridSize*0.6);
-        double yOffset = (1080 / 2) - (snakeSize*gridSize* 0.6 );
+        double xOffset = (game_width / 2) - (snakeSize*gridSize*0.6);
+        double yOffset = (game_height / 2) - (snakeSize*gridSize* 0.6 );
         Rectangle[][] rects = new Rectangle[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {

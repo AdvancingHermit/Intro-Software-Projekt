@@ -44,6 +44,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(1920, 1080, camera);
 		Fruit apple = new Fruit(new Vector(100,100), appleSprite);
+		
+		
 		//fruits.add(apple);
 
 	}
@@ -64,7 +66,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		shape.begin(ShapeType.Filled);
 
-		Rectangle[][] shower = grid.show();
+		Rectangle[][] shower = grid.show(viewport.getWorldWidth(), viewport.getWorldHeight());
 		ArrayList<Vector> positions = grid.snakes[0].getPositions();
 
 
