@@ -1,8 +1,11 @@
 package com.snake.game;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +18,9 @@ import com.snake.game.util.Vector;
 import com.badlogic.gdx.math.Rectangle;
 
 public class SnakeProjekt extends ApplicationAdapter {
+
+	final private int gridsize = 20;
+	final private int snakeAmount = 1;
 	SpriteBatch batch;
 	Texture img;
 	Grid grid;
@@ -22,15 +28,22 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	FitViewport viewport;
 
+	Texture appleSprite;
+	List<Fruit> fruits = new ArrayList<>();
+	Random random = new Random();
+
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
+		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		img = new Texture("badlogic.jpg");
-		grid = new Grid(20, 1);
+		grid = new Grid(gridsize, snakeAmount);
 		shape = new ShapeRenderer();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(1920, 1080, camera);
+		Fruit apple = new Fruit(new Vector(100,100), appleSprite);
+		//fruits.add(apple);
 
 	}
 
@@ -41,10 +54,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		ScreenUtils.clear(1, 0, 0, 1);
+		ScreenUtils.clear(0, 0, 1, 1);
 
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
+
 		shape.begin(ShapeType.Filled);
 
 		Rectangle[][] shower = grid.show();
@@ -80,6 +94,38 @@ public class SnakeProjekt extends ApplicationAdapter {
 			shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.snakeSize, grid.snakeSize);
 		}
 		shape.end();
+
+
+        if (fruits.isEmpty()){
+			int randx = random.nextInt(1, gridsize + 1) * 40;
+			int randy = randx + 40;
+			for (Vector pos : grid.snakes[0].getPositions()){
+				if (new Vector(randx,randy).equals(pos)){
+					break;
+				}
+			}
+			fruits.add(new Fruit(new Vector(randx,randy), appleSprite));
+		}
+
+
+
+
+
+		batch.begin();
+	 //	batch.draw(appleSprite, 195,135,90f,90f);
+		for (Fruit fruit : fruits){
+			batch.draw(fruit.getSprite(), fruit.getPosition().x,fruit.getPosition().y, (float) 90, (float) 90);
+		}
+
+
+		batch.end();
+		for (Fruit fruit : fruits) {
+			if (grid.snakes[0].checkCollision(fruit.getPosition())){
+			//	grid.snakes[0].setScore(grid.snakes[0].getScore + 1)
+				fruits.remove(fruit);
+			}
+		}
+
 	}
 
 	@Override
