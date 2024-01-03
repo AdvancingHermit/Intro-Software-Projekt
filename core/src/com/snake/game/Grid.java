@@ -1,5 +1,6 @@
 package com.snake.game;
 
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.math.Rectangle;
 import com.snake.game.Snake;
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ public class Grid {
             
             if(!snakes[i].isDead) {
                 snakes[i].move();
-                
             }
         }
 
