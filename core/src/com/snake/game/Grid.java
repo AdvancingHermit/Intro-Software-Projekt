@@ -1,5 +1,6 @@
 package com.snake.game;
 
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.math.Rectangle;
 import com.snake.game.Snake;
 import com.snake.game.util.Vector;
@@ -27,7 +28,6 @@ public class Grid {
             
             if(!snakes[i].isDead) {
                 snakes[i].move();
-                
             }
         }
         double xOffset = (1920 / 2) - (snakeSize*gridSize*0.6);

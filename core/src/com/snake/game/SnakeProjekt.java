@@ -79,11 +79,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			}
 			shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.snakeSize, grid.snakeSize);
 		}
-		
-
-
 		shape.end();
-
 	}
 
 	@Override
