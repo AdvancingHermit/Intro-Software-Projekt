@@ -33,8 +33,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	private int n = 55;
-	private int m = 27;
+	private int n = 10;
+	private int m = 10;
 	private Vector gridsize;
 
 
@@ -151,7 +151,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						n--;
+						n = Math.max(n-1, 5);
 						System.out.println("n--: " + n);
 						mousePressed = false;
 					} else if (Gdx.input.getX() >= startButtonX + 500 // Creating start plus n hitbox
@@ -159,7 +159,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						n++;
+					n = Math.min(n+1, 100);
 						System.out.println("n++: " + n);
 						mousePressed = false;
 					}
@@ -168,7 +168,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						m--;
+						m = Math.max(m-1, 5);
 						System.out.println("m-- " + m);
 						mousePressed = false;
 					}  else if (Gdx.input.getX() >= startButtonX - 300 // Creating start plus n hitbox
@@ -176,7 +176,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						m++;
+						m = Math.min(m+1, 100);
 						System.out.println("m++: " + m);
 						mousePressed = false;
 					} 
