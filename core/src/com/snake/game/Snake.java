@@ -15,7 +15,7 @@ public class Snake {
     public boolean isDead;
     private int counter = 0;
 
-    private int maxcounter = 17;
+    private int maxcounter = 30;
     private double startTime = System.currentTimeMillis();
     private int fruitsEaten = 0;
 

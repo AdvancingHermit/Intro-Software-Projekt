@@ -30,7 +30,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	Scene currentSceen = Scene.Main_Scene;
-	final private int gridsize = 5;
+
+	final private int n = 55;
+	final private int m = 27;
+	final private Vector gridsize = new Vector(n, m);
+
+
 	final private int snakeAmount = 1;
 	SpriteBatch batch;
 	Texture img;
@@ -147,11 +152,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 						while (fruits.isEmpty()) {
 							boolean snakeCoversFullScreen = false;
 							boolean spawnInSnake = false;
-							int randx = random.nextInt(0, gridsize);
-							int randy = random.nextInt(0, gridsize);
+							int randx = random.nextInt(0, gridsize.x);
+							int randy = random.nextInt(0, gridsize.x);
 							for (Snake snake : grid.snakes) {
 								for (Vector pos : snake.getPositions()) {
-									if (snake.getPositions().size() == gridsize * gridsize) {
+									if (snake.getPositions().size() == gridsize.x * gridsize.y) {
 										snakeCoversFullScreen = true;
 									}
 									if (new Vector(randx, randy).equals(pos)) {
@@ -176,14 +181,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 					int cx = positions.get(k).x;
 					int cy = positions.get(k).y;
 
-					if (cx == grid.gridSize || cx == -1) {
+					if (cx == grid.gridSize.x || cx == -1) {
 						// Skiftes til i, når vi looper over slanger.
-						cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize - Math.abs(cx);
+						cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize.x - Math.abs(cx);
 						grid.snakes[0].checkCollision();
 					}
-					if (cy == grid.gridSize || cy == -1) {
+					if (cy == grid.gridSize.y || cy == -1) {
 						// Skiftes til i, når vi looper over slanger.
-						cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize - Math.abs(cy);
+						cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize.y - Math.abs(cy);
 						grid.snakes[0].checkCollision();
 					}
 
