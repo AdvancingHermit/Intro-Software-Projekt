@@ -1,12 +1,6 @@
 package com.snake.game;
 
-import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.snake.game.Snake;
-import com.snake.game.util.Vector;
-
-import java.util.ArrayList;
 
 public class Grid {
     Snake[] snakes;
