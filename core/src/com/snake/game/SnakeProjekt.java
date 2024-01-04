@@ -8,6 +8,7 @@ import java.util.Random;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.snake.game.util.InputBox;
 import com.snake.game.util.Vector;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -32,8 +34,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	private int n = 5;
-	private int m = 5;
+	private int n = 10;
+	private int m = 10;
 	private Vector gridsize;
 
 
@@ -66,9 +68,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int startButtonY;
 	boolean mousePressed;
 	int frameCounter = 0;
+	InputBox inputBox = new InputBox();
+
 
 	@Override
 	public void create() {
+
+		
 		batch = new SpriteBatch();
 
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
@@ -107,6 +113,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
+		inputBox = new InputBox();
+		
 
 	}
 
@@ -117,6 +125,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		inputBox.update();
+		System.out.println(inputBox.getString());
+
 		switch (currentSceen) {
 			case Main_Scene:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -150,14 +161,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						n--;
+						n = Math.max(n-1, 5);
+						System.out.println("n--: " + n);
 						mousePressed = false;
 					} else if (Gdx.input.getX() >= startButtonX + 500 // Creating start plus n hitbox
 							&& Gdx.input.getX() <= startButtonX + 600
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						n++;
+					n = Math.min(n+1, 100);
+						System.out.println("n++: " + n);
 						mousePressed = false;
 					}
 					if (Gdx.input.getX() >= startButtonX - 400// Creating start minus m hitbox
@@ -165,14 +178,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						m--;
+						m = Math.max(m-1, 5);
 						mousePressed = false;
 					}  else if (Gdx.input.getX() >= startButtonX - 300 // Creating start plus n hitbox
 							&& Gdx.input.getX() <= startButtonX - 200
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						m++;
+						m = Math.min(m+1, 100);
 						mousePressed = false;
 					}
 				}
@@ -323,7 +336,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.setColor(Color.GREEN);
 						batch.draw(snakeBodySprite, (snakePiece.getSpritePos().x), (snakePiece.getSpritePos().y), grid.squareSize ,grid.squareSize);
 					}
-
 				}
 				snakePieces.clear();
 					batch.end();
