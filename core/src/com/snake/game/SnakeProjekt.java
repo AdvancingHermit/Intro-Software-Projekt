@@ -25,7 +25,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.util.InputBox;
 import com.snake.game.util.Vector;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class SnakeProjekt extends ApplicationAdapter {
 
@@ -58,7 +57,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Texture snakeHeadSidewaysSprite;
 
 	List<Fruit> fruits = new ArrayList<>();
-	List<Fruit> snakePieces = new ArrayList<>();
+	List<GameObject> snakePieces = new ArrayList<>();
 	Random random = new Random();
 	GlyphLayout scoreNumText;
 	GlyphLayout colonText;
@@ -180,7 +179,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
 						m = Math.max(m-1, 5);
-						System.out.println("m-- " + m);
 						mousePressed = false;
 					}  else if (Gdx.input.getX() >= startButtonX - 300 // Creating start plus n hitbox
 							&& Gdx.input.getX() <= startButtonX - 200
@@ -188,9 +186,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
 						m = Math.min(m+1, 100);
-						System.out.println("m++: " + m);
 						mousePressed = false;
-					} 
+					}
 				}
 				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
 						&& Gdx.input.getX() <= startButtonX + 200
@@ -240,33 +237,56 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 
 						while (fruits.isEmpty()) {
-
 							boolean snakeCoversFullScreen = false;
 							boolean spawnInSnake = false;
+							int snakeSize = 0;
 							int randx = random.nextInt(0, gridsize.x);
 							int randy = random.nextInt(0, gridsize.y);
 							for (Snake snake : grid.snakes) {
+								snakeSize = snake.getPositions().size();
 								for (Vector pos : snake.getPositions()) {
-									if (snake.getPositions().size() >= gridsize.x * gridsize.y) {
-										snakeCoversFullScreen = true;
-									}
 									if (new Vector(randx, randy).equals(pos)) {
 										spawnInSnake = true;
 									}
 								}
 							}
-							if (snakeCoversFullScreen) {
-								break;
-							}
-							if (!spawnInSnake) {
-								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
-										(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
-										(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
-												+ grid.squareSize * randy))));
+
+							int totalWalls = 0;
+							for (Wall wall : grid.walls) {
+								totalWalls += wall.getNumberOfWalls();
+								if (new Vector(randx, randy).equals(wall.getSnakePos())) {
+									spawnInSnake = true;
+								}
+								for (int i = 1; i< wall.getSize().x; i++) {
+									if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
+										spawnInSnake = true;
+									}
+								}
+								for (int i = 1; i< wall.getSize().y; i++) {
+									if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
+										spawnInSnake = true;
+									}
+								}
 							}
 
+
+							if (snakeSize >= gridsize.x * gridsize.y - totalWalls) {
+								snakeCoversFullScreen = true;
+							}
+
+								if (snakeCoversFullScreen) {
+									break;
+								}
+								if (!spawnInSnake) {
+									fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
+											(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
+											(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
+													+ grid.squareSize * randy))));
+								}
+
+							}
 						}
-					}
+
 
 				}
 
@@ -286,19 +306,19 @@ public class SnakeProjekt extends ApplicationAdapter {
 						grid.snakes[0].move();
 					}
 
-					snakePieces.add(new Fruit(new Vector((int) (cx), (int) (cy)), null, new Vector(
+					snakePieces.add(new GameObject(new Vector((int) (cx), (int) (cy)), null, new Vector(
 						(int) (shower[cx][cy].x - screenWidth / 2),
 						(int) (shower[cx][cy].y - screenHeight / 2))));
 				}
 				shape.end();
 
 				batch.begin();
-				for (Fruit fruit : fruits) {
-					batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize,
+				for (GameObject gameObject : fruits) {
+					batch.draw(gameObject.getSprite(), (gameObject.getSpritePos().x), (gameObject.getSpritePos().y), grid.squareSize,
 							grid.squareSize);
 				}
 				for (int i = 0; i < snakePieces.size(); i++) {
-					Fruit snakePiece = snakePieces.get(i);
+					GameObject snakePiece = snakePieces.get(i);
 
 					if (i == positions.size() - 1) {
 						shape.setColor(Color.BLACK);
@@ -316,7 +336,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.setColor(Color.GREEN);
 						batch.draw(snakeBodySprite, (snakePiece.getSpritePos().x), (snakePiece.getSpritePos().y), grid.squareSize ,grid.squareSize);
 					}
-					
 				}
 				snakePieces.clear();
 					batch.end();
@@ -345,11 +364,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.end();
 				Iterator<Fruit> fruitIterator = fruits.iterator();
 				while (fruitIterator.hasNext()) {
-					Fruit fruit = fruitIterator.next();
+					GameObject gameObject = fruitIterator.next();
 					for (Snake snake : grid.snakes) {
-						if (snake.checkCollision(fruit.getSnakePos())) {
+						if (snake.checkCollision(gameObject.getSnakePos())) {
 							snake.setHasEaten();
-							fruits.remove(fruit);
+							fruits.remove(gameObject);
 
 						}
 					}
