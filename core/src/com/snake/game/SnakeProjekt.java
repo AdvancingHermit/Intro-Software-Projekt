@@ -53,9 +53,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		font = new BitmapFont(); 
 
-		
-
-		Fruit apple = new Fruit(new Vector(100, 100), appleSprite);
 		// fruits.add(apple);
 
 
@@ -104,16 +101,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f * viewport.getScreenHeight());
 				batch.end();
 
-				if (fruits.isEmpty()) {
-					int randx = random.nextInt(1, gridsize + 1);
-					int randy = random.nextInt(1, gridsize + 1);
-					for (Vector pos : grid.snakes[0].getPositions()) {
-						if (new Vector(randx, randy).equals(pos)) {
-							break;
-						}
-					}
-					//fruits.add(new Fruit(new Vector(randx, randy), appleSprite));
-				}
 
 				for (Rectangle[] rectangles : shower) {
 					for (Rectangle rectangle : rectangles) {
@@ -121,9 +108,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.setColor(Color.WHITE);
 						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 						if (fruits.isEmpty()) {
-							int randx = random.nextInt(1, gridsize);
-							int randy = random.nextInt(1, gridsize);
-							fruits.add(new Fruit(new Vector((int) ((rectangle.x - viewport.getScreenWidth()/2) + grid.squareSize * randx), (int) (rectangle.y - viewport.getScreenHeight()/2) + (grid.squareSize * randy)), appleSprite));
+							int randx = random.nextInt(0, gridsize);
+							int randy = random.nextInt(0, gridsize);
+							fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector((int) ((rectangle.x - (viewport.getScreenWidth()/2)) + grid.squareSize * randx), (int) ((rectangle.y - (viewport.getScreenHeight()/2)) + grid.squareSize * randy))));
 						}
  
 
@@ -156,14 +143,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				batch.begin();
 				for (Fruit fruit : fruits) {
-					batch.draw(fruit.getSprite(), fruit.getPosition().x, fruit.getPosition().y, grid.squareSize, grid.squareSize);
+					    batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize, grid.squareSize);
 				}
 
 				batch.end();
 				Iterator<Fruit> fruitIterator = fruits.iterator();
 				while (fruitIterator.hasNext()) {
 					Fruit fruit = fruitIterator.next();
-					if (grid.snakes[0].checkCollision(fruit.getPosition())) {
+					if (grid.snakes[0].checkCollision(fruit.getSnakePos())) {
 						System.out.println("Nom nom");
 						// grid.snakes[0].setScore(grid.snakes[0].getScore + 1)
 						fruits.remove(fruit);
