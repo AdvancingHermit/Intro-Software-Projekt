@@ -20,7 +20,12 @@ public class InputBox {
     public void update() {
         char pressedKey = getPressedKey();
         if (pressedKey != '\0' && keyUp) {
-            inputs.add(pressedKey);
+            if(!isShiftPressed()){
+                inputs.add((pressedKey + "").toLowerCase().charAt(0));
+            }
+            else{
+                inputs.add(pressedKey);
+            }
             keyUp = false;
         } else if (pressedKey == '\0') {
             keyUp = true;
@@ -33,6 +38,10 @@ public class InputBox {
             string += inputs.get(i);
         }
         return string;
+    }
+
+    public boolean isShiftPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
 
     public char getPressedKey() {
