@@ -57,7 +57,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		img = new Texture("badlogic.jpg");
 		shape = new ShapeRenderer();
-		grid = new Grid(gridsize, snakeAmount,  Gdx.graphics.getHeight() );
+		grid = new Grid(gridsize, snakeAmount,  Gdx.graphics.getHeight());
+		grid.walls = grid.wallGenerator(gridsize);
+
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
@@ -82,12 +84,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
-		
-
 		// fruits.add(apple);
-
-
-
 	}
 
 	@Override
@@ -140,6 +137,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				font2.draw(batch, scoreNumText, - offset + scoreText.width + colonText.width, 0.41f * viewport.getScreenHeight());
         
 				batch.end();
+
+
 
 				for (Rectangle[] rectangles : shower) {
 					for (Rectangle rectangle : rectangles) {
@@ -196,6 +195,30 @@ public class SnakeProjekt extends ApplicationAdapter {
 					for (Fruit fruit : fruits) {
 						batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize, grid.squareSize);
 					}
+					batch.end();
+
+					batch.begin();
+
+					for(int i = 0; i < grid.walls.length; i++){
+						for(int j = 0; j < grid.walls[i].size.x; j++){
+							batch.draw(appleSprite, (grid.walls[i].getSpritePos().x) + j * grid.squareSize, (grid.walls[i].getSpritePos().y), grid.squareSize, grid.squareSize);
+							for(Snake snake : grid.snakes){
+								if(snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(j, 0)))) {
+									snake.isDead = true;
+								}
+							}
+						}
+						for(int j = 0; j < grid.walls[i].size.y; j++){
+							batch.draw(appleSprite, (grid.walls[i].getSpritePos().x), (grid.walls[i].getSpritePos().y) + j * grid.squareSize, grid.squareSize, grid.squareSize);
+							for(Snake snake : grid.snakes){
+								if(snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(0, j)))) {
+									snake.isDead = true;
+								}
+							}
+						}
+						
+					}
+
 					batch.end();
 
 					Iterator<Fruit> fruitIterator = fruits.iterator();
