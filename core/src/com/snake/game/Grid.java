@@ -1,27 +1,24 @@
 package com.snake.game;
 
-import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.snake.game.Snake;
 import com.snake.game.util.Vector;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Grid {
     Snake[] snakes;
     Wall[] walls;
     int squareSize;
-    int gridSize;
+    Vector gridSize;
 
-    Grid(int gridSize, int snakeAmount, int screenHeight) {
+    Grid(Vector gridSize, int snakeAmount, int screenHeight) {
         snakes = new Snake[snakeAmount];
         System.out.println(gridSize + " " + screenHeight);
-        squareSize = (screenHeight * 70) / 100 / gridSize;
+        int max = Math.max(gridSize.x, gridSize.y);
+        squareSize = (screenHeight * 70) / 100 / max;
         this.gridSize = gridSize;
         for (int i = 0; i < snakeAmount; i++) {
-            snakes[i] = new Snake(gridSize, gridSize);
+            snakes[i] = new Snake(gridSize.x, gridSize.y);
         }
         Wall[] walls = wallGenerator(gridSize);
     }
@@ -32,14 +29,14 @@ public class Grid {
                 snakes[i].move();
             }
         }
-        double xOffset = ((game_width / 2) - (squareSize * gridSize) / 2);
-        double yOffset = ((game_height / 2) - (squareSize * gridSize) / 2);
 
-        Rectangle[][] rects = new Rectangle[gridSize][gridSize];
-        for (int i = 0; i < gridSize; i++) {
-            for (int j = 0; j < gridSize; j++) {
-                rects[i][j] = new Rectangle(i * squareSize + (int) xOffset, j * squareSize + (int) yOffset, squareSize,
-                        squareSize);
+        double xOffset = ((game_width / 2) - (squareSize*gridSize.x) / 2);
+        double yOffset = ((game_height / 2) - (squareSize*gridSize.y) / 2);
+
+        Rectangle[][] rects = new Rectangle[gridSize.x][gridSize.y];
+        for (int i = 0; i < gridSize.x; i++) {
+            for (int j = 0; j < gridSize.y; j++) {
+                rects[i][j] = new Rectangle(i * squareSize + (int)xOffset, j * squareSize + (int)yOffset, squareSize, squareSize);
             }
         }
         return rects;
