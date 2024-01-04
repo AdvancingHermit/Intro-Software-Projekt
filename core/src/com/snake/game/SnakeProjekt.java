@@ -30,7 +30,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	Scene currentSceen = Scene.Main_Scene;
-	final private int gridsize = 3;
+	final private int gridsize = 5;
 	final private int snakeAmount = 1;
 	SpriteBatch batch;
 	Texture img;
@@ -145,27 +145,29 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 
 						while (fruits.isEmpty()) {
+							boolean snakeCoversFullScreen = false;
 							boolean spawnInSnake = false;
 							int randx = random.nextInt(0, gridsize);
 							int randy = random.nextInt(0, gridsize);
-
 							for (Snake snake : grid.snakes) {
 								for (Vector pos : snake.getPositions()) {
+									if (snake.getPositions().size() == gridsize * gridsize) {
+										snakeCoversFullScreen = true;
+									}
 									if (new Vector(randx, randy).equals(pos)) {
 										spawnInSnake = true;
 									}
 								}
 							}
+							if (snakeCoversFullScreen) {
+								break;
+							}
 							if (!spawnInSnake) {
-								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite,
-										new Vector(
-												(int) ((rectangle.x - (screenWidth / 2))
-														+ grid.squareSize * randx),
-												(int) ((rectangle.y - (screenHeight / 2))
-														+ grid.squareSize * randy))));
+								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
+										(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
+										(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2)) + grid.squareSize * randy))));
 							}
 						}
-						
 
 					}
 

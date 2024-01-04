@@ -77,7 +77,6 @@ public class Snake {
             }
             if (hasEaten) {
                 counter++;
-                fruitsEaten++;
                 hasEaten = false;
                 return;
             }
@@ -104,6 +103,7 @@ public class Snake {
     }
 
     public void setHasEaten() {
+        fruitsEaten++;
         this.hasEaten = true;
     }
 
