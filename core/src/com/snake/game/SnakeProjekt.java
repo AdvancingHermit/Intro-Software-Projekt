@@ -146,20 +146,21 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.setColor(Color.WHITE);
 						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 						if (fruits.isEmpty()) {
+							while (fruits.isEmpty()) {
 							boolean spawnInSnake = false;
 							int randx = random.nextInt(0, gridsize);
 							int randy = random.nextInt(0, gridsize);
-						for (Snake snake : grid.snakes) {
-								for (Vector pos : snake.getPositions()) {
-									if (new Vector(randx, randy).equals(pos)) {
-										spawnInSnake = true;
+								for (Snake snake : grid.snakes) {
+									for (Vector pos : snake.getPositions()) {
+										if (new Vector(randx, randy).equals(pos)) {
+											spawnInSnake = true;
+										}
 									}
 								}
+								if (!spawnInSnake) {
+									fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector((int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx), (int) ((rectangle.y - (Gdx.graphics.getHeight() / 2)) + grid.squareSize * randy))));
 								}
-							if (!spawnInSnake) {
-								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector((int) ((rectangle.x - (viewport.getScreenWidth() / 2)) + grid.squareSize * randx), (int) ((rectangle.y - (viewport.getScreenHeight() / 2)) + grid.squareSize * randy))));
 							}
-
 						}
 
 
@@ -195,8 +196,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 					for (Fruit fruit : fruits) {
 						batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize, grid.squareSize);
 					}
-
 					batch.end();
+
 					Iterator<Fruit> fruitIterator = fruits.iterator();
 					while (fruitIterator.hasNext()) {
 						Fruit fruit = fruitIterator.next();
