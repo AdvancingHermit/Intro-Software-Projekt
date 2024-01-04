@@ -50,7 +50,16 @@ public class Grid {
             int posX = random.nextInt(gridSize.x);
             int posY = random.nextInt(gridSize.y);
 
+            
             walls[i] = new Wall(new Vector(posX, posY), null, new Vector(posX * squareSize - (gridSize.x/2) * squareSize, posY * squareSize - (gridSize.y/2) * squareSize), new Vector(random.nextInt(1, 5), random.nextInt(1, 5)));
+
+
+            if(walls[i].size.x + posX > gridSize.x){
+                walls[i].size.x = gridSize.x - posX;
+            }
+            if(walls[i].size.y + posY > gridSize.y){
+                walls[i].size.y = gridSize.y - posY;
+            }
         }
         return walls;
     }
