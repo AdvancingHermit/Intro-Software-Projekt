@@ -33,10 +33,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
+	private int n = 55;
+	private int m = 27;
+	private Vector gridsize;
 
-	final private int n = 10;
-	final private int m = 11;
-	final private Vector gridsize = new Vector(n, m);
 
 
 	final private int snakeAmount = 1;
@@ -63,6 +63,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout scoreText;
 	int screenHeight;
 	int screenWidth;
+	int startButtonX;
+	int startButtonY;
+	boolean mousePressed;
+	int frameCounter = 0;
 
 	@Override
 	public void create() {
@@ -79,8 +83,8 @@ public class SnakeProjekt extends ApplicationAdapter {
     
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
-		grid = new Grid(gridsize, snakeAmount, screenHeight);
-    grid.walls = grid.wallGenerator(gridsize);
+
+    
 
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
@@ -114,22 +118,78 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		ScreenUtils.clear(0, 0, 1, 1);
 		switch (currentSceen) {
 			case Main_Scene:
+				ScreenUtils.clear(0, 0, 1, 1);
+				startButtonX = screenWidth / 2 - 100;
+				startButtonY = screenHeight / 2 - 100;
+				frameCounter++;
+				mousePressed = false;
+
 				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 					Gdx.app.exit();
 				}
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
-				shape.rect(viewport.getScreenWidth() / 2 - 100, viewport.getScreenHeight() / 2 - 100, 200, 200);
-
-				if (Gdx.input.getX() >= viewport.getScreenWidth() / 2 - 100
-						&& Gdx.input.getX() <= viewport.getScreenWidth() / 2 + 100
-						&& Gdx.input.getY() <= viewport.getScreenHeight() / 2 + 100
-						&& Gdx.input.getY() >= viewport.getScreenHeight() / 2 - 100
-						&& Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+				shape.setColor(Color.WHITE);
+				shape.rect(startButtonX, startButtonY, 200, 200); // creating start game
+				shape.setColor(Color.RED);
+				shape.rect(startButtonX + 400, startButtonY, 100, 200); // creating minus n
+				shape.setColor(Color.GREEN);
+				shape.rect(startButtonX + 500, startButtonY, 100, 200); // creating plus n
+				shape.setColor(Color.RED);
+				shape.rect(startButtonX - 400, startButtonY, 100, 200); // creating minus m
+				shape.setColor(Color.GREEN);
+				shape.rect(startButtonX - 300, startButtonY, 100, 200); // creating plus m
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					mousePressed = true;
+				}
+				if (frameCounter % 5 == 0) {
+					if (Gdx.input.getX() >= startButtonX + 400 // Creating start minus n hitbox
+							&& Gdx.input.getX() <= startButtonX + 500
+							&& Gdx.input.getY() <= startButtonY + 200
+							&& Gdx.input.getY() >= startButtonY
+							&& mousePressed) {
+						n--;
+						System.out.println("n--: " + n);
+						mousePressed = false;
+					} else if (Gdx.input.getX() >= startButtonX + 500 // Creating start plus n hitbox
+							&& Gdx.input.getX() <= startButtonX + 600
+							&& Gdx.input.getY() <= startButtonY + 200
+							&& Gdx.input.getY() >= startButtonY
+							&& mousePressed) {
+						n++;
+						System.out.println("n++: " + n);
+						mousePressed = false;
+					}
+					if (Gdx.input.getX() >= startButtonX - 400// Creating start minus m hitbox
+							&& Gdx.input.getX() <= startButtonX - 300
+							&& Gdx.input.getY() <= startButtonY + 200
+							&& Gdx.input.getY() >= startButtonY
+							&& mousePressed) {
+						m--;
+						System.out.println("m-- " + m);
+						mousePressed = false;
+					}  else if (Gdx.input.getX() >= startButtonX - 300 // Creating start plus n hitbox
+							&& Gdx.input.getX() <= startButtonX - 200
+							&& Gdx.input.getY() <= startButtonY + 200
+							&& Gdx.input.getY() >= startButtonY
+							&& mousePressed) {
+						m++;
+						System.out.println("m++: " + m);
+						mousePressed = false;
+					} 
+				}
+				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
+						&& Gdx.input.getX() <= startButtonX + 200
+						&& Gdx.input.getY() <= startButtonY + 200
+						&& Gdx.input.getY() >= startButtonY
+						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
+					gridsize = new Vector(n, m);
+					grid = new Grid(gridsize, snakeAmount, screenHeight);
+          grid.walls = grid.wallGenerator(gridsize);
 					currentSceen = Scene.Main_Game;
 				}
 				shape.end();
@@ -191,7 +251,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 							if (!spawnInSnake) {
 								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
 										(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
-										(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2)) + grid.squareSize * randy))));
+										(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
+												+ grid.squareSize * randy))));
 							}
 
 						}
