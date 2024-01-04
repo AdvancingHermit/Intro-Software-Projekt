@@ -1,5 +1,6 @@
 package com.snake.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.snake.game.util.Vector;
 
@@ -21,6 +22,8 @@ public class Grid {
             snakes[i] = new Snake(gridSize.x, gridSize.y);
         }
         Wall[] walls = wallGenerator(gridSize);
+
+        
     }
 
     public Rectangle[][] show(float game_width, float game_height) {

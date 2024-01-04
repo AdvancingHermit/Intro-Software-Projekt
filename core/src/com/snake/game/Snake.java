@@ -118,4 +118,15 @@ public class Snake {
     public int getScore() {
         return (int) ((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
     }
+    public Vector getVel() {
+        return vel;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
 }
