@@ -116,6 +116,6 @@ public class Snake {
     }
 
     public int getScore() {
-        return (int)((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
+        return (int) ((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
     }
 }
