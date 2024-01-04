@@ -12,7 +12,8 @@ public class DesktopLauncher {
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         DisplayMode desktopMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
-        config.setFullscreenMode(desktopMode);
+        //config.setFullscreenMode(desktopMode);
+        config.setWindowedMode(500, 500);
         config.setHdpiMode(HdpiMode.Pixels);
         config.setForegroundFPS(60);
         config.setTitle("IntroSnakeProjekt");

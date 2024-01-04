@@ -8,6 +8,7 @@ import java.util.Random;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.snake.game.util.InputBox;
 import com.snake.game.util.Vector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -67,9 +69,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int startButtonY;
 	boolean mousePressed;
 	int frameCounter = 0;
+	InputBox inputBox = new InputBox();
+
 
 	@Override
 	public void create() {
+
+		
 		batch = new SpriteBatch();
 
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
@@ -108,6 +114,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
+		inputBox = new InputBox();
+		
 
 	}
 
@@ -118,6 +126,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		inputBox.update();
+		System.out.println(inputBox.getString());
+
 		switch (currentSceen) {
 			case Main_Scene:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -235,7 +246,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 							int randx = random.nextInt(0, gridsize.x);
 							int randy = random.nextInt(0, gridsize.y);
 							for (Snake snake : grid.snakes) {
-								System.out.println(snake.getPositions().size());
 								for (Vector pos : snake.getPositions()) {
 									if (snake.getPositions().size() >= gridsize.x * gridsize.y) {
 										snakeCoversFullScreen = true;
@@ -306,7 +316,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.setColor(Color.GREEN);
 						batch.draw(snakeBodySprite, (snakePiece.getSpritePos().x), (snakePiece.getSpritePos().y), grid.squareSize ,grid.squareSize);
 					}
-					System.out.println(snakePiece.getSpritePos().x + " " + snakePiece.getSpritePos().y);
 					
 				}
 				snakePieces.clear();
