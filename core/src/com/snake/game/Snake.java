@@ -22,7 +22,7 @@ public class Snake {
     public Snake(int x, int y) {
         Vector pos = new Vector(x / 2, y / 2);
         positions = new ArrayList<Vector>();
-        for (int i = 10; i >= 0; i--) {
+        for (int i = 1; i >= 0; i--) {
             Vector position = new Vector(pos.x, pos.y - i);
             this.positions.add(position);
         }

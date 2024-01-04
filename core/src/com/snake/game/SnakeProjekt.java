@@ -34,7 +34,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	Scene currentSceen = Scene.Main_Scene;
-	final private int gridsize = 18;
+	final private int gridsize = 5;
 	final private int snakeAmount = 1;
 	SpriteBatch batch;
 	Texture img;
@@ -50,6 +50,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout scoreNumText;
 	GlyphLayout colonText;
 	GlyphLayout scoreText;
+	int screenHeight;
+	int screenWidth;
 
 	@Override
 	public void create() {
@@ -57,12 +59,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		img = new Texture("badlogic.jpg");
 		shape = new ShapeRenderer();
-		grid = new Grid(gridsize, snakeAmount,  Gdx.graphics.getHeight() );
+		screenWidth = Gdx.graphics.getWidth();
+		screenHeight = Gdx.graphics.getHeight();
+		grid = new Grid(gridsize, snakeAmount, screenHeight);
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
-		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+		viewport = new FitViewport(screenWidth, screenHeight, camera);
 
-		
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 72;
@@ -76,17 +79,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		font2.setColor(Color.ORANGE);
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
-
 		scoreText = new GlyphLayout();
 		scoreText.setText(font2, "SCORE");
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
-		
 
 		// fruits.add(apple);
-
-
 
 	}
 
@@ -129,89 +128,96 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 				ArrayList<Vector> positions = grid.snakes[0].getPositions();
+				shape.end();
 				batch.begin();
 
 				scoreNumText.setText(font2, "22");
 				float offset = (scoreNumText.width + scoreText.width + colonText.width) / 2;
 				scoreNumText.setText(font2, "" + grid.snakes[0].getScore());
 
-				font2.draw(batch, scoreText, - offset, 0.41f * viewport.getScreenHeight());
-				font.draw(batch, colonText, - offset + scoreText.width, 0.41f * viewport.getScreenHeight());
-				font2.draw(batch, scoreNumText, - offset + scoreText.width + colonText.width, 0.41f * viewport.getScreenHeight());
-        
+				font2.draw(batch, scoreText, -offset, 0.41f * viewport.getScreenHeight());
+				font.draw(batch, colonText, -offset + scoreText.width, 0.41f * viewport.getScreenHeight());
+				font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width,
+						0.41f * viewport.getScreenHeight());
+
 				batch.end();
+				shape.begin(ShapeType.Filled);
 
 				for (Rectangle[] rectangles : shower) {
 					for (Rectangle rectangle : rectangles) {
 						shape.setColor(Color.WHITE);
 						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
-						if (fruits.isEmpty()) {
-							while (fruits.isEmpty()) {
+
+						while (fruits.isEmpty()) {
 							boolean spawnInSnake = false;
 							int randx = random.nextInt(0, gridsize);
 							int randy = random.nextInt(0, gridsize);
-								for (Snake snake : grid.snakes) {
-									for (Vector pos : snake.getPositions()) {
-										if (new Vector(randx, randy).equals(pos)) {
-											spawnInSnake = true;
-										}
+
+							for (Snake snake : grid.snakes) {
+								for (Vector pos : snake.getPositions()) {
+									if (new Vector(randx, randy).equals(pos)) {
+										spawnInSnake = true;
 									}
 								}
-								if (!spawnInSnake) {
-									fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector((int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx), (int) ((rectangle.y - (Gdx.graphics.getHeight() / 2)) + grid.squareSize * randy))));
-								}
+							}
+							if (!spawnInSnake) {
+								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite,
+										new Vector(
+												(int) ((rectangle.x - (screenWidth / 2))
+														+ grid.squareSize * randx),
+												(int) ((rectangle.y - (screenHeight / 2))
+														+ grid.squareSize * randy))));
 							}
 						}
-
-
-						}
+						
 
 					}
-					for (int k = 0; k < positions.size(); k++) {
-						int cx = positions.get(k).x;
-						int cy = positions.get(k).y;
 
-						if (cx == grid.gridSize || cx == -1) {
-							// Skiftes til i, når vi looper over slanger.
-							cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize - Math.abs(cx);
-							grid.snakes[0].checkCollision();
-						}
-						if (cy == grid.gridSize || cy == -1) {
-							// Skiftes til i, når vi looper over slanger.
-							cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize - Math.abs(cy);
-							grid.snakes[0].checkCollision();
-						}
+				}
+				for (int k = 0; k < positions.size(); k++) {
+					int cx = positions.get(k).x;
+					int cy = positions.get(k).y;
 
-						if (k == positions.size() - 1) {
-							shape.setColor(Color.BLACK);
-						} else {
-							shape.setColor(Color.GREEN);
-						}
-						shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.squareSize, grid.squareSize);
+					if (cx == grid.gridSize || cx == -1) {
+						// Skiftes til i, når vi looper over slanger.
+						cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize - Math.abs(cx);
+						grid.snakes[0].checkCollision();
 					}
-					shape.end();
-
-
-					batch.begin();
-					for (Fruit fruit : fruits) {
-						batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize, grid.squareSize);
+					if (cy == grid.gridSize || cy == -1) {
+						// Skiftes til i, når vi looper over slanger.
+						cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize - Math.abs(cy);
+						grid.snakes[0].checkCollision();
 					}
-					batch.end();
 
-					Iterator<Fruit> fruitIterator = fruits.iterator();
-					while (fruitIterator.hasNext()) {
-						Fruit fruit = fruitIterator.next();
-						for (Snake snake : grid.snakes) {
-							if (snake.checkCollision(fruit.getSnakePos())) {
-								snake.setHasEaten();
-								fruits.remove(fruit);
-							}
+					if (k == positions.size() - 1) {
+						shape.setColor(Color.BLACK);
+					} else {
+						shape.setColor(Color.GREEN);
+					}
+					shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.squareSize, grid.squareSize);
+				}
+				shape.end();
+
+				batch.begin();
+				for (Fruit fruit : fruits) {
+					batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize,
+							grid.squareSize);
+				}
+
+				batch.end();
+				Iterator<Fruit> fruitIterator = fruits.iterator();
+				while (fruitIterator.hasNext()) {
+					Fruit fruit = fruitIterator.next();
+					for (Snake snake : grid.snakes) {
+						if (snake.checkCollision(fruit.getSnakePos())) {
+							snake.setHasEaten();
+							fruits.remove(fruit);
 						}
-						break;
 					}
+					break;
 				}
 		}
-
+	}
 
 	@Override
 	public void dispose() {
