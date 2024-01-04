@@ -31,8 +31,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	final private int n = 55;
-	final private int m = 27;
+	final private int n = 27;
+	final private int m = 16;
 	final private Vector gridsize = new Vector(n, m);
 
 
@@ -153,7 +153,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							boolean snakeCoversFullScreen = false;
 							boolean spawnInSnake = false;
 							int randx = random.nextInt(0, gridsize.x);
-							int randy = random.nextInt(0, gridsize.x);
+							int randy = random.nextInt(0, gridsize.y);
 							for (Snake snake : grid.snakes) {
 								for (Vector pos : snake.getPositions()) {
 									if (snake.getPositions().size() == gridsize.x * gridsize.y) {
