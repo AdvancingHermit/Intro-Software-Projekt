@@ -46,15 +46,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		img = new Texture("badlogic.jpg");
-		grid = new Grid(gridsize, snakeAmount, Gdx.graphics.getHeight());
 		shape = new ShapeRenderer();
+		grid = new Grid(gridsize, snakeAmount,  Gdx.graphics.getHeight() );
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		font = new BitmapFont(); 
 
 		// fruits.add(apple);
-
 
 	}
 
@@ -101,7 +100,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f * viewport.getScreenHeight());
 				batch.end();
 
-
 				for (Rectangle[] rectangles : shower) {
 					for (Rectangle rectangle : rectangles) {
 						shape.setColor(Color.WHITE);
@@ -125,6 +123,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 
 						}
+
 					}
 					for (int k = 0; k < positions.size(); k++) {
 						int cx = positions.get(k).x;
