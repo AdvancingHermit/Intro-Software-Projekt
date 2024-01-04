@@ -42,14 +42,15 @@ public class Grid {
         return rects;
     }
 
-    public Wall[] wallGenerator(int gridSize) {
+    public Wall[] wallGenerator(Vector gridSize) {
         Random random = new Random();
-        Wall[] walls = new Wall[gridSize / 5];
+        Wall[] walls = new Wall[(int)Math.sqrt(gridSize.x * gridSize.y) / 5];
 
         for (int i = 0; i < walls.length; i++) {
-            int posX = random.nextInt(gridSize);
-            int posY = random.nextInt(gridSize);
-            walls[i] = new Wall(new Vector(posX, posY), null, new Vector(posX * squareSize - (gridSize/2) * squareSize, posY * squareSize - (gridSize/2) * squareSize), new Vector(random.nextInt(1, 5), random.nextInt(1, 5)));
+            int posX = random.nextInt(gridSize.x);
+            int posY = random.nextInt(gridSize.y);
+
+            walls[i] = new Wall(new Vector(posX, posY), null, new Vector(posX * squareSize - (gridSize.x/2) * squareSize, posY * squareSize - (gridSize.y/2) * squareSize), new Vector(random.nextInt(1, 5), random.nextInt(1, 5)));
         }
         return walls;
     }
