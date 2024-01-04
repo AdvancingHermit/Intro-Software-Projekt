@@ -21,7 +21,6 @@ public class Grid {
         for (int i = 0; i < snakeAmount; i++) {
             snakes[i] = new Snake(gridSize.x, gridSize.y);
         }
-        Wall[] walls = wallGenerator(gridSize);
 
         
     }
