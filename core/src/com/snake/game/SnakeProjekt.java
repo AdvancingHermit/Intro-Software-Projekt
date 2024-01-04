@@ -98,9 +98,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		ScreenUtils.clear(0, 0, 1, 1);
 		switch (currentSceen) {
 			case Main_Scene:
-				ScreenUtils.clear(0, 0, 1, 1);
 				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 					Gdx.app.exit();
 				}
