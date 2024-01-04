@@ -104,61 +104,71 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				for (Rectangle[] rectangles : shower) {
 					for (Rectangle rectangle : rectangles) {
-
 						shape.setColor(Color.WHITE);
 						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 						if (fruits.isEmpty()) {
+							boolean spawnInSnake = false;
 							int randx = random.nextInt(0, gridsize);
 							int randy = random.nextInt(0, gridsize);
-							fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector((int) ((rectangle.x - (viewport.getScreenWidth()/2)) + grid.squareSize * randx), (int) ((rectangle.y - (viewport.getScreenHeight()/2)) + grid.squareSize * randy))));
+						for (Snake snake : grid.snakes) {
+								for (Vector pos : snake.getPositions()) {
+									if (new Vector(randx, randy).equals(pos)) {
+										spawnInSnake = true;
+									}
+								}
+								}
+							if (!spawnInSnake) {
+								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector((int) ((rectangle.x - (viewport.getScreenWidth() / 2)) + grid.squareSize * randx), (int) ((rectangle.y - (viewport.getScreenHeight() / 2)) + grid.squareSize * randy))));
+							}
+
 						}
- 
 
 
+						}
 					}
-				}
-				for (int k = 0; k < positions.size(); k++) {
-					int cx = positions.get(k).x;
-					int cy = positions.get(k).y;
+					for (int k = 0; k < positions.size(); k++) {
+						int cx = positions.get(k).x;
+						int cy = positions.get(k).y;
 
-					if (cx == grid.gridSize || cx == -1) {
-						// Skiftes til i, når vi looper over slanger.
-						cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize - Math.abs(cx);
+						if (cx == grid.gridSize || cx == -1) {
+							// Skiftes til i, når vi looper over slanger.
+							cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize - Math.abs(cx);
+						}
+						if (cy == grid.gridSize || cy == -1) {
+							// Skiftes til i, når vi looper over slanger.
+							cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize - Math.abs(cy);
+						}
+
+						if (k == positions.size() - 1) {
+							shape.setColor(Color.BLACK);
+						} else {
+							shape.setColor(Color.GREEN);
+						}
+						shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.squareSize, grid.squareSize);
 					}
-					if (cy == grid.gridSize || cy == -1) {
-						// Skiftes til i, når vi looper over slanger.
-						cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize - Math.abs(cy);
+					shape.end();
+
+
+					batch.begin();
+					for (Fruit fruit : fruits) {
+						batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize, grid.squareSize);
 					}
 
-					if (k == positions.size() - 1) {
-						shape.setColor(Color.BLACK);
-					} else {
-						shape.setColor(Color.GREEN);
+					batch.end();
+					Iterator<Fruit> fruitIterator = fruits.iterator();
+					while (fruitIterator.hasNext()) {
+						Fruit fruit = fruitIterator.next();
+						for (Snake snake : grid.snakes) {
+							if (snake.checkCollision(fruit.getSnakePos())) {
+								snake.setHasEaten();
+								fruits.remove(fruit);
+							}
+						}
+						break;
 					}
-					shape.rect(shower[cx][cy].x, shower[cx][cy].y, grid.squareSize, grid.squareSize);
-				}
-				shape.end();
-
-
-
-				batch.begin();
-				for (Fruit fruit : fruits) {
-					    batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize, grid.squareSize);
-				}
-
-				batch.end();
-				Iterator<Fruit> fruitIterator = fruits.iterator();
-				while (fruitIterator.hasNext()) {
-					Fruit fruit = fruitIterator.next();
-					if (grid.snakes[0].checkCollision(fruit.getSnakePos())) {
-						System.out.println("Nom nom");
-						// grid.snakes[0].setScore(grid.snakes[0].getScore + 1)
-						fruits.remove(fruit);
-					}
-					break;
 				}
 		}
-	}
+
 
 	@Override
 	public void dispose() {

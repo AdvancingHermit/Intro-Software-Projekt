@@ -14,6 +14,8 @@ public class Snake {
     private boolean hasEaten;
     public boolean isDead;
     private int counter = 0;
+
+    private int maxcounter = 17;
     private double startTime = System.currentTimeMillis();
     private int fruitsEaten = 0;
 
@@ -51,7 +53,7 @@ public class Snake {
         if (Gdx.input.isKeyPressed(keys[3]) && !vel.equals(new Vector(-1, 0))) { // Default D
             key = 'D';
         }
-        if (counter % 20 == 0) {
+        if (counter % maxcounter == 0) {
 
             switch (key) {
                 case ('W'):
