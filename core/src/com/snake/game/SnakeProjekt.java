@@ -32,8 +32,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	private int n = 15;
-	private int m = 15;
+	private int n = 10;
+	private int m = 10;
 	private Vector gridsize;
 
 
@@ -174,7 +174,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& mousePressed) {
 						m++;
 						mousePressed = false;
-					} 
+					}
 				}
 				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
 						&& Gdx.input.getX() <= startButtonX + 200
@@ -226,30 +226,54 @@ public class SnakeProjekt extends ApplicationAdapter {
 						while (fruits.isEmpty()) {
 							boolean snakeCoversFullScreen = false;
 							boolean spawnInSnake = false;
+							int snakeSize = 0;
 							int randx = random.nextInt(0, gridsize.x);
 							int randy = random.nextInt(0, gridsize.y);
 							for (Snake snake : grid.snakes) {
+								snakeSize = snake.getPositions().size();
 								for (Vector pos : snake.getPositions()) {
-									if (snake.getPositions().size() >= gridsize.x * gridsize.y - grid.walls.length) {
-										snakeCoversFullScreen = true;
-									}
 									if (new Vector(randx, randy).equals(pos)) {
 										spawnInSnake = true;
 									}
 								}
 							}
-							if (snakeCoversFullScreen) {
-								break;
-							}
-							if (!spawnInSnake) {
-								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
-										(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
-										(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
-												+ grid.squareSize * randy))));
+
+							int totalWalls = 0;
+							for (Wall wall : grid.walls) {
+								totalWalls += wall.getNumberOfWalls();
+								if (new Vector(randx, randy).equals(wall.getSnakePos())) {
+									spawnInSnake = true;
+								}
+								for (int i = 1; i< wall.getSize().x; i++) {
+									if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
+										spawnInSnake = true;
+									}
+								}
+								for (int i = 1; i< wall.getSize().y; i++) {
+									if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
+										spawnInSnake = true;
+									}
+								}
 							}
 
+
+							if (snakeSize >= gridsize.x * gridsize.y - totalWalls) {
+								snakeCoversFullScreen = true;
+							}
+
+								if (snakeCoversFullScreen) {
+									break;
+								}
+								if (!spawnInSnake) {
+									fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
+											(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
+											(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
+													+ grid.squareSize * randy))));
+								}
+
+							}
 						}
-					}
+
 
 				}
 

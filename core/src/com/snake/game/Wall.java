@@ -11,4 +11,12 @@ public class Wall extends GameObject {
         super(snakePosition, sprite, spritePos);
         this.size = size;
     }
+
+    public Vector getSize() {
+        return size;
+    }
+
+    public int getNumberOfWalls(){
+        return size.x + size.y - 1;
+    }
 }
