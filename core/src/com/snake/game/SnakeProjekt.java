@@ -12,7 +12,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -36,9 +42,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	FitViewport viewport;
 	BitmapFont font;
+	BitmapFont font2;
 	Texture appleSprite;
 	List<Fruit> fruits = new ArrayList<>();
 	Random random = new Random();
+	GlyphLayout scoreNumText;
+	GlyphLayout colonText;
+	GlyphLayout scoreText;
 
 	@Override
 	public void create() {
@@ -51,10 +61,31 @@ public class SnakeProjekt extends ApplicationAdapter {
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 		
-		font = new BitmapFont();
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 72;
+		font = generator.generateFont(parameter); // font size 12 pixels
+		font.setColor(Color.ORANGE);
+		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/snes.ttf"));
+		parameter = new FreeTypeFontParameter();
+		parameter.size = 90;
+		font2 = generator.generateFont(parameter); // font size 12 pixels
+		font2.setColor(Color.ORANGE);
+		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
+
+		scoreText = new GlyphLayout();
+		scoreText.setText(font2, "SCORE");
+		colonText = new GlyphLayout();
+		colonText.setText(font, " : ");
+		scoreNumText = new GlyphLayout();
+		
 
 		Fruit apple = new Fruit(new Vector(100, 100), appleSprite);
 		// fruits.add(apple);
+
+
 
 	}
 
@@ -99,7 +130,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 				ArrayList<Vector> positions = grid.snakes[0].getPositions();
 				batch.begin();
 
-				font.draw(batch, String.valueOf(grid.snakes[0].getScore()), 0, 0.4f * viewport.getScreenHeight());
+				scoreNumText.setText(font2, "22");
+				float offset = (scoreNumText.width + scoreText.width + colonText.width) / 2;
+				scoreNumText.setText(font2, "" + grid.snakes[0].getScore());
+
+				font2.draw(batch, scoreText, - offset, 0.41f * viewport.getScreenHeight());
+				font.draw(batch, colonText, - offset + scoreText.width, 0.41f * viewport.getScreenHeight());
+				font2.draw(batch, scoreNumText, - offset + scoreText.width + colonText.width, 0.41f * viewport.getScreenHeight());
 
 				batch.end();
 				for (Rectangle[] rectangles : shower) {
