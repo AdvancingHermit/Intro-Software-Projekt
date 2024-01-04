@@ -1,5 +1,6 @@
 package com.snake.game;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.snake.game.util.Vector;
@@ -18,9 +19,14 @@ public class Grid {
         int max = Math.max(gridSize.x, gridSize.y);
         squareSize = (screenHeight * 70) / 100 / max;
         this.gridSize = gridSize;
-        for (int i = 0; i < snakeAmount; i++) {
-            snakes[i] = new Snake(gridSize.x, gridSize.y);
+        snakes[0] = new Snake(gridSize.x / 2, gridSize.y / 2);
+
+        int[] keys = { Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT };
+        for (int i = 1; i < snakeAmount; i++) {
+            
+            snakes[i] = new Snake( i * 2  + gridSize.x / 2, gridSize.y / 2, keys);
         }
+        
         Wall[] walls = wallGenerator(gridSize);
 
         
