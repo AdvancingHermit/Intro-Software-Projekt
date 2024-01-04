@@ -3,8 +3,11 @@ package com.snake.game;
 import com.badlogic.gdx.math.Rectangle;
 import com.snake.game.util.Vector;
 
+import java.util.Random;
+
 public class Grid {
     Snake[] snakes;
+    Wall[] walls;
     int squareSize;
     Vector gridSize;
 
@@ -17,6 +20,7 @@ public class Grid {
         for (int i = 0; i < snakeAmount; i++) {
             snakes[i] = new Snake(gridSize.x, gridSize.y);
         }
+        Wall[] walls = wallGenerator(gridSize);
     }
 
     public Rectangle[][] show(float game_width, float game_height) {
@@ -25,6 +29,7 @@ public class Grid {
                 snakes[i].move();
             }
         }
+
         double xOffset = ((game_width / 2) - (squareSize*gridSize.x) / 2);
         double yOffset = ((game_height / 2) - (squareSize*gridSize.y) / 2);
 
@@ -35,6 +40,18 @@ public class Grid {
             }
         }
         return rects;
+    }
+
+    public Wall[] wallGenerator(int gridSize) {
+        Random random = new Random();
+        Wall[] walls = new Wall[gridSize / 5];
+
+        for (int i = 0; i < walls.length; i++) {
+            int posX = random.nextInt(gridSize);
+            int posY = random.nextInt(gridSize);
+            walls[i] = new Wall(new Vector(posX, posY), null, new Vector(posX * squareSize - (gridSize/2) * squareSize, posY * squareSize - (gridSize/2) * squareSize), new Vector(random.nextInt(1, 5), random.nextInt(1, 5)));
+        }
+        return walls;
     }
 
 }
