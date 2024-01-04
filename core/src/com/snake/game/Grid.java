@@ -31,7 +31,7 @@ public class Grid {
         }
         double xOffset = ((game_width / 2) - (squareSize*gridSize) / 2);
         double yOffset = ((game_height / 2) - (squareSize*gridSize) / 2);
-  
+
         Rectangle[][] rects = new Rectangle[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {

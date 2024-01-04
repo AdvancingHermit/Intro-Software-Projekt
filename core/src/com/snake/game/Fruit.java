@@ -5,18 +5,30 @@ import com.snake.game.util.Vector;
 
 public class Fruit {
 
-    private Vector position;
+    private Vector snakePos;
     private Texture sprite;
+
+    private Vector spritePos;
 
     boolean isOnScreen;
 
-    public Fruit(Vector position, Texture sprite){
-        this.position = position;
-        this.sprite = sprite;
+
+    public Vector getSpritePos() {
+        return spritePos;
     }
 
-    public Vector getPosition() {
-        return position;
+    public void setSpritePos(Vector spritePos) {
+        this.spritePos = spritePos;
+    }
+
+    public Fruit(Vector snakePosition, Texture sprite, Vector spritePos){
+        this.snakePos = snakePosition;
+        this.sprite = sprite;
+        this.spritePos = spritePos;
+    }
+
+    public Vector getSnakePos() {
+        return snakePos;
     }
 
     public boolean isOnScreen() {
