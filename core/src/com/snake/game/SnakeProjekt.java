@@ -32,8 +32,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	private int n = 10;
-	private int m = 10;
+	private int n = 5;
+	private int m = 5;
 	private Vector gridsize;
 
 
