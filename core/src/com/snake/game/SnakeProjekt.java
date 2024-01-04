@@ -33,8 +33,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	final private int n = 5;
-	final private int m = 5;
+
+	final private int n = 10;
+	final private int m = 11;
 	final private Vector gridsize = new Vector(n, m);
 
 
@@ -113,9 +114,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		ScreenUtils.clear(0, 0, 1, 1);
 		switch (currentSceen) {
 			case Main_Scene:
-				ScreenUtils.clear(0, 0, 1, 1);
 				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 					Gdx.app.exit();
 				}
