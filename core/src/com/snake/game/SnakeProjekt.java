@@ -80,6 +80,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	WallHandler wallHandler = new WallHandler(true);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 50);
+	BorderHandler borderHandler = new BorderHandler(true);
 
 	int fruitAmount = 3;
 
@@ -331,15 +332,28 @@ public class SnakeProjekt extends ApplicationAdapter {
 				int cy = positions.get(k).y;
 
 				if (cx == grid.gridSize.x || cx == -1) {
-					// Skiftes til i, når vi looper over slanger.
-					cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
-					snake.move();
-
+					if (borderHandler.isEnabled()) {
+						snake.isDead = true;
+						snake.moveBack();
+						cx = positions.get(k).x;
+						cy = positions.get(k).y;
+					} else {
+						// Skiftes til i, når vi looper over slanger.
+						cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
+						snake.move();
+						cx = positions.get(k).x;
+						cy = positions.get(k).y;
+					}
 				}
 				if (cy == grid.gridSize.y || cy == -1) {
-					// Skiftes til i, når vi looper over slanger.
-					cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
-					snake.move();
+					if (borderHandler.isEnabled()) {
+						snake.isDead = true;
+						snake.moveBack();
+					} else {
+						// Skiftes til i, når vi looper over slanger.
+						cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
+						snake.move();
+					}
 				}
 
 				if (k == positions.size() - 1) {
