@@ -124,9 +124,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		inputBox.update();
-		System.out.println(inputBox.getString());
-
 		switch (currentSceen) {
 			case Main_Scene:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -372,7 +369,38 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 					break;
 				}
+				inputBox.update();
+				InputBoxShower(inputBox, new Vector(0, 0), new Vector(100, 100));
+				System.out.println(inputBox.getString());
 		}
+	}
+
+
+	private void InputBoxShower(InputBox inputBox, Vector position, Vector size){
+		Rectangle[] rects = inputBox.show(position, size);
+		shape.begin(ShapeType.Filled);
+		shape.setColor(Color.WHITE);
+		shape.rect(rects[0].x, rects[0].y, rects[0].width, rects[0].height);
+		shape.setColor(Color.BLACK);
+		shape.rect(rects[1].x, rects[1].y, rects[1].width, rects[1].height);
+		shape.end();
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/snes.ttf"));
+		parameter = new FreeTypeFontParameter();
+		parameter.size = size.y;
+		font2 = generator.generateFont(parameter); // font size 12 pixels
+		font2.setColor(Color.ORANGE);
+		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+		scoreText = new GlyphLayout();
+		scoreText.setText(font2, inputBox.getString());
+		int posX = (int)(rects[0].x - viewport.getScreenWidth()/2);
+		int posY = (int)(rects[0].y - viewport.getScreenHeight()/2 + rects[0].height - 8);
+
+		System.out.println(posX + " " + posY);
+		batch.begin();
+		font2.draw(batch, scoreText, posX, posY);
+		batch.end();
 	}
 
 	@Override
