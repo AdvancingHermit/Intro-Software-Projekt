@@ -71,6 +71,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 	InputBox inputBox;
 
 
+	WallHandler wallHandler = new WallHandler(false);
+
+
 	@Override
 	public void create() {
 
@@ -193,7 +196,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
 					gridsize = new Vector(n, m);
 					grid = new Grid(gridsize, snakeAmount, screenHeight);
-          grid.walls = grid.wallGenerator(gridsize);
+					if (wallHandler.isEnabled()) {
+						grid.walls = grid.wallGenerator(gridsize);
+					}
 					currentSceen = Scene.Main_Game;
 				}
 				shape.end();
@@ -252,21 +257,22 @@ public class SnakeProjekt extends ApplicationAdapter {
 									}
 								}
 							}
-
-							int totalWalls = 0;
-							for (Wall wall : grid.walls) {
-								totalWalls += wall.getNumberOfWalls();
-								if (new Vector(randx, randy).equals(wall.getSnakePos())) {
-									spawnInSnake = true;
-								}
-								for (int i = 1; i< wall.getSize().x; i++) {
-									if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
+							int totalWalls = 0;   
+							if (wallHandler.isEnabled()) {
+								for (Wall wall : grid.walls) {
+									totalWalls += wall.getNumberOfWalls();
+									if (new Vector(randx, randy).equals(wall.getSnakePos())) {
 										spawnInSnake = true;
 									}
-								}
-								for (int i = 1; i< wall.getSize().y; i++) {
-									if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
-										spawnInSnake = true;
+									for (int i = 1; i < wall.getSize().x; i++) {
+										if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
+											spawnInSnake = true;
+										}
+									}
+									for (int i = 1; i < wall.getSize().y; i++) {
+										if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
+											spawnInSnake = true;
+										}
 									}
 								}
 							}
@@ -335,29 +341,31 @@ public class SnakeProjekt extends ApplicationAdapter {
 							grid.squareSize);
 				}
 					batch.end();
+				     if (wallHandler.isEnabled()) {
+						 batch.begin();
 
-					batch.begin();
 
-					for(int i = 0; i < grid.walls.length; i++){
-						for(int j = 0; j < grid.walls[i].size.x; j++){
-							batch.draw(wallSprite, (grid.walls[i].getSpritePos().x) + j * grid.squareSize, (grid.walls[i].getSpritePos().y), grid.squareSize, grid.squareSize);
-							for(Snake snake : grid.snakes){
-								if(snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(j, 0)))) {
-									snake.isDead = true;
-								}
-							}
-						}
-						for(int j = 0; j < grid.walls[i].size.y; j++){
-							batch.draw(wallSprite, (grid.walls[i].getSpritePos().x), (grid.walls[i].getSpritePos().y) + j * grid.squareSize, grid.squareSize, grid.squareSize);
-							for(Snake snake : grid.snakes){
-								if(snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(0, j)))) {
-									snake.isDead = true;
-								}
-							}
-						}
-						
-					}
-				batch.end();
+						 for (int i = 0; i < grid.walls.length; i++) {
+							 for (int j = 0; j < grid.walls[i].size.x; j++) {
+								 batch.draw(wallSprite, (grid.walls[i].getSpritePos().x) + j * grid.squareSize, (grid.walls[i].getSpritePos().y), grid.squareSize, grid.squareSize);
+								 for (Snake snake : grid.snakes) {
+									 if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(j, 0)))) {
+										 snake.isDead = true;
+									 }
+								 }
+							 }
+							 for (int j = 0; j < grid.walls[i].size.y; j++) {
+								 batch.draw(wallSprite, (grid.walls[i].getSpritePos().x), (grid.walls[i].getSpritePos().y) + j * grid.squareSize, grid.squareSize, grid.squareSize);
+								 for (Snake snake : grid.snakes) {
+									 if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(0, j)))) {
+										 snake.isDead = true;
+									 }
+								 }
+							 }
+
+						 }
+						 batch.end();
+					 }
 				Iterator<Fruit> fruitIterator = fruits.iterator();
 				while (fruitIterator.hasNext()) {
 					Fruit fruit = fruitIterator.next();
