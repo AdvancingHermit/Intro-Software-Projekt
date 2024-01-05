@@ -319,7 +319,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			System.out.println(fruit.getSnakePos());
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
-					snake.setHasEaten(fruit.isGolden());
+					snake.setHasEaten(fruit);
 					fruitIterator.remove();
 				}
 			}

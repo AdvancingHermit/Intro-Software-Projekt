@@ -18,4 +18,12 @@ public class Fruit extends GameObject {
     public boolean isGolden() {
         return golden;
     }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getSize() {
+        return size;
+    }
 }
