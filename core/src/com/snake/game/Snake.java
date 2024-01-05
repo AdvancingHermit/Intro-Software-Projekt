@@ -11,15 +11,16 @@ public class Snake {
     private Vector vel;
     private char key;
     private int[] keys;
-    private boolean hasEaten;
     public boolean isDead;
     private int counter = 0;
     private int maxcounter = 7;
   
     private double startTime = System.currentTimeMillis();
-    private int fruitsEaten = 0;
 
     private int highscore;
+
+    private int grow = 0;
+    private int score = 0;
 
     public int getHighscore() {
         return highscore;
@@ -80,9 +81,9 @@ public class Snake {
                 isDead = true;
                 positions.remove(positions.size() - 1);
             }
-            if (hasEaten) {
+            if (grow > 0) {
                 counter++;
-                hasEaten = false;
+                grow--;
                 return;
             }
             if (!isDead) {
@@ -108,9 +109,9 @@ public class Snake {
         return (positions.get(positions.size() - 1)).equals(pos);
     }
 
-    public void setHasEaten() {
-        fruitsEaten++;
-        this.hasEaten = true;
+    public void setHasEaten(Fruit fruit) {
+        score += fruit.isGolden() ? 3 * fruit.getScore() : fruit.getScore();
+        grow += fruit.isGolden() ? 3 * fruit.getSize() : fruit.getSize();
     }
 
     public ArrayList<Vector> getPositions() {
@@ -125,7 +126,7 @@ public class Snake {
         if (isDead){
             return highscore;
         }
-        highscore = (int) ((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
+        highscore = (int) ((System.currentTimeMillis() - startTime) * 0.001 + score);
         return highscore;
     }
     public Vector getVel() {
