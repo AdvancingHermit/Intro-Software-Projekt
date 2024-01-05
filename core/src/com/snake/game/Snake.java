@@ -14,7 +14,7 @@ public class Snake {
     private boolean hasEaten;
     public boolean isDead;
     private int counter = 0;
-    private int maxcounter = 14;
+    private int maxcounter = 2;
   
     private double startTime = System.currentTimeMillis();
     private int fruitsEaten = 0;
@@ -37,7 +37,6 @@ public class Snake {
         this.keys = keys;
         vel = new Vector(-1, 0);
         key = 'A';
-
     }
 
     public Snake(int x, int y, int[] keys) {
