@@ -110,10 +110,26 @@ public class SnakeProjekt extends ApplicationAdapter {
 		scoreNumText = new GlyphLayout();
 
 		inputBox = new InputBox(1);
-		backButtonX = -screenWidth/2 + 150;
-		backButtonY = screenHeight/2 - 200;
+		backButtonX = -screenWidth / 2 + 150;
+		backButtonY = screenHeight / 2 - 200;
 		backButtonWidth = 300;
 		backButtonHeight = 100;
+
+	}
+
+	public void drawBackButton() {
+		batch.begin();
+		batch.draw(backArrow, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
+		batch.end();
+	}
+
+	public void clickedBackButton() {
+		if (Gdx.input.getX() >= backButtonX + screenWidth / 2 // Creating start minus n hitbox
+				&& Gdx.input.getX() <= backButtonX + screenWidth / 2 + 300
+				&& Gdx.input.getY() <= backButtonY - screenHeight / 2 + 400
+				&& Gdx.input.getY() >= backButtonY - screenHeight / 2 + 300) {
+			currentSceen = Scene.Main_Scene;
+		}
 	}
 
 	@Override
@@ -124,7 +140,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 	@Override
 	public void render() {
 		inputBox.update();
-		System.out.println(inputBox.getString());
 
 		switch (currentSceen) {
 			case Main_Scene:
@@ -142,11 +157,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.begin(ShapeType.Filled);
 				shape.setColor(Color.WHITE);
 				shape.rect(startButtonX, startButtonY, 200, 200); // creating start game
-				batch.begin();
-				batch.draw(backArrow, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
-				batch.end();
-				
+				drawBackButton();
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					clickedBackButton();
 					mousePressed = true;
 				}
 				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
@@ -180,7 +193,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
 						n = Math.max(n - 1, 5);
-						System.out.println("n--: " + n);
 						mousePressed = false;
 					} else if (Gdx.input.getX() >= startButtonX + 500 // Creating start plus n hitbox
 							&& Gdx.input.getX() <= startButtonX + 600
@@ -188,7 +200,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
 						n = Math.min(n + 1, 100);
-						System.out.println("n++: " + n);
 						mousePressed = false;
 					}
 					if (Gdx.input.getX() >= startButtonX - 400// Creating start minus m hitbox
@@ -217,7 +228,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.setProjectionMatrix(camera.combined);
 
 				shape.begin(ShapeType.Filled);
-
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 
 				shape.end();
