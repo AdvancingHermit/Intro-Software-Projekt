@@ -36,8 +36,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	private int n = 5;
-	private int m = 5;
+	private int n = 6;
+	private int m = 6;
 
 	private Vector gridsize;
 
@@ -54,6 +54,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont font3;
 
 	Texture appleSprite;
+	Texture goldenAppleSprite;
 	Texture wallSprite;
 	Texture snakeBodySprite;
 	Texture snakeHeadSprite;
@@ -79,8 +80,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	WallHandler wallHandler = new WallHandler(true);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 50);
 
-	int fruitAmount = 5;
+	int fruitAmount = 3;
 
 	@Override
 	public void create() {
@@ -88,6 +90,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		backArrow = new Texture(Gdx.files.internal("Arrow.png"));
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
+		goldenAppleSprite = new Texture((Gdx.files.internal("GoldenApple.png")));
 		wallSprite = new Texture((Gdx.files.internal("wall.jpg")));
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
 		snakeHeadSprite = new Texture((Gdx.files.internal("snakehead.png")));
@@ -316,7 +319,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			System.out.println(fruit.getSnakePos());
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
-					snake.setHasEaten();
+					snake.setHasEaten(fruit.isGolden());
 					fruitIterator.remove();
 				}
 			}
@@ -401,7 +404,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 				}
 
-				if (snakeSize >= gridsize.x * gridsize.y - totalWalls - (fruitAmount-1)) {
+				if (snakeSize >= gridsize.x * gridsize.y - totalWalls) {
+					snakeCoversFullScreen = true;
+				}
+				if (gridsize.x * gridsize.y - snakeSize - totalWalls - fruits.size() <= 0){
 					snakeCoversFullScreen = true;
 				}
 
@@ -415,10 +421,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 				}
 				if (!spawnInSnake && ! spawnInFruit) {
-						fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
+					boolean golden = random.nextInt(0,100) + 1 <= goldenFruitHandler.getChance();
+					Texture sprite = golden ? goldenAppleSprite : appleSprite;
+						fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), sprite, new Vector(
 								(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
 								(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
-										+ grid.squareSize * randy))));
+										+ grid.squareSize * randy)), 30, 1, golden));
 
 				} else {
 					k--;
