@@ -7,7 +7,7 @@ public class GameObject {
 
     private Vector snakePos;
     private Texture sprite;
-
+    private boolean isEnabled;
     private Vector spritePos;
 
 
@@ -31,5 +31,11 @@ public class GameObject {
 
     public Texture getSprite() {
         return sprite;
+    }
+    public boolean getisEnabled(){
+        return isEnabled;
+    }
+    public void setisEnabled(boolean state){
+        this.isEnabled = state;
     }
 }

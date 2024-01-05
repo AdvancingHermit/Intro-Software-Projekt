@@ -29,7 +29,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class SnakeProjekt extends ApplicationAdapter {
 
 	enum Scene {
-		Main_Scene, Main_Game
+		Main_Scene, Main_Game, Main_Setting, Main_Enable_Features
 	}
 
 	Scene currentSceen = Scene.Main_Scene;
@@ -200,6 +200,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 					currentSceen = Scene.Main_Game;
 				}
 				shape.end();
+				break;
+		    case Main_Setting:
+				break;
+			case Main_Enable_Features:
 				break;
 			case Main_Game:
 				ScreenUtils.clear(0, 0, 1, 1);
