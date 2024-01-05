@@ -181,7 +181,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
 					gridsize = new Vector(n, m);
 					grid = new Grid(gridsize, multiplayerHandler.isEnabled(), screenHeight);
-					grid.walls = grid.wallGenerator(gridsize);
+					if (wallHandler.isEnabled()) {
+						grid.walls = grid.wallGenerator(gridsize);
+					}
 					currentSceen = Scene.Main_Game;
 				}
 				shape.end();
@@ -232,20 +234,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						m = Math.min(m + 1, 100);
 						mousePressed = false;
 					}
-				}
-
-				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
-						&& Gdx.input.getX() <= startButtonX + 200
-						&& Gdx.input.getY() <= startButtonY + 200
-						&& Gdx.input.getY() >= startButtonY
-						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
-					gridsize = new Vector(n, m);
-					grid = new Grid(gridsize, multiplayerHandler.isEnabled(), screenHeight);
-					if (wallHandler.isEnabled()) {
-						grid.walls = grid.wallGenerator(gridsize);
-					}
-					currentSceen = Scene.Main_Game;
 				}
 				shape.end();
 				break;
@@ -420,7 +408,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						if (snake.checkCollision(fruit.getSnakePos())) {
 							snake.setHasEaten();
 							fruits.remove(fruit);
-
 						}
 					}
 					break;
