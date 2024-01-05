@@ -34,12 +34,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-
 	private int n = 10;
 	private int m = 10;
 	private Vector gridsize;
-
-
 
 	final private int snakeAmount = 3;
 	SpriteBatch batch;
@@ -50,7 +47,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FitViewport viewport;
 	BitmapFont font;
 	BitmapFont font2;
-	
+
+	Texture backArrow;
 	Texture appleSprite;
 	Texture wallSprite;
 	Texture snakeBodySprite;
@@ -69,14 +67,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	boolean mousePressed;
 	int frameCounter = 0;
 	InputBox inputBox;
-
+	int backButtonHeight, backButtonWidth, backButtonX, backButtonY;
 
 	@Override
 	public void create() {
 
-		
 		batch = new SpriteBatch();
-
+		backArrow = new Texture(Gdx.files.internal("Arrow.png"));
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		wallSprite = new Texture((Gdx.files.internal("wall.jpg")));
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
@@ -85,10 +82,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		img = new Texture("badlogic.jpg");
 		shape = new ShapeRenderer();
-    
+
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
-    
 
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
@@ -114,7 +110,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		scoreNumText = new GlyphLayout();
 
 		inputBox = new InputBox(1);
-
+		backButtonX = -screenWidth/2 + 150;
+		backButtonY = screenHeight/2 - 200;
+		backButtonWidth = 300;
+		backButtonHeight = 100;
 	}
 
 	@Override
@@ -143,6 +142,29 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.begin(ShapeType.Filled);
 				shape.setColor(Color.WHITE);
 				shape.rect(startButtonX, startButtonY, 200, 200); // creating start game
+				batch.begin();
+				batch.draw(backArrow, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
+				batch.end();
+				
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					mousePressed = true;
+				}
+				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
+						&& Gdx.input.getX() <= startButtonX + 200
+						&& Gdx.input.getY() <= startButtonY + 200
+						&& Gdx.input.getY() >= startButtonY
+						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
+					gridsize = new Vector(n, m);
+					grid = new Grid(gridsize, snakeAmount, screenHeight);
+					grid.walls = grid.wallGenerator(gridsize);
+					currentSceen = Scene.Main_Game;
+				}
+				shape.end();
+				break;
+			case Main_Setting:
+				break;
+			case Main_Enable_Features:
 				shape.setColor(Color.RED);
 				shape.rect(startButtonX + 400, startButtonY, 100, 200); // creating minus n
 				shape.setColor(Color.GREEN);
@@ -151,16 +173,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.rect(startButtonX - 400, startButtonY, 100, 200); // creating minus m
 				shape.setColor(Color.GREEN);
 				shape.rect(startButtonX - 300, startButtonY, 100, 200); // creating plus m
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-					mousePressed = true;
-				}
 				if (frameCounter % 5 == 0) {
 					if (Gdx.input.getX() >= startButtonX + 400 // Creating start minus n hitbox
 							&& Gdx.input.getX() <= startButtonX + 500
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						n = Math.max(n-1, 5);
+						n = Math.max(n - 1, 5);
 						System.out.println("n--: " + n);
 						mousePressed = false;
 					} else if (Gdx.input.getX() >= startButtonX + 500 // Creating start plus n hitbox
@@ -168,7 +187,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-					n = Math.min(n+1, 100);
+						n = Math.min(n + 1, 100);
 						System.out.println("n++: " + n);
 						mousePressed = false;
 					}
@@ -177,33 +196,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						m = Math.max(m-1, 5);
+						m = Math.max(m - 1, 5);
 						mousePressed = false;
-					}  else if (Gdx.input.getX() >= startButtonX - 300 // Creating start plus n hitbox
+					} else if (Gdx.input.getX() >= startButtonX - 300 // Creating start plus n hitbox
 							&& Gdx.input.getX() <= startButtonX - 200
 							&& Gdx.input.getY() <= startButtonY + 200
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
-						m = Math.min(m+1, 100);
+						m = Math.min(m + 1, 100);
 						mousePressed = false;
 					}
 				}
-				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
-						&& Gdx.input.getX() <= startButtonX + 200
-						&& Gdx.input.getY() <= startButtonY + 200
-						&& Gdx.input.getY() >= startButtonY
-						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
-					gridsize = new Vector(n, m);
-					grid = new Grid(gridsize, snakeAmount, screenHeight);
-          grid.walls = grid.wallGenerator(gridsize);
-					currentSceen = Scene.Main_Game;
-				}
-				shape.end();
-				break;
-		    case Main_Setting:
-				break;
-			case Main_Enable_Features:
 				break;
 			case Main_Game:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -216,25 +219,23 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.begin(ShapeType.Filled);
 
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
-				
+
 				shape.end();
 				batch.begin();
 				for (int i = 0; i < grid.snakes.length; i++) {
 					scoreNumText.setText(font2, "22");
-					scoreText.setText(font2, "PLAYER " + (i+1) + " SCORE");
+					scoreText.setText(font2, "PLAYER " + (i + 1) + " SCORE");
 					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 50;
 					scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
-					font2.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
-					font.draw(batch, colonText, -offset + scoreText.width, (float) (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
-					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
+					font2.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i) * viewport.getScreenHeight());
+					font.draw(batch, colonText, -offset + scoreText.width,
+							(float) (0.41f + 0.075f * -i) * viewport.getScreenHeight());
+					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width,
+							(0.41f + 0.075f * -i) * viewport.getScreenHeight());
 				}
-
-	
 
 				batch.end();
 				shape.begin(ShapeType.Filled);
-
-
 
 				for (Rectangle[] rectangles : shower) {
 					for (Rectangle rectangle : rectangles) {
@@ -262,36 +263,36 @@ public class SnakeProjekt extends ApplicationAdapter {
 								if (new Vector(randx, randy).equals(wall.getSnakePos())) {
 									spawnInSnake = true;
 								}
-								for (int i = 1; i< wall.getSize().x; i++) {
-									if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
+								for (int i = 1; i < wall.getSize().x; i++) {
+									if (new Vector(randx, randy)
+											.equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
 										spawnInSnake = true;
 									}
 								}
-								for (int i = 1; i< wall.getSize().y; i++) {
-									if (new Vector(randx, randy).equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
+								for (int i = 1; i < wall.getSize().y; i++) {
+									if (new Vector(randx, randy)
+											.equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
 										spawnInSnake = true;
 									}
 								}
 							}
-
 
 							if (snakeSize >= gridsize.x * gridsize.y - totalWalls) {
 								snakeCoversFullScreen = true;
 							}
 
-								if (snakeCoversFullScreen) {
-									break;
-								}
-								if (!spawnInSnake) {
-									fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
-											(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
-											(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
-													+ grid.squareSize * randy))));
-								}
-
+							if (snakeCoversFullScreen) {
+								break;
 							}
-						}
+							if (!spawnInSnake) {
+								fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), appleSprite, new Vector(
+										(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
+										(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
+												+ grid.squareSize * randy))));
+							}
 
+						}
+					}
 
 				}
 
@@ -302,7 +303,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					for (int k = 0; k < positions.size(); k++) {
 						int cx = positions.get(k).x;
 						int cy = positions.get(k).y;
-	
+
 						if (cx == grid.gridSize.x || cx == -1) {
 							// Skiftes til i, når vi looper over slanger.
 							cx = snake.getPositions().get(k).x = grid.gridSize.x - Math.abs(cx);
@@ -314,55 +315,57 @@ public class SnakeProjekt extends ApplicationAdapter {
 							snake.move();
 						}
 
-						if (k== positions.size() - 1) {
+						if (k == positions.size() - 1) {
 							shape.setColor(Color.BLACK);
 							Sprite sprY = new Sprite(snakeHeadSprite);
 							Sprite sprX = new Sprite(snakeHeadSidewaysSprite);
 							Vector vel = snake.getVel();
-							sprY.setFlip(false,  vel.y == 1);
-							sprX.setFlip(vel.x == -1,  false);
+							sprY.setFlip(false, vel.y == 1);
+							sprX.setFlip(vel.x == -1, false);
 							Sprite spr = vel.x == 0 ? sprY : sprX;
-							batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2), (int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
-											 
-	
-	
+							batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2),
+									(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
+
 						} else {
-							batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2), (int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize ,grid.squareSize);
+							batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
+									(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 						}
 					}
 				}
 				batch.end();
-				
-				
 
 				batch.begin();
 				for (GameObject gameObject : fruits) {
-					batch.draw(gameObject.getSprite(), (gameObject.getSpritePos().x), (gameObject.getSpritePos().y), grid.squareSize,
+					batch.draw(gameObject.getSprite(), (gameObject.getSpritePos().x), (gameObject.getSpritePos().y),
+							grid.squareSize,
 							grid.squareSize);
 				}
-					batch.end();
+				batch.end();
 
-					batch.begin();
+				batch.begin();
 
-					for(int i = 0; i < grid.walls.length; i++){
-						for(int j = 0; j < grid.walls[i].size.x; j++){
-							batch.draw(wallSprite, (grid.walls[i].getSpritePos().x) + j * grid.squareSize, (grid.walls[i].getSpritePos().y), grid.squareSize, grid.squareSize);
-							for(Snake snake : grid.snakes){
-								if(snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(j, 0)))) {
-									snake.isDead = true;
-								}
+				for (int i = 0; i < grid.walls.length; i++) {
+					for (int j = 0; j < grid.walls[i].size.x; j++) {
+						batch.draw(wallSprite, (grid.walls[i].getSpritePos().x) + j * grid.squareSize,
+								(grid.walls[i].getSpritePos().y), grid.squareSize, grid.squareSize);
+						for (Snake snake : grid.snakes) {
+							if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(j, 0)))) {
+								snake.isDead = true;
 							}
 						}
-						for(int j = 0; j < grid.walls[i].size.y; j++){
-							batch.draw(wallSprite, (grid.walls[i].getSpritePos().x), (grid.walls[i].getSpritePos().y) + j * grid.squareSize, grid.squareSize, grid.squareSize);
-							for(Snake snake : grid.snakes){
-								if(snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(0, j)))) {
-									snake.isDead = true;
-								}
-							}
-						}
-						
 					}
+					for (int j = 0; j < grid.walls[i].size.y; j++) {
+						batch.draw(wallSprite, (grid.walls[i].getSpritePos().x),
+								(grid.walls[i].getSpritePos().y) + j * grid.squareSize, grid.squareSize,
+								grid.squareSize);
+						for (Snake snake : grid.snakes) {
+							if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(0, j)))) {
+								snake.isDead = true;
+							}
+						}
+					}
+
+				}
 				batch.end();
 				Iterator<Fruit> fruitIterator = fruits.iterator();
 				while (fruitIterator.hasNext()) {
