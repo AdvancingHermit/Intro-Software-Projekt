@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.snake.game.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Grid {
@@ -24,7 +25,7 @@ public class Grid {
         int[] keys = { Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT };
         for (int i = 1; i < snakeAmount; i++) {
             
-            snakes[i] = new Snake( i * 2  + gridSize.x / 2, gridSize.y / 2, keys);
+            snakes[i] = new Snake( i * 3  + gridSize.x / 2, gridSize.y / 2, keys);
         }
 
         
@@ -34,6 +35,7 @@ public class Grid {
         for (int i = 0; i < snakes.length; i++) {
             if (!snakes[i].isDead) {
                 snakes[i].move();
+                checkSnakeCollision(snakes, snakes[i]);
             }
         }
 
@@ -68,5 +70,21 @@ public class Grid {
         }
         return walls;
     }
+    	public boolean checkSnakeCollision(Snake[] snakes, Snake currSnake) {
+		for (Snake snake : snakes) {
+			if (snake != currSnake) {
+				ArrayList<Vector> positions = snake.getPositions();
+                Vector head = currSnake.getPositions().get(currSnake.getPositions().size() - 1);
+				for (int i = 0; i < positions.size(); i++) {
+					if (head.equals(positions.get(i))) {
+						currSnake.isDead = true;
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+		
+	}
 
 }
