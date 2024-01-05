@@ -16,4 +16,8 @@ public class Vector{
     public boolean equals(Vector other) {
         return (x == other.x && y == other.y);
     }
+
+    public String toString(){
+        return "X: " + x + " Y:" + y;
+    }
 }
