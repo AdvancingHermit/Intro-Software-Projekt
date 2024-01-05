@@ -41,7 +41,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 
 
-	final private int snakeAmount = 3;
+	final private int snakeAmount = 2;
 	SpriteBatch batch;
 	Texture img;
 	Grid grid;
@@ -221,8 +221,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 20;
 					scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
 					font2.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
-					font2.draw(batch, colonText, -offset + scoreText.width, (float) (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
-					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 50, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
+					font.draw(batch, colonText, -offset + scoreText.width, (float) (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
+					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
 
 				}
 
