@@ -22,6 +22,9 @@ public class Snake {
     private int grow = 0;
     private int score = 0;
 
+    private boolean hasDeadMoved = false;
+    private Vector lastRemoved;
+
     public int getHighscore() {
         return highscore;
     }
@@ -87,11 +90,21 @@ public class Snake {
                 return;
             }
             if (!isDead) {
+                lastRemoved = positions.get(0);
                 positions.remove(0);
             }
 
         }
         counter++;
+    }
+
+    public void moveBack(){
+        if (hasDeadMoved){
+            return;
+        }
+        positions.add(0, lastRemoved);
+        positions.remove(positions.size() - 1);
+        hasDeadMoved = true;
     }
 
     public boolean checkCollision() {
