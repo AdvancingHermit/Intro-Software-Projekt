@@ -14,13 +14,13 @@ public class Snake {
     private boolean hasEaten;
     public boolean isDead;
     private int counter = 0;
-
-    private int maxcounter = 13;
+    private int maxcounter = 14;
+  
     private double startTime = System.currentTimeMillis();
     private int fruitsEaten = 0;
 
     public Snake(int x, int y) {
-        Vector pos = new Vector(x / 2, y / 2);
+        Vector pos = new Vector(x, y);
         positions = new ArrayList<Vector>();
         for (int i = 1; i >= 0; i--) {
             Vector position = new Vector(pos.x, pos.y - i);

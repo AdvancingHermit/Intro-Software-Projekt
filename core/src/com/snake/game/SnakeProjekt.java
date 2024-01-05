@@ -34,13 +34,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
+
 	private int n = 10;
 	private int m = 10;
 	private Vector gridsize;
 
 
 
-	final private int snakeAmount = 1;
+	final private int snakeAmount = 3;
 	SpriteBatch batch;
 	Texture img;
 	Grid grid;
@@ -57,7 +58,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Texture snakeHeadSidewaysSprite;
 
 	List<Fruit> fruits = new ArrayList<>();
-	List<GameObject> snakePieces = new ArrayList<>();
 	Random random = new Random();
 	GlyphLayout scoreNumText;
 	GlyphLayout colonText;
@@ -88,7 +88,6 @@ public class SnakeProjekt extends ApplicationAdapter {
     
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
-
     
 
 		camera = new OrthographicCamera();
@@ -109,12 +108,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
 		scoreText = new GlyphLayout();
-		scoreText.setText(font2, "SCORE");
+		scoreText.setText(font2, "Player 1 SCORE");
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
+
 		inputBox = new InputBox();
-		
 
 	}
 
@@ -213,18 +212,20 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.begin(ShapeType.Filled);
 
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
-				ArrayList<Vector> positions = grid.snakes[0].getPositions();
+				
 				shape.end();
 				batch.begin();
+				for (int i = 0; i < grid.snakes.length; i++) {
+					scoreNumText.setText(font2, "22");
+					scoreText.setText(font2, "PLAYER " + (i+1) + " SCORE");
+					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 50;
+					scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
+					font2.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
+					font.draw(batch, colonText, -offset + scoreText.width, (float) (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
+					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
+				}
 
-				scoreNumText.setText(font2, "22");
-				float offset = (scoreNumText.width + scoreText.width + colonText.width) / 2;
-				scoreNumText.setText(font2, "" + grid.snakes[0].getScore());
-
-				font2.draw(batch, scoreText, -offset, 0.41f * viewport.getScreenHeight());
-				font.draw(batch, colonText, -offset + scoreText.width, 0.41f * viewport.getScreenHeight());
-				font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width,
-						0.41f * viewport.getScreenHeight());
+	
 
 				batch.end();
 				shape.begin(ShapeType.Filled);
@@ -290,54 +291,51 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				}
 
-				
-				for (int k = 0; k < positions.size(); k++) {
-					int cx = positions.get(k).x;
-					int cy = positions.get(k).y;
-
-					if (cx == grid.gridSize.x || cx == -1) {
-						// Skiftes til i, når vi looper over slanger.
-						cx = grid.snakes[0].getPositions().get(k).x = grid.gridSize.x - Math.abs(cx);
-						grid.snakes[0].move();
-					}
-					if (cy == grid.gridSize.y || cy == -1) {
-						// Skiftes til i, når vi looper over slanger.
-						cy = grid.snakes[0].getPositions().get(k).y = grid.gridSize.y - Math.abs(cy);
-						grid.snakes[0].move();
-					}
-
-					snakePieces.add(new GameObject(new Vector((int) (cx), (int) (cy)), null, new Vector(
-						(int) (shower[cx][cy].x - screenWidth / 2),
-						(int) (shower[cx][cy].y - screenHeight / 2))));
-				}
 				shape.end();
+				batch.begin();
+				for (Snake snake : grid.snakes) {
+					ArrayList<Vector> positions = snake.getPositions();
+					for (int k = 0; k < positions.size(); k++) {
+						int cx = positions.get(k).x;
+						int cy = positions.get(k).y;
+	
+						if (cx == grid.gridSize.x || cx == -1) {
+							// Skiftes til i, når vi looper over slanger.
+							cx = snake.getPositions().get(k).x = grid.gridSize.x - Math.abs(cx);
+							snake.move();
+						}
+						if (cy == grid.gridSize.y || cy == -1) {
+							// Skiftes til i, når vi looper over slanger.
+							cy = snake.getPositions().get(k).y = grid.gridSize.y - Math.abs(cy);
+							snake.move();
+						}
+
+						if (k== positions.size() - 1) {
+							shape.setColor(Color.BLACK);
+							Sprite sprY = new Sprite(snakeHeadSprite);
+							Sprite sprX = new Sprite(snakeHeadSidewaysSprite);
+							Vector vel = snake.getVel();
+							sprY.setFlip(false,  vel.y == 1);
+							sprX.setFlip(vel.x == -1,  false);
+							Sprite spr = vel.x == 0 ? sprY : sprX;
+							batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2), (int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
+											 
+	
+	
+						} else {
+							batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2), (int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize ,grid.squareSize);
+						}
+					}
+				}
+				batch.end();
+				
+				
 
 				batch.begin();
 				for (GameObject gameObject : fruits) {
 					batch.draw(gameObject.getSprite(), (gameObject.getSpritePos().x), (gameObject.getSpritePos().y), grid.squareSize,
 							grid.squareSize);
 				}
-				for (int i = 0; i < snakePieces.size(); i++) {
-					GameObject snakePiece = snakePieces.get(i);
-
-					if (i == positions.size() - 1) {
-						shape.setColor(Color.BLACK);
-						Sprite sprY = new Sprite(snakeHeadSprite);
-						Sprite sprX = new Sprite(snakeHeadSidewaysSprite);
-						Vector vel = grid.snakes[0].getVel();
-						sprY.setFlip(false,  vel.y == 1);
-						sprX.setFlip(vel.x == -1,  false);
-						Sprite spr = vel.x == 0 ? sprY : sprX;
-						batch.draw(spr, (snakePiece.getSpritePos().x), (snakePiece.getSpritePos().y), grid.squareSize, grid.squareSize);
-										 
-
-
-					} else {
-						shape.setColor(Color.GREEN);
-						batch.draw(snakeBodySprite, (snakePiece.getSpritePos().x), (snakePiece.getSpritePos().y), grid.squareSize ,grid.squareSize);
-					}
-				}
-				snakePieces.clear();
 					batch.end();
 
 					batch.begin();
