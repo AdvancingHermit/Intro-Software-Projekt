@@ -68,7 +68,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int startButtonY;
 	boolean mousePressed;
 	int frameCounter = 0;
-	InputBox inputBox = new InputBox();
+	InputBox inputBox;
 
 
 	@Override
@@ -113,7 +113,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
 
-		inputBox = new InputBox();
+		inputBox = new InputBox(1);
 
 	}
 

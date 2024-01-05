@@ -14,9 +14,10 @@ public class InputBox {
     // Type 0 = strings, 1 = numbers
     int type;
 
-    public InputBox() {
+    public InputBox(int type) {
         inputs = new ArrayList<Character>();
         keyUp = true;
+        this.type = type;
     }
 
     public void update() {
@@ -62,8 +63,8 @@ public class InputBox {
     }
 
     private boolean isNumber(char c) {
-        return c == '0' || c == '1' || c == '2' || c == '3' || c == '4'
-                || c == '5' || c == '6' || c == '7' || c == '8' || c == '9';
+        String regex = "^[0-9]*$";
+        return ("" + c).matches(regex);
     }
 
     private char getPressedKey() {
