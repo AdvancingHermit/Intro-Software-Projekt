@@ -341,14 +341,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 						// Skiftes til i, når vi looper over slanger.
 						cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
 						snake.move();
-						cx = positions.get(k).x;
-						cy = positions.get(k).y;
 					}
 				}
 				if (cy == grid.gridSize.y || cy == -1) {
 					if (borderHandler.isEnabled()) {
 						snake.isDead = true;
 						snake.moveBack();
+						cx = positions.get(k).x;
+						cy = positions.get(k).y;
 					} else {
 						// Skiftes til i, når vi looper over slanger.
 						cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
