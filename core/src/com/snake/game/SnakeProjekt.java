@@ -322,6 +322,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					snake.setHasEaten(fruit);
 					fruitIterator.remove();
 				}
+			}
 		}
 	}
 
