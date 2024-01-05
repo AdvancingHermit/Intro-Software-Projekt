@@ -14,7 +14,7 @@ public class Snake {
     private boolean hasEaten;
     public boolean isDead;
     private int counter = 0;
-    private int maxcounter = 2;
+    private int maxcounter = 7;
   
     private double startTime = System.currentTimeMillis();
     private int fruitsEaten = 0;
@@ -94,6 +94,7 @@ public class Snake {
     }
 
     public boolean checkCollision() {
+
         for (int i = 0; i < positions.size() - 1; i++) {
             if (positions.get(positions.size() - 1).equals(positions.get(i))) {
                 isDead = true;
