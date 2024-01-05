@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Size;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.util.InputBox;
 import com.snake.game.util.Vector;
+import com.snake.game.util.Button;
 import com.badlogic.gdx.math.Rectangle;
 
 public class SnakeProjekt extends ApplicationAdapter {
@@ -32,7 +34,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Main_Scene, Main_Game, Main_Setting, Main_Enable_Features
 	}
 
-	Scene currentSceen = Scene.Main_Scene;
+	Scene currentScene = Scene.Main_Scene;
 
 	private int n = 5;
 	private int m = 5;
@@ -70,6 +72,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int frameCounter = 0;
 	InputBox inputBox;
 	int backButtonHeight, backButtonWidth, backButtonX, backButtonY, startButtonWidth, startButtonHeight;
+	Button backButton;
 
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
@@ -119,50 +122,41 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		inputBox = new InputBox(0);
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
-
-		backButtonX = -screenWidth / 2 + 150;
-		backButtonY = screenHeight / 2 - 200;
-		backButtonWidth = 300;
-		backButtonHeight = 100;
-		startButtonWidth = screenWidth/4;
-		startButtonHeight = screenHeight/4;
-		startButtonX = screenWidth / 2 - startButtonWidth/2;
-		startButtonY = screenHeight / 2 - startButtonHeight/2;
+		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector (300, 100), backArrow);
+	
+		startButtonWidth = screenWidth / 4;
+		startButtonHeight = screenHeight / 4;
+		startButtonX = screenWidth / 2 - startButtonWidth / 2;
+		startButtonY = screenHeight / 2 - startButtonHeight / 2;
 
 	}
 
-	public void drawBackButton() {
-		batch.begin();
-		batch.draw(backArrow, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
-		batch.end();
-	}
-
-	public void clickedBackButton() {
-		if (Gdx.input.getX() >= backButtonX + screenWidth / 2 // Creating start minus n hitbox
-				&& Gdx.input.getX() <= backButtonX + screenWidth / 2 + 300
-				&& Gdx.input.getY() <= backButtonY - screenHeight / 2 + 400
-				&& Gdx.input.getY() >= backButtonY - screenHeight / 2 + 300 &&
-				(Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
-			currentSceen = Scene.Main_Scene;
+	public void showButton(Button temp){
+		if (temp.getbackArrow() != null){
+			batch.begin();
+			batch.draw(temp.getbackArrow(), temp.getpos().x, temp.getpos().y,  temp.getSize().x, temp.getSize().y);
+			batch.end();
+		} else {
+			shape.begin();
+			shape.rect(temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
+			shape.end();
 		}
-	}
-	public void checkForESC(){
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-					Gdx.app.exit();
-				}
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
 	}
+
 	@Override
 	public void render() {
-		checkForESC();
-		switch (currentSceen) {
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			Gdx.app.exit();
+		}
+		switch (currentScene) {
 			case Main_Scene:
 				ScreenUtils.clear(0, 0, 1, 1);
-				
+
 				frameCounter++;
 				mousePressed = false;
 				camera.update();
@@ -171,7 +165,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.setColor(Color.GREEN);
 				shape.rect(startButtonX, startButtonY, startButtonWidth, startButtonHeight); // creating start game
 				shape.setColor(Color.RED);
-				shape.rect(startButtonX+startButtonWidth/8, startButtonY-startButtonHeight/2, startButtonWidth-startButtonWidth/4, startButtonHeight/2); // creating feature  
+				shape.rect(startButtonX + startButtonWidth / 8, startButtonY - startButtonHeight / 2,
+						startButtonWidth - startButtonWidth / 4, startButtonHeight / 2); // creating feature
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					mousePressed = true;
 				}
@@ -186,12 +181,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (wallHandler.isEnabled()) {
 						grid.walls = grid.wallGenerator(gridsize);
 					}
-					currentSceen = Scene.Main_Game;
+					currentScene = Scene.Main_Game;
 				}
-				if (Gdx.input.getX() >= startButtonX+startButtonWidth/8 // Creating Feature game button hitbox
-						&& Gdx.input.getX() <= startButtonX+startButtonWidth/8 + startButtonWidth-startButtonWidth/4
-						&& Gdx.input.getY() >= startButtonY+startButtonHeight/2 + startButtonHeight/2
-						&& Gdx.input.getY() <= startButtonY+startButtonHeight/2 + startButtonHeight
+				if (Gdx.input.getX() >= startButtonX + startButtonWidth / 8 // Creating Feature game button hitbox
+						&& Gdx.input.getX() <= startButtonX + startButtonWidth / 8 + startButtonWidth
+								- startButtonWidth / 4
+						&& Gdx.input.getY() >= startButtonY + startButtonHeight / 2 + startButtonHeight / 2
+						&& Gdx.input.getY() <= startButtonY + startButtonHeight / 2 + startButtonHeight
 						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
 					gridsize = new Vector(n, m);
@@ -199,8 +195,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (wallHandler.isEnabled()) {
 						grid.walls = grid.wallGenerator(gridsize);
 					}
-					currentSceen = Scene.Main_Enable_Features;
-				} 
+					currentScene = Scene.Main_Enable_Features;
+				}
 				shape.end();
 				break;
 			case Main_Setting:
@@ -218,8 +214,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.rect(startButtonX - 400, startButtonY, 100, 200); // creating minus m
 				shape.setColor(Color.GREEN);
 				shape.rect(startButtonX - 300, startButtonY, 100, 200); // creating plus m
-				drawBackButton();
-				clickedBackButton();
+				showButton(backButton);
+				if (backButton.clickedButton()){
+					currentScene = Scene.Main_Scene;
+				}
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					mousePressed = true;
 				}
