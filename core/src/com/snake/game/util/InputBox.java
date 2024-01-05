@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Rectangle;
 
 public class InputBox {
 
@@ -37,6 +38,19 @@ public class InputBox {
         } else if (pressedKey == '\0') {
             keyUp = true;
         }
+    }
+
+    public Rectangle[] show(Vector position, Vector size){
+        Rectangle rect = new Rectangle(position.x, position.y, size.x, size.y);
+        Rectangle curserBlink;
+        if(counter % 60 < 30){
+            curserBlink = new Rectangle(position.x + 2, position.y + 2, 4, size.y - 4);
+        } else {
+            curserBlink = new Rectangle(position.x + 2, position.y + 2, 0, 0);
+        }
+        counter++;
+        
+        return new Rectangle[]{rect, curserBlink};
     }
 
     public String getString() {

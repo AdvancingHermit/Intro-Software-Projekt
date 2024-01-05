@@ -34,11 +34,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	private int n = 10;
-	private int m = 10;
+
+	private int n = 30;
+	private int m = 30;
+
 	private Vector gridsize;
 
-	final private int snakeAmount = 3;
+	final private int snakeAmount = 2;
+
 	SpriteBatch batch;
 	Texture img;
 	Grid grid;
@@ -49,6 +52,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont font2;
 
 	Texture backArrow;
+	BitmapFont font3;
+
 	Texture appleSprite;
 	Texture wallSprite;
 	Texture snakeBodySprite;
@@ -68,6 +73,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int frameCounter = 0;
 	InputBox inputBox;
 	int backButtonHeight, backButtonWidth, backButtonX, backButtonY;
+
+	FreeTypeFontGenerator generator;
+	FreeTypeFontParameter parameter;
+  
+	WallHandler wallHandler = new WallHandler(false);
 
 	@Override
 	public void create() {
@@ -90,8 +100,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(screenWidth, screenHeight, camera);
 
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		parameter = new FreeTypeFontParameter();
 		parameter.size = 72;
 		font = generator.generateFont(parameter); // font size 12 pixels
 		font.setColor(Color.ORANGE);
@@ -108,14 +118,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
-
-		inputBox = new InputBox(1);
+    
+		inputBox = new InputBox(0);
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+    
 		backButtonX = -screenWidth / 2 + 150;
 		backButtonY = screenHeight / 2 - 200;
 		backButtonWidth = 300;
 		backButtonHeight = 100;
 
 	}
+
 
 	public void drawBackButton() {
 		batch.begin();
@@ -139,7 +152,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		inputBox.update();
 
 		switch (currentSceen) {
 			case Main_Scene:
@@ -186,7 +198,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.rect(startButtonX - 400, startButtonY, 100, 200); // creating minus m
 				shape.setColor(Color.GREEN);
 				shape.rect(startButtonX - 300, startButtonY, 100, 200); // creating plus m
-				if (frameCounter % 5 == 0) {
+
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					mousePressed = true;
+				}
+				if (frameCounter % 3 == 0) {
 					if (Gdx.input.getX() >= startButtonX + 400 // Creating start minus n hitbox
 							&& Gdx.input.getX() <= startButtonX + 500
 							&& Gdx.input.getY() <= startButtonY + 200
@@ -218,8 +234,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						mousePressed = false;
 					}
 				}
-				break;
+
 			case Main_Game:
+
 				ScreenUtils.clear(0, 0, 1, 1);
 				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 					Gdx.app.exit();
@@ -233,17 +250,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.end();
 				batch.begin();
 				for (int i = 0; i < grid.snakes.length; i++) {
+
 					scoreNumText.setText(font2, "22");
 					scoreText.setText(font2, "PLAYER " + (i + 1) + " SCORE");
-					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 50;
+					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 20;
 					scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
 					font2.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i) * viewport.getScreenHeight());
 					font.draw(batch, colonText, -offset + scoreText.width,
 							(float) (0.41f + 0.075f * -i) * viewport.getScreenHeight());
-					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width,
+					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
 							(0.41f + 0.075f * -i) * viewport.getScreenHeight());
-				}
 
+				}
 				batch.end();
 				shape.begin(ShapeType.Filled);
 
@@ -259,30 +277,32 @@ public class SnakeProjekt extends ApplicationAdapter {
 							int randx = random.nextInt(0, gridsize.x);
 							int randy = random.nextInt(0, gridsize.y);
 							for (Snake snake : grid.snakes) {
-								snakeSize = snake.getPositions().size();
+								snakeSize += snake.getPositions().size();
 								for (Vector pos : snake.getPositions()) {
 									if (new Vector(randx, randy).equals(pos)) {
 										spawnInSnake = true;
 									}
 								}
 							}
-
 							int totalWalls = 0;
-							for (Wall wall : grid.walls) {
-								totalWalls += wall.getNumberOfWalls();
-								if (new Vector(randx, randy).equals(wall.getSnakePos())) {
-									spawnInSnake = true;
-								}
-								for (int i = 1; i < wall.getSize().x; i++) {
-									if (new Vector(randx, randy)
-											.equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
+
+							if (wallHandler.isEnabled()) {
+								for (Wall wall : grid.walls) {
+									totalWalls += wall.getNumberOfWalls();
+									if (new Vector(randx, randy).equals(wall.getSnakePos())) {
 										spawnInSnake = true;
 									}
-								}
-								for (int i = 1; i < wall.getSize().y; i++) {
-									if (new Vector(randx, randy)
-											.equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
-										spawnInSnake = true;
+									for (int i = 1; i < wall.getSize().x; i++) {
+										if (new Vector(randx, randy)
+												.equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
+											spawnInSnake = true;
+										}
+									}
+									for (int i = 1; i < wall.getSize().y; i++) {
+										if (new Vector(randx, randy)
+												.equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
+											spawnInSnake = true;
+										}
 									}
 								}
 							}
@@ -316,12 +336,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 						if (cx == grid.gridSize.x || cx == -1) {
 							// Skiftes til i, når vi looper over slanger.
-							cx = snake.getPositions().get(k).x = grid.gridSize.x - Math.abs(cx);
+							cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
 							snake.move();
+
 						}
 						if (cy == grid.gridSize.y || cy == -1) {
 							// Skiftes til i, når vi looper over slanger.
-							cy = snake.getPositions().get(k).y = grid.gridSize.y - Math.abs(cy);
+							cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
 							snake.move();
 						}
 
@@ -345,45 +366,46 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.end();
 
 				batch.begin();
-				for (GameObject gameObject : fruits) {
-					batch.draw(gameObject.getSprite(), (gameObject.getSpritePos().x), (gameObject.getSpritePos().y),
-							grid.squareSize,
+
+				for (Fruit fruit : fruits) {
+					batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize,
 							grid.squareSize);
 				}
 				batch.end();
+				if (wallHandler.isEnabled()) {
+					batch.begin();
 
-				batch.begin();
-
-				for (int i = 0; i < grid.walls.length; i++) {
-					for (int j = 0; j < grid.walls[i].size.x; j++) {
-						batch.draw(wallSprite, (grid.walls[i].getSpritePos().x) + j * grid.squareSize,
-								(grid.walls[i].getSpritePos().y), grid.squareSize, grid.squareSize);
-						for (Snake snake : grid.snakes) {
-							if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(j, 0)))) {
-								snake.isDead = true;
+					for (int i = 0; i < grid.walls.length; i++) {
+						for (int j = 0; j < grid.walls[i].size.x; j++) {
+							batch.draw(wallSprite, (grid.walls[i].getSpritePos().x) + j * grid.squareSize,
+									(grid.walls[i].getSpritePos().y), grid.squareSize, grid.squareSize);
+							for (Snake snake : grid.snakes) {
+								if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(j, 0)))) {
+									snake.isDead = true;
+								}
 							}
 						}
-					}
-					for (int j = 0; j < grid.walls[i].size.y; j++) {
-						batch.draw(wallSprite, (grid.walls[i].getSpritePos().x),
-								(grid.walls[i].getSpritePos().y) + j * grid.squareSize, grid.squareSize,
-								grid.squareSize);
-						for (Snake snake : grid.snakes) {
-							if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(0, j)))) {
-								snake.isDead = true;
+						for (int j = 0; j < grid.walls[i].size.y; j++) {
+							batch.draw(wallSprite, (grid.walls[i].getSpritePos().x),
+									(grid.walls[i].getSpritePos().y) + j * grid.squareSize, grid.squareSize,
+									grid.squareSize);
+							for (Snake snake : grid.snakes) {
+								if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(0, j)))) {
+									snake.isDead = true;
+								}
 							}
 						}
-					}
 
+					}
+					batch.end();
 				}
-				batch.end();
 				Iterator<Fruit> fruitIterator = fruits.iterator();
 				while (fruitIterator.hasNext()) {
-					GameObject gameObject = fruitIterator.next();
+					Fruit fruit = fruitIterator.next();
 					for (Snake snake : grid.snakes) {
-						if (snake.checkCollision(gameObject.getSnakePos())) {
+						if (snake.checkCollision(fruit.getSnakePos())) {
 							snake.setHasEaten();
-							fruits.remove(gameObject);
+							fruits.remove(fruit);
 
 						}
 					}
@@ -392,11 +414,36 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 	}
 
+	private void InputBoxShower(InputBox inputBox, Vector position, Vector size) {
+		Rectangle[] rects = inputBox.show(position, size);
+		shape.begin(ShapeType.Filled);
+		shape.setColor(Color.WHITE);
+		shape.rect(rects[0].x, rects[0].y, rects[0].width, rects[0].height);
+		shape.setColor(Color.BLACK);
+		shape.rect(rects[1].x, rects[1].y, rects[1].width, rects[1].height);
+		shape.end();
+
+		parameter.size = size.y;
+		font3 = generator.generateFont(parameter); // font size 12 pixels
+		font3.setColor(Color.ORANGE);
+		scoreText = new GlyphLayout();
+		scoreText.setText(font3, inputBox.getString());
+		int posX = (int)(rects[0].x - viewport.getScreenWidth()/2);
+		int posY = (int)(rects[0].y - viewport.getScreenHeight()/2 + rects[0].height - 8);
+
+		System.out.println(posX + " " + posY);
+		batch.begin();
+		font3.draw(batch, scoreText, posX, posY);
+		batch.end();
+	}
+
 	@Override
 	public void dispose() {
 		batch.dispose();
 		img.dispose();
 		shape.dispose();
 		appleSprite.dispose();
+		generator.dispose();
 	}
+
 }

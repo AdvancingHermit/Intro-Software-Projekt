@@ -14,10 +14,16 @@ public class Snake {
     private boolean hasEaten;
     public boolean isDead;
     private int counter = 0;
-    private int maxcounter = 14;
+    private int maxcounter = 7;
   
     private double startTime = System.currentTimeMillis();
     private int fruitsEaten = 0;
+
+    private int highscore;
+
+    public int getHighscore() {
+        return highscore;
+    }
 
     public Snake(int x, int y) {
         Vector pos = new Vector(x, y);
@@ -31,7 +37,6 @@ public class Snake {
         this.keys = keys;
         vel = new Vector(-1, 0);
         key = 'A';
-
     }
 
     public Snake(int x, int y, int[] keys) {
@@ -89,6 +94,7 @@ public class Snake {
     }
 
     public boolean checkCollision() {
+
         for (int i = 0; i < positions.size() - 1; i++) {
             if (positions.get(positions.size() - 1).equals(positions.get(i))) {
                 isDead = true;
@@ -116,7 +122,11 @@ public class Snake {
     }
 
     public int getScore() {
-        return (int) ((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
+        if (isDead){
+            return highscore;
+        }
+        highscore = (int) ((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
+        return highscore;
     }
     public Vector getVel() {
         return vel;
