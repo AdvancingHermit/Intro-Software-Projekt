@@ -250,7 +250,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							int randx = random.nextInt(0, gridsize.x);
 							int randy = random.nextInt(0, gridsize.y);
 							for (Snake snake : grid.snakes) {
-								snakeSize = snake.getPositions().size();
+								snakeSize += snake.getPositions().size();
 								for (Vector pos : snake.getPositions()) {
 									if (new Vector(randx, randy).equals(pos)) {
 										spawnInSnake = true;
