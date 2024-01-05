@@ -14,43 +14,60 @@ public class InputBox {
     int counter = 0;
     // Type 0 = strings, 1 = numbers
     int type;
+    boolean isEnabled;
+    Vector position;
+    Vector size;
+    int countFrame = 0;
 
-    public InputBox(int type) {
+    public InputBox(int type, Vector position, Vector size) {
         inputs = new ArrayList<Character>();
         keyUp = true;
         this.type = type;
+        this.position = position;
+        this.size = size;
+    }
+
+    public void enable(int screenHeight) {
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && countFrame % 3 == 0) {
+            int y = screenHeight - Gdx.input.getY();
+            if (Gdx.input.getX() > position.x && Gdx.input.getX() < position.x + size.x && y > position.y
+                    && y < position.y + size.y) {
+                isEnabled = !isEnabled;
+            }
+        }
+        countFrame++;
     }
 
     public void update() {
         char pressedKey = getPressedKey();
-        if (pressedKey != '\0' && keyUp && isNumber(pressedKey) && type == 1) {
-            inputs.add(pressedKey);
-            keyUp = false;
-        }
-        else if (pressedKey != '\0' && keyUp && type == 0) {
-            if(!isShiftPressed()){
-                inputs.add((pressedKey + "").toLowerCase().charAt(0));
-            }
-            else{
+        if (isEnabled) {
+            if (pressedKey != '\0' && keyUp && isNumber(pressedKey) && type == 1) {
                 inputs.add(pressedKey);
+                keyUp = false;
+            } else if (pressedKey != '\0' && keyUp && type == 0) {
+                if (!isShiftPressed()) {
+                    inputs.add((pressedKey + "").toLowerCase().charAt(0));
+                } else {
+                    inputs.add(pressedKey);
+                }
+                keyUp = false;
+            } else if (pressedKey == '\0') {
+                keyUp = true;
             }
-            keyUp = false;
-        } else if (pressedKey == '\0') {
-            keyUp = true;
         }
     }
 
-    public Rectangle[] show(Vector position, Vector size){
+    public Rectangle[] show() {
         Rectangle rect = new Rectangle(position.x, position.y, size.x, size.y);
         Rectangle curserBlink;
-        if(counter % 60 < 30){
+        if (counter % 60 < 30) {
             curserBlink = new Rectangle(position.x + 2, position.y + 2, 4, size.y - 4);
         } else {
             curserBlink = new Rectangle(position.x + 2, position.y + 2, 0, 0);
         }
         counter++;
-        
-        return new Rectangle[]{rect, curserBlink};
+
+        return new Rectangle[] { rect, curserBlink };
     }
 
     public String getString() {
@@ -62,7 +79,7 @@ public class InputBox {
     }
 
     public int getNumber() {
-        if(type != 1){
+        if (type != 1) {
             return -1;
         }
         String string = "";
@@ -79,6 +96,13 @@ public class InputBox {
     private boolean isNumber(char c) {
         String regex = "^[0-9]*$";
         return ("" + c).matches(regex);
+    }
+
+    public Vector getPosition(){
+        return position;
+    }
+    public Vector getSize(){
+        return size;
     }
 
     private char getPressedKey() {
