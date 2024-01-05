@@ -37,7 +37,6 @@ public class Snake {
         this.keys = keys;
         vel = new Vector(-1, 0);
         key = 'A';
-
     }
 
     public Snake(int x, int y, int[] keys) {

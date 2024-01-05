@@ -34,8 +34,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
+
 	private int n = 30;
 	private int m = 30;
+
 	private Vector gridsize;
 
 	final private int snakeAmount = 2;
@@ -47,7 +49,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FitViewport viewport;
 	BitmapFont font;
 	BitmapFont font2;
-
+	BitmapFont font3;
 	Texture appleSprite;
 	Texture wallSprite;
 	Texture snakeBodySprite;
@@ -67,6 +69,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int frameCounter = 0;
 	InputBox inputBox;
 
+
+	FreeTypeFontGenerator generator;
+	FreeTypeFontParameter parameter;
+  
 	WallHandler wallHandler = new WallHandler(false);
 
 	@Override
@@ -90,8 +96,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport(screenWidth, screenHeight, camera);
 
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		parameter = new FreeTypeFontParameter();
 		parameter.size = 72;
 		font = generator.generateFont(parameter); // font size 12 pixels
 		font.setColor(Color.ORANGE);
@@ -109,7 +115,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
 
-		inputBox = new InputBox(1);
+		inputBox = new InputBox(0);
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		parameter = new FreeTypeFontParameter();
 
 	}
 
@@ -201,6 +209,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			case Main_Enable_Features:
 				break;
 			case Main_Game:
+
 				ScreenUtils.clear(0, 0, 1, 1);
 				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 					Gdx.app.exit();
@@ -383,22 +392,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.setColor(Color.BLACK);
 		shape.rect(rects[1].x, rects[1].y, rects[1].width, rects[1].height);
 		shape.end();
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/snes.ttf"));
-		parameter = new FreeTypeFontParameter();
+
 		parameter.size = size.y;
-		font2 = generator.generateFont(parameter); // font size 12 pixels
-		font2.setColor(Color.ORANGE);
-		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+		font3 = generator.generateFont(parameter); // font size 12 pixels
+		font3.setColor(Color.ORANGE);
 		scoreText = new GlyphLayout();
-		scoreText.setText(font2, inputBox.getString());
-		int posX = (int) (rects[0].x - viewport.getScreenWidth() / 2);
-		int posY = (int) (rects[0].y - viewport.getScreenHeight() / 2 + rects[0].height - 8);
+		scoreText.setText(font3, inputBox.getString());
+		int posX = (int)(rects[0].x - viewport.getScreenWidth()/2);
+		int posY = (int)(rects[0].y - viewport.getScreenHeight()/2 + rects[0].height - 8);
 
 		System.out.println(posX + " " + posY);
 		batch.begin();
-		font2.draw(batch, scoreText, posX, posY);
+		font3.draw(batch, scoreText, posX, posY);
 		batch.end();
 	}
 
@@ -408,6 +413,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		img.dispose();
 		shape.dispose();
 		appleSprite.dispose();
+		generator.dispose();
 	}
 
 }
