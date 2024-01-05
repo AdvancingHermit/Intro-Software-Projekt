@@ -1,6 +1,6 @@
 package com.snake.game;
 
-public class GoldenFruitHandler extends GameFeatures
+public class GoldenFruitHandler extends GameFeature
 {
     int chance;
 

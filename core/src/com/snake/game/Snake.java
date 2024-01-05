@@ -9,7 +9,7 @@ public class Snake {
 
     private ArrayList<Vector> positions;
 
-    private final int snakeSize = 10;
+    private final int snakeSize = 2;
     private Vector vel;
     private char key;
     private int[] keys;
