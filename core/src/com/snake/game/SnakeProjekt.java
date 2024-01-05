@@ -125,7 +125,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
 
-		inputBox = new InputBox(0);
+		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
 		backButtonX = -screenWidth / 2 + 150;
@@ -322,7 +322,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 					snake.setHasEaten(fruit);
 					fruitIterator.remove();
 				}
-			}
 		}
 	}
 
@@ -435,8 +434,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 	}
 
-	private void InputBoxShower(InputBox inputBox, Vector position, Vector size) {
-		Rectangle[] rects = inputBox.show(position, size);
+	private void InputBoxShower(InputBox inputBox) {
+		inputBox.enable(screenHeight);
+		inputBox.update();
+		Rectangle[] rects = inputBox.show();
 		shape.begin(ShapeType.Filled);
 		shape.setColor(Color.WHITE);
 		shape.rect(rects[0].x, rects[0].y, rects[0].width, rects[0].height);
@@ -444,17 +445,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.rect(rects[1].x, rects[1].y, rects[1].width, rects[1].height);
 		shape.end();
 
-		parameter.size = size.y;
-		font3 = generator.generateFont(parameter); // font size 12 pixels
-		font3.setColor(Color.ORANGE);
-		scoreText = new GlyphLayout();
-		scoreText.setText(font3, inputBox.getString());
+		Object[] reciever = inputBox.getFont();
+		BitmapFont fontReceived = (BitmapFont) reciever[0];
+		GlyphLayout glyphReceived = (GlyphLayout) reciever[1];
 		int posX = (int) (rects[0].x - viewport.getScreenWidth() / 2);
 		int posY = (int) (rects[0].y - viewport.getScreenHeight() / 2 + rects[0].height - 8);
-
-		System.out.println(posX + " " + posY);
 		batch.begin();
-		font3.draw(batch, scoreText, posX, posY);
+		fontReceived.draw(batch, glyphReceived, posX, posY);
 		batch.end();
 	}
 
