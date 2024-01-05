@@ -57,7 +57,7 @@ public class InputBox {
         return Integer.parseInt(string);
     }
 
-    public boolean isShiftPressed() {
+    private boolean isShiftPressed() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
 
@@ -66,7 +66,7 @@ public class InputBox {
                 || c == '5' || c == '6' || c == '7' || c == '8' || c == '9';
     }
 
-    public char getPressedKey() {
+    private char getPressedKey() {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             return 'A';
         }
