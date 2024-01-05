@@ -444,15 +444,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.rect(rects[1].x, rects[1].y, rects[1].width, rects[1].height);
 		shape.end();
 
-		parameter.size = inputBox.getSize().y;
-		font3 = generator.generateFont(parameter); // font size 12 pixels
-		font3.setColor(Color.ORANGE);
-		scoreText = new GlyphLayout();
-		scoreText.setText(font3, inputBox.getString());
+		Object[] reciever = inputBox.getFont();
+		BitmapFont fontReceived = (BitmapFont) reciever[0];
+		GlyphLayout glyphReceived = (GlyphLayout) reciever[1];
 		int posX = (int) (rects[0].x - viewport.getScreenWidth() / 2);
 		int posY = (int) (rects[0].y - viewport.getScreenHeight() / 2 + rects[0].height - 8);
 		batch.begin();
-		font3.draw(batch, scoreText, posX, posY);
+		fontReceived.draw(batch, glyphReceived, posX, posY);
 		batch.end();
 	}
 
