@@ -35,8 +35,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Scene currentSceen = Scene.Main_Scene;
 
 
-	private int n = 10;
-	private int m = 10;
+	private int n = 5;
+	private int m = 5;
 	private Vector gridsize;
 
 
@@ -299,7 +299,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					for (int k = 0; k < positions.size(); k++) {
 						int cx = positions.get(k).x;
 						int cy = positions.get(k).y;
-	
+						System.out.println(cx + " " + cy);
 						if (cx == grid.gridSize.x || cx == -1) {
 							// Skiftes til i, når vi looper over slanger.
 							cx = snake.getPositions().get(k).x = grid.gridSize.x - Math.abs(cx);
@@ -311,7 +311,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							snake.move();
 						}
 
-						if (k== positions.size() - 1) {
+						if (k == positions.size() - 1) {
 							shape.setColor(Color.BLACK);
 							Sprite sprY = new Sprite(snakeHeadSprite);
 							Sprite sprX = new Sprite(snakeHeadSidewaysSprite);
@@ -319,10 +319,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							sprY.setFlip(false,  vel.y == 1);
 							sprX.setFlip(vel.x == -1,  false);
 							Sprite spr = vel.x == 0 ? sprY : sprX;
-							batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2), (int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
-											 
-	
-	
+							batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2), (int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);	
 						} else {
 							batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2), (int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize ,grid.squareSize);
 						}
