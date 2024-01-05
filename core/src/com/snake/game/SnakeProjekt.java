@@ -125,6 +125,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backButtonWidth = 300;
 		backButtonHeight = 100;
 
+
 	}
 
 	public void drawBackButton() {
@@ -137,9 +138,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 		if (Gdx.input.getX() >= backButtonX + screenWidth / 2 // Creating start minus n hitbox
 				&& Gdx.input.getX() <= backButtonX + screenWidth / 2 + 300
 				&& Gdx.input.getY() <= backButtonY - screenHeight / 2 + 400
-				&& Gdx.input.getY() >= backButtonY - screenHeight / 2 + 300) {
+				&& Gdx.input.getY() >= backButtonY - screenHeight / 2 + 300 &&
+				(Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
 			currentSceen = Scene.Main_Scene;
 		}
+	}
+	public void checkForESC(){
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+					Gdx.app.exit();
+				}
 	}
 
 	@Override
@@ -149,6 +156,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		checkForESC();
 		switch (currentSceen) {
 			case Main_Scene:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -156,10 +164,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				startButtonY = screenHeight / 2 - 100;
 				frameCounter++;
 				mousePressed = false;
-
-				if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-					Gdx.app.exit();
-				}
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
@@ -188,6 +192,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 			case Main_Setting:
 				break;
 			case Main_Enable_Features:
+				ScreenUtils.clear(0, 0, 1, 1);
+				camera.update();
+				batch.setProjectionMatrix(camera.combined);
+				shape.begin(ShapeType.Filled);
 				shape.setColor(Color.RED);
 				shape.rect(startButtonX + 400, startButtonY, 100, 200); // creating minus n
 				shape.setColor(Color.GREEN);
@@ -196,7 +204,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.rect(startButtonX - 400, startButtonY, 100, 200); // creating minus m
 				shape.setColor(Color.GREEN);
 				shape.rect(startButtonX - 300, startButtonY, 100, 200); // creating plus m
-
+				drawBackButton();
+				clickedBackButton();
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					mousePressed = true;
 				}
