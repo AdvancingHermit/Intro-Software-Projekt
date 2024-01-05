@@ -220,13 +220,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.end();
 				batch.begin();
 				for (int i = 0; i < grid.snakes.length; i++) {
-					scoreNumText.setText(font2, "22");
-					scoreText.setText(font2, "PLAYER " + (i+1) + " SCORE");
-					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 50;
+					scoreText.setText(font2, "PLAYER " + (i + 1) + " SCORE");
+					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 30;
 					scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
 					font2.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
-					font.draw(batch, colonText, -offset + scoreText.width, (float) (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
+					font2.draw(batch, colonText, -offset + scoreText.width, (float) (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
 					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width, (0.41f + 0.075f * -i ) * viewport.getScreenHeight());
+
 				}
 
 	
@@ -336,8 +336,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				
 
 				batch.begin();
-				for (GameObject gameObject : fruits) {
-					batch.draw(gameObject.getSprite(), (gameObject.getSpritePos().x), (gameObject.getSpritePos().y), grid.squareSize,
+				for (Fruit fruit : fruits) {
+					batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize,
 							grid.squareSize);
 				}
 					batch.end();
@@ -366,11 +366,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.end();
 				Iterator<Fruit> fruitIterator = fruits.iterator();
 				while (fruitIterator.hasNext()) {
-					GameObject gameObject = fruitIterator.next();
+					Fruit fruit = fruitIterator.next();
 					for (Snake snake : grid.snakes) {
-						if (snake.checkCollision(gameObject.getSnakePos())) {
+						if (snake.checkCollision(fruit.getSnakePos())) {
 							snake.setHasEaten();
-							fruits.remove(gameObject);
+							fruits.remove(fruit);
 
 						}
 					}

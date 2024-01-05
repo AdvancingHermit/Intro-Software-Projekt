@@ -19,6 +19,12 @@ public class Snake {
     private double startTime = System.currentTimeMillis();
     private int fruitsEaten = 0;
 
+    private int highscore;
+
+    public int getHighscore() {
+        return highscore;
+    }
+
     public Snake(int x, int y) {
         Vector pos = new Vector(x, y);
         positions = new ArrayList<Vector>();
@@ -116,7 +122,11 @@ public class Snake {
     }
 
     public int getScore() {
-        return (int) ((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
+        if (isDead){
+            return highscore;
+        }
+        highscore = (int) ((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
+        return highscore;
     }
     public Vector getVel() {
         return vel;
