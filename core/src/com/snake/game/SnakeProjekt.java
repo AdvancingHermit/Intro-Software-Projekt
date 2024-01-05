@@ -35,12 +35,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Scene currentSceen = Scene.Main_Scene;
 
 
-	private int n = 30;
-	private int m = 30;
+	private int n = 5;
+	private int m = 5;
 
 	private Vector gridsize;
-
-	final private int snakeAmount = 2;
 
 	SpriteBatch batch;
 	Texture img;
@@ -77,7 +75,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
   
-	WallHandler wallHandler = new WallHandler(false);
+	WallHandler wallHandler = new WallHandler(true);
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
 
 	@Override
 	public void create() {
@@ -181,7 +180,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
 					gridsize = new Vector(n, m);
-					grid = new Grid(gridsize, snakeAmount, screenHeight);
+					grid = new Grid(gridsize, multiplayerHandler.isEnabled(), screenHeight);
 					grid.walls = grid.wallGenerator(gridsize);
 					currentSceen = Scene.Main_Game;
 				}
@@ -235,6 +234,21 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 				}
 
+				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
+						&& Gdx.input.getX() <= startButtonX + 200
+						&& Gdx.input.getY() <= startButtonY + 200
+						&& Gdx.input.getY() >= startButtonY
+						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
+					gridsize = new Vector(n, m);
+					grid = new Grid(gridsize, multiplayerHandler.isEnabled(), screenHeight);
+					if (wallHandler.isEnabled()) {
+						grid.walls = grid.wallGenerator(gridsize);
+					}
+					currentSceen = Scene.Main_Game;
+				}
+				shape.end();
+				break;
 			case Main_Game:
 
 				ScreenUtils.clear(0, 0, 1, 1);

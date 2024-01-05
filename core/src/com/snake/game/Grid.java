@@ -14,7 +14,10 @@ public class Grid {
     int squareSize;
     Vector gridSize;
 
-    Grid(Vector gridSize, int snakeAmount, int screenHeight) {
+    private int snakeAmount;
+
+    Grid(Vector gridSize, boolean multiplayer, int screenHeight) {
+        snakeAmount = multiplayer ? 2 : 1;
         snakes = new Snake[snakeAmount];
         System.out.println(gridSize + " " + screenHeight);
         int max = Math.max(gridSize.x, gridSize.y);
