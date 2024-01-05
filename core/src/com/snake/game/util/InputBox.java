@@ -11,6 +11,8 @@ public class InputBox {
     boolean keyUp;
     char prevKey;
     int counter = 0;
+    // Type 0 = strings, 1 = numbers
+    int type;
 
     public InputBox() {
         inputs = new ArrayList<Character>();
@@ -19,7 +21,11 @@ public class InputBox {
 
     public void update() {
         char pressedKey = getPressedKey();
-        if (pressedKey != '\0' && keyUp) {
+        if (pressedKey != '\0' && keyUp && isNumber(pressedKey) && type == 1) {
+            inputs.add(pressedKey);
+            keyUp = false;
+        }
+        else if (pressedKey != '\0' && keyUp && type == 0) {
             if(!isShiftPressed()){
                 inputs.add((pressedKey + "").toLowerCase().charAt(0));
             }
@@ -40,8 +46,24 @@ public class InputBox {
         return string;
     }
 
+    public int getNumber() {
+        if(type != 1){
+            return -1;
+        }
+        String string = "";
+        for (int i = 0; i < inputs.size(); i++) {
+            string += inputs.get(i);
+        }
+        return Integer.parseInt(string);
+    }
+
     public boolean isShiftPressed() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+    }
+
+    private boolean isNumber(char c) {
+        return c == '0' || c == '1' || c == '2' || c == '3' || c == '4'
+                || c == '5' || c == '6' || c == '7' || c == '8' || c == '9';
     }
 
     public char getPressedKey() {
