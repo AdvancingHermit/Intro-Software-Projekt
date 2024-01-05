@@ -41,6 +41,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	private Vector gridsize;
 
 	final private int snakeAmount = 2;
+
 	SpriteBatch batch;
 	Texture img;
 	Grid grid;
@@ -49,7 +50,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FitViewport viewport;
 	BitmapFont font;
 	BitmapFont font2;
+
+	Texture backArrow;
 	BitmapFont font3;
+
 	Texture appleSprite;
 	Texture wallSprite;
 	Texture snakeBodySprite;
@@ -68,7 +72,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	boolean mousePressed;
 	int frameCounter = 0;
 	InputBox inputBox;
-
+	int backButtonHeight, backButtonWidth, backButtonX, backButtonY;
 
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
@@ -79,7 +83,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public void create() {
 
 		batch = new SpriteBatch();
-
+		backArrow = new Texture(Gdx.files.internal("Arrow.png"));
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		wallSprite = new Texture((Gdx.files.internal("wall.jpg")));
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
@@ -114,11 +118,31 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
-
+    
 		inputBox = new InputBox(0);
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
-		parameter = new FreeTypeFontParameter();
+    
+		backButtonX = -screenWidth / 2 + 150;
+		backButtonY = screenHeight / 2 - 200;
+		backButtonWidth = 300;
+		backButtonHeight = 100;
 
+	}
+
+
+	public void drawBackButton() {
+		batch.begin();
+		batch.draw(backArrow, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
+		batch.end();
+	}
+
+	public void clickedBackButton() {
+		if (Gdx.input.getX() >= backButtonX + screenWidth / 2 // Creating start minus n hitbox
+				&& Gdx.input.getX() <= backButtonX + screenWidth / 2 + 300
+				&& Gdx.input.getY() <= backButtonY - screenHeight / 2 + 400
+				&& Gdx.input.getY() >= backButtonY - screenHeight / 2 + 300) {
+			currentSceen = Scene.Main_Scene;
+		}
 	}
 
 	@Override
@@ -128,6 +152,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+
 		switch (currentSceen) {
 			case Main_Scene:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -144,6 +169,27 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.begin(ShapeType.Filled);
 				shape.setColor(Color.WHITE);
 				shape.rect(startButtonX, startButtonY, 200, 200); // creating start game
+				drawBackButton();
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					clickedBackButton();
+					mousePressed = true;
+				}
+				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
+						&& Gdx.input.getX() <= startButtonX + 200
+						&& Gdx.input.getY() <= startButtonY + 200
+						&& Gdx.input.getY() >= startButtonY
+						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
+					gridsize = new Vector(n, m);
+					grid = new Grid(gridsize, snakeAmount, screenHeight);
+					grid.walls = grid.wallGenerator(gridsize);
+					currentSceen = Scene.Main_Game;
+				}
+				shape.end();
+				break;
+			case Main_Setting:
+				break;
+			case Main_Enable_Features:
 				shape.setColor(Color.RED);
 				shape.rect(startButtonX + 400, startButtonY, 100, 200); // creating minus n
 				shape.setColor(Color.GREEN);
@@ -152,6 +198,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.rect(startButtonX - 400, startButtonY, 100, 200); // creating minus m
 				shape.setColor(Color.GREEN);
 				shape.rect(startButtonX - 300, startButtonY, 100, 200); // creating plus m
+
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					mousePressed = true;
 				}
@@ -162,7 +209,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
 						n = Math.max(n - 1, 5);
-						System.out.println("n--: " + n);
 						mousePressed = false;
 					} else if (Gdx.input.getX() >= startButtonX + 500 // Creating start plus n hitbox
 							&& Gdx.input.getX() <= startButtonX + 600
@@ -170,7 +216,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 							&& Gdx.input.getY() >= startButtonY
 							&& mousePressed) {
 						n = Math.min(n + 1, 100);
-						System.out.println("n++: " + n);
 						mousePressed = false;
 					}
 					if (Gdx.input.getX() >= startButtonX - 400// Creating start minus m hitbox
@@ -189,25 +234,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						mousePressed = false;
 					}
 				}
-				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
-						&& Gdx.input.getX() <= startButtonX + 200
-						&& Gdx.input.getY() <= startButtonY + 200
-						&& Gdx.input.getY() >= startButtonY
-						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
-					gridsize = new Vector(n, m);
-					grid = new Grid(gridsize, snakeAmount, screenHeight);
-					if (wallHandler.isEnabled()) {
-						grid.walls = grid.wallGenerator(gridsize);
-					}
-					currentSceen = Scene.Main_Game;
-				}
-				shape.end();
-				break;
-			case Main_Setting:
-				break;
-			case Main_Enable_Features:
-				break;
+
 			case Main_Game:
 
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -218,12 +245,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.setProjectionMatrix(camera.combined);
 
 				shape.begin(ShapeType.Filled);
-
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 
 				shape.end();
 				batch.begin();
 				for (int i = 0; i < grid.snakes.length; i++) {
+
+					scoreNumText.setText(font2, "22");
 					scoreText.setText(font2, "PLAYER " + (i + 1) + " SCORE");
 					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 20;
 					scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
@@ -234,7 +262,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 							(0.41f + 0.075f * -i) * viewport.getScreenHeight());
 
 				}
-
 				batch.end();
 				shape.begin(ShapeType.Filled);
 
@@ -258,6 +285,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 								}
 							}
 							int totalWalls = 0;
+
 							if (wallHandler.isEnabled()) {
 								for (Wall wall : grid.walls) {
 									totalWalls += wall.getNumberOfWalls();
@@ -305,7 +333,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					for (int k = 0; k < positions.size(); k++) {
 						int cx = positions.get(k).x;
 						int cy = positions.get(k).y;
-						System.out.println(cx + " " + cy);
+
 						if (cx == grid.gridSize.x || cx == -1) {
 							// Skiftes til i, når vi looper over slanger.
 							cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
@@ -328,6 +356,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							Sprite spr = vel.x == 0 ? sprY : sprX;
 							batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2),
 									(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
+
 						} else {
 							batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
 									(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
@@ -337,6 +366,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.end();
 
 				batch.begin();
+
 				for (Fruit fruit : fruits) {
 					batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize,
 							grid.squareSize);
