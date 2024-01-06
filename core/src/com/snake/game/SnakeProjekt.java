@@ -189,7 +189,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					System.out.println(Gdx.input.getY() + " " + (screenHeight - startButton.getpos().y - startButton.getSize().y));
 					if (startButton.clickedButton()) {
 						gridsize = new Vector(n, m);
-						grid = new Grid(gridsize, multiplayerHandler.isEnabled(), screenHeight);
+						grid = new Grid(gridsize, multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1, screenHeight);
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
@@ -198,23 +198,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						currentScene = Scene.Main_Enable_Features;
 					}
 					mousePressed = true;
-				}
-
-				if (Gdx.input.getX() >= startButtonX + startButtonWidth / 8 // Creating Feature game button hitbox
-						&& Gdx.input.getX() <= startButtonX + startButtonWidth / 8 + startButtonWidth
-								- startButtonWidth / 4
-						&& Gdx.input.getY() >= startButtonY + startButtonHeight / 2 + startButtonHeight / 2
-						&& Gdx.input.getY() <= startButtonY + startButtonHeight / 2 + startButtonHeight
-						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
-
-					gridsize = new Vector(n, m);
-					int snakeAmount = multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1;
-					grid = new Grid(gridsize, snakeAmount, screenHeight);
-					if (wallHandler.isEnabled()) {
-						grid.walls = grid.wallGenerator(gridsize);
-					}
-					currentScene = Scene.Main_Enable_Features;
 				}
 				shape.end();
 				break;
