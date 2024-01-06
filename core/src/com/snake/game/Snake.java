@@ -11,7 +11,7 @@ public class Snake {
 
     private ArrayList<Vector> positions;
 
-    private final int snakeSize = 2;
+    private final int snakeSize = 1;
     private Vector vel;
     private char key;
     private int[] keys;
@@ -143,8 +143,8 @@ public class Snake {
     }
 
     public void setHasEaten(Fruit fruit) {
-        score += fruit.isGolden() ? 3 * fruit.getScore() : fruit.getScore();
-        grow += fruit.isGolden() ? -3 * fruit.getSize() : fruit.getSize();
+        score += fruit.getScore();
+        grow += fruit.getGrowth();
     }
 
     public ArrayList<Vector> getPositions() {
@@ -154,9 +154,6 @@ public class Snake {
     public void setPositions(ArrayList<Vector> positions) {
         this.positions = positions;
     }
-
-
-
     public int getScore() {
         if (isDead){
             return highscore;

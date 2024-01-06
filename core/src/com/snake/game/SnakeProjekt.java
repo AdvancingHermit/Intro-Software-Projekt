@@ -35,7 +35,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Main_Scene, Main_Game, Main_Setting, Main_Enable_Features
 	}
 
-	Scene currentScene = Scene.Main_Scene;
+
+	Scene currentSceen = Scene.Main_Scene;
 
 	private Vector gridsize;
 
@@ -80,6 +81,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontParameter parameter;
 
 
+
+
+
   //handlers
 	WallHandler wallHandler = new WallHandler(false);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
@@ -87,8 +91,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
-
-	int fruitAmount = 2;
+  
+  //fruits
+	FruitType apple;
+	FruitType goldenApple;
+  int fruitAmount = 2;
+  
 	private int n = 15;
 	private int m = 15;
 
@@ -135,6 +143,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+
+		backButtonX = -screenWidth / 2 + 150;
+		backButtonY = screenHeight / 2 - 200;
+		backButtonWidth = 300;
+		backButtonHeight = 100;
+
+		//Fruits
+		apple = new FruitType(appleSprite, 1, 1);
+		goldenApple = new FruitType(goldenAppleSprite, 10, -1);
+
+
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
@@ -475,20 +494,27 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 				}
 				if (!invalidSpawn) {
-					boolean golden = random.nextInt(0, 100) + 1 <= goldenFruitHandler.getChance();
-					Texture sprite = golden ? goldenAppleSprite : appleSprite;
-					fruits.add(new Fruit(spawningPosition, sprite, new Vector(
-							(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2))
-									+ grid.squareSize * spawningPosition.x),
-							(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
-									+ grid.squareSize * spawningPosition.y)),
-							30, 1, golden));
+					boolean golden = (random.nextInt(0,100) + 1 <= goldenFruitHandler.getChance()) && goldenFruitHandler.isEnabled();
+                    if (golden) {
+                        createFruit(goldenApple, spawningPosition, rectangle);
+                    } else {
+                        createFruit(apple, spawningPosition, rectangle);
+                    }
 
-				} else {
+
+
+                } else {
 					k--;
 				}
 			}
 		}
+	}
+
+	private void createFruit(FruitType fruitType, Vector spawningPosition, Rectangle rectangle) {
+		fruits.add(new Fruit(spawningPosition, fruitType.getSprite(), new Vector(
+				(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * spawningPosition.x),
+				(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2)) + grid.squareSize * spawningPosition.y)),
+				fruitType.getScore(), fruitType.getGrowth()));
 	}
 
 	private void InputBoxShower(InputBox inputBox) {
