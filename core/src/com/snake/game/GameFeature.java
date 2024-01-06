@@ -1,9 +1,9 @@
 package com.snake.game;
 
-public class GameFeatures {
+public class GameFeature {
     private boolean enabled;
 
-    public GameFeatures(boolean enabled){
+    public GameFeature(boolean enabled){
         this.enabled = enabled;
     }
 

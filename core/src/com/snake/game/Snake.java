@@ -8,6 +8,8 @@ import com.snake.game.util.Vector;
 public class Snake {
 
     private ArrayList<Vector> positions;
+
+    private final int snakeSize = 2;
     private Vector vel;
     private char key;
     private int[] keys;
@@ -32,7 +34,7 @@ public class Snake {
     public Snake(int x, int y) {
         Vector pos = new Vector(x, y);
         positions = new ArrayList<Vector>();
-        for (int i = 1; i >= 0; i--) {
+        for (int i = snakeSize; i >= 0; i--) {
             Vector position = new Vector(pos.x, pos.y - i);
             this.positions.add(position);
         }
@@ -84,6 +86,13 @@ public class Snake {
                 isDead = true;
                 positions.remove(positions.size() - 1);
             }
+            while (grow < 0 && positions.size() > 2){
+                grow++;
+                positions.remove(0);
+            }
+            if (grow < 0 && positions.size() == 2){
+                grow = 0;
+            }
             if (grow > 0) {
                 counter++;
                 grow--;
@@ -124,7 +133,7 @@ public class Snake {
 
     public void setHasEaten(Fruit fruit) {
         score += fruit.isGolden() ? 3 * fruit.getScore() : fruit.getScore();
-        grow += fruit.isGolden() ? 3 * fruit.getSize() : fruit.getSize();
+        grow += fruit.isGolden() ? -3 * fruit.getSize() : fruit.getSize();
     }
 
     public ArrayList<Vector> getPositions() {

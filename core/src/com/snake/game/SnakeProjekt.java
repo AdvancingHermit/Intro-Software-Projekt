@@ -1,16 +1,13 @@
 package com.snake.game;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,8 +33,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-	private int n = 6;
-	private int m = 6;
 
 	private Vector gridsize;
 
@@ -77,12 +72,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
 
+
+	int fruitAmount = 5;
+  
+  //handlers
 	WallHandler wallHandler = new WallHandler(true);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 50);
 	BorderHandler borderHandler = new BorderHandler(true);
 
-	int fruitAmount = 3;
+	private int n = 5;
+	private int m = 5;
 
 	@Override
 	public void create() {
@@ -132,6 +132,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backButtonY = screenHeight / 2 - 200;
 		backButtonWidth = 300;
 		backButtonHeight = 100;
+
 
 	}
 
@@ -379,39 +380,22 @@ public class SnakeProjekt extends ApplicationAdapter {
 		if (fruits.isEmpty()) {
 			for (int k = 0; k < fruitAmount; k++) {
 				boolean snakeCoversFullScreen = false;
-				boolean spawnInSnake = false;
-				boolean spawnInFruit = false;
+				boolean invalidSpawn = false;
 				int snakeSize = 0;
-				int randx = random.nextInt(0, gridsize.x);
-				int randy = random.nextInt(0, gridsize.y);
+				Vector spawningPosition = new Vector(random.nextInt(0, gridsize.x), random.nextInt(0, gridsize.y));
 				for (Snake snake : grid.snakes) {
 					snakeSize += snake.getPositions().size();
-					for (Vector pos : snake.getPositions()) {
-						if (new Vector(randx, randy).equals(pos)) {
-							spawnInSnake = true;
-						}
+						if (snake.getPositions().contains(spawningPosition)) {
+							invalidSpawn = true;
 					}
 				}
 				int totalWalls = 0;
 
 				if (wallHandler.isEnabled()) {
 					for (Wall wall : grid.walls) {
-						totalWalls += wall.getNumberOfWalls();
-						if (new Vector(randx, randy).equals(wall.getSnakePos())) {
-							spawnInSnake = true;
-						}
-						for (int i = 1; i < wall.getSize().x; i++) {
-							if (new Vector(randx, randy)
-									.equals(new Vector(wall.getSnakePos().x + i, wall.getSnakePos().y))) {
-								spawnInSnake = true;
-							}
-						}
-						for (int i = 1; i < wall.getSize().y; i++) {
-							if (new Vector(randx, randy)
-									.equals(new Vector(wall.getSnakePos().x, wall.getSnakePos().y + i))) {
-								spawnInSnake = true;
-							}
-						}
+                       if (wall.getOccupiedTiles().contains(spawningPosition)) {
+						   invalidSpawn = true;
+					   }
 					}
 				}
 
@@ -427,18 +411,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				Rectangle rectangle = shower[0][0];
 				for (Fruit fruit : fruits) {
-					if (new Vector(fruit.getSnakePos().x, fruit.getSnakePos().y).equals(new Vector(randx, randy))) {
-						spawnInFruit = true;
-					}
+                    if (fruit.getSnakePos().equals(spawningPosition)) {
+                        invalidSpawn = true;
+                        break;
+                    }
 				}
-				if (!spawnInSnake && !spawnInFruit) {
-					boolean golden = random.nextInt(0, 100) + 1 <= goldenFruitHandler.getChance();
+				if (!invalidSpawn) {
+					boolean golden = random.nextInt(0,100) + 1 <= goldenFruitHandler.getChance();
 					Texture sprite = golden ? goldenAppleSprite : appleSprite;
-					fruits.add(new Fruit(new Vector((int) (randx), (int) (randy)), sprite, new Vector(
-							(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * randx),
-							(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
-									+ grid.squareSize * randy)),
-							30, 1, golden));
+						fruits.add(new Fruit(spawningPosition, sprite, new Vector(
+								(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * spawningPosition.x),
+								(int) ((rectangle.y - (Gdx.graphics.getHeight() / 2))
+										+ grid.squareSize * spawningPosition.y)), 30, 1, golden));
 
 				} else {
 					k--;
