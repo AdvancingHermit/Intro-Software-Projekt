@@ -138,19 +138,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		featureButton = new Button(
 				new Vector(startButton.getpos().x + screenWidth / 32, startButton.getpos().y - screenHeight / 8),
 				new Vector(screenWidth / 4 - screenWidth / 16, screenHeight / 8));
-<<<<<<< Updated upstream
-		/*
-		 * startButtonWidth = screenWidth / 4;
-		 * startButtonHeight = screenHeight / 4;
-		 * startButtonX = screenWidth / 2 - startButtonWidth / 2;
-		 * startButtonY = screenHeight / 2 - startButtonHeight / 2;
-		 * 
-		 * shape.rect(startButtonX + startButtonWidth / 8, startButtonY -
-		 * startButtonHeight / 2,
-		 * startButtonWidth - startButtonWidth / 4, startButtonHeight / 2); // creating
-		 * feature
-		 */
-=======
 		boxesWidth = screenWidth / 6;
 		boxesHeight = screenHeight / 16;
 		for (int i = 0; i < features.length; i++) {
@@ -166,7 +153,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector(boxesWidth, boxesHeight));
 			}
 		}
->>>>>>> Stashed changes
+
 	}
 
 	public void showButton(Button temp) {
@@ -210,13 +197,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							Gdx.input.getY() + " " + (screenHeight - startButton.getpos().y - startButton.getSize().y));
 					if (startButton.clickedButton()) {
 						gridsize = new Vector(n, m);
-<<<<<<< Updated upstream
-						grid = new Grid(gridsize, multiplayerHandler.isEnabled(), screenHeight);
-=======
-						grid = new Grid(gridsize,
-								multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
-								screenHeight);
->>>>>>> Stashed changes
+						grid = new Grid(gridsize, multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1, screenHeight);
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
@@ -225,23 +206,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						currentScene = Scene.Main_Enable_Features;
 					}
 					mousePressed = true;
-				}
-
-				if (Gdx.input.getX() >= startButtonX + startButtonWidth / 8 // Creating Feature game button hitbox
-						&& Gdx.input.getX() <= startButtonX + startButtonWidth / 8 + startButtonWidth
-								- startButtonWidth / 4
-						&& Gdx.input.getY() >= startButtonY + startButtonHeight / 2 + startButtonHeight / 2
-						&& Gdx.input.getY() <= startButtonY + startButtonHeight / 2 + startButtonHeight
-						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
-
-					gridsize = new Vector(n, m);
-					int snakeAmount = multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1;
-					grid = new Grid(gridsize, snakeAmount, screenHeight);
-					if (wallHandler.isEnabled()) {
-						grid.walls = grid.wallGenerator(gridsize);
-					}
-					currentScene = Scene.Main_Enable_Features;
 				}
 				shape.end();
 				break;
@@ -252,18 +216,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
-<<<<<<< Updated upstream
-				shape.setColor(Color.RED);
-				shape.rect(startButtonX + 400, startButtonY, 100, 200); // creating minus n
-				shape.setColor(Color.GREEN);
-				shape.rect(startButtonX + 500, startButtonY, 100, 200); // creating plus n
-				shape.setColor(Color.RED);
-				shape.rect(startButtonX - 400, startButtonY, 100, 200); // creating minus m
-				shape.setColor(Color.GREEN);
-				shape.rect(startButtonX - 300, startButtonY, 100, 200); // creating plus m
-=======
 				color = Color.RED;
->>>>>>> Stashed changes
 				showButton(backButton);
 				for (Button x : features) {
 					showButton(x, color);
@@ -321,36 +274,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				}
 				if (frameCounter % 3 == 0) {
-					if (Gdx.input.getX() >= startButtonX + 400 // Creating start minus n hitbox
-							&& Gdx.input.getX() <= startButtonX + 500
-							&& Gdx.input.getY() <= startButtonY + 200
-							&& Gdx.input.getY() >= startButtonY
-							&& mousePressed) {
-						n = Math.max(n - 1, 5);
-						mousePressed = false;
-					} else if (Gdx.input.getX() >= startButtonX + 500 // Creating start plus n hitbox
-							&& Gdx.input.getX() <= startButtonX + 600
-							&& Gdx.input.getY() <= startButtonY + 200
-							&& Gdx.input.getY() >= startButtonY
-							&& mousePressed) {
-						n = Math.min(n + 1, 100);
-						mousePressed = false;
-					}
-					if (Gdx.input.getX() >= startButtonX - 400// Creating start minus m hitbox
-							&& Gdx.input.getX() <= startButtonX - 300
-							&& Gdx.input.getY() <= startButtonY + 200
-							&& Gdx.input.getY() >= startButtonY
-							&& mousePressed) {
-						m = Math.max(m - 1, 5);
-						mousePressed = false;
-					} else if (Gdx.input.getX() >= startButtonX - 300 // Creating start plus n hitbox
-							&& Gdx.input.getX() <= startButtonX - 200
-							&& Gdx.input.getY() <= startButtonY + 200
-							&& Gdx.input.getY() >= startButtonY
-							&& mousePressed) {
-						m = Math.min(m + 1, 100);
-						mousePressed = false;
-					}
+					// for hitboxes, der behandler variabler
 				}
 				shape.end();
 				break;
