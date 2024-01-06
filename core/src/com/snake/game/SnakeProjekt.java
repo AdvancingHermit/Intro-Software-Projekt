@@ -80,8 +80,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BorderHandler borderHandler = new BorderHandler(true);
 
 	int fruitAmount = 1;
-	private int n = 4;
-	private int m = 4;
+	private int n = 10;
+	private int m = 10;
 
 	//fruits
 	FruitType apple;
