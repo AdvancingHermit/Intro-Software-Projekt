@@ -1,6 +1,7 @@
 package com.snake.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -15,14 +16,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Size;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.util.InputBox;
 import com.snake.game.util.Vector;
+import com.snake.game.util.Button;
 import com.badlogic.gdx.math.Rectangle;
 
 public class SnakeProjekt extends ApplicationAdapter {
@@ -33,7 +37,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 
 	Scene currentSceen = Scene.Main_Scene;
-
 
 	private Vector gridsize;
 
@@ -68,24 +71,34 @@ public class SnakeProjekt extends ApplicationAdapter {
 	boolean mousePressed;
 	int frameCounter = 0;
 	InputBox inputBox;
-	int backButtonHeight, backButtonWidth, backButtonX, backButtonY;
+	int backButtonHeight, backButtonWidth, backButtonX, backButtonY, startButtonWidth, startButtonHeight, boxesHeight,
+			boxesWidth;
+	Button backButton, startButton, featureButton;
+	Color color;
+	Button[] features = new Button[12];
 
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
 
+
+
+
+
   //handlers
 	WallHandler wallHandler = new WallHandler(false);
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(false, 10);
-	BorderHandler borderHandler = new BorderHandler(true);
-
-	int fruitAmount = 1;
-	private int n = 10;
-	private int m = 10;
-
-	//fruits
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(false, 0);
+	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
+	BorderHandler borderHandler = new BorderHandler(false);
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
+  
+  //fruits
 	FruitType apple;
 	FruitType goldenApple;
+  int fruitAmount = 2;
+  
+	private int n = 15;
+	private int m = 15;
 
 	@Override
 	public void create() {
@@ -141,28 +154,40 @@ public class SnakeProjekt extends ApplicationAdapter {
 		goldenApple = new FruitType(goldenAppleSprite, 10, -1);
 
 
+		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
+				backArrow);
+		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
+				new Vector(screenWidth / 4, screenHeight / 4));
+		featureButton = new Button(
+				new Vector(startButton.getpos().x + screenWidth / 32, startButton.getpos().y - screenHeight / 8),
+				new Vector(screenWidth / 4 - screenWidth / 16, screenHeight / 8));
+		boxesWidth = screenWidth / 6;
+		boxesHeight = screenHeight / 16;
+		for (int i = 0; i < features.length; i++) {
+			if (i % 2 == 0) {
+				features[i] = new Button(
+						new Vector((screenWidth - screenWidth * 2 / 3) - boxesWidth / 2,
+								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 8)),
+						new Vector(boxesWidth, boxesHeight));
+			} else {
+				features[i] = new Button(
+						new Vector((screenWidth - screenWidth / 3) - boxesWidth / 2,
+								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 8)),
+						new Vector(boxesWidth, boxesHeight));
+			}
+		}
 	}
 
-	public void drawBackButton() {
+	public void showButton(Button temp) {
 		batch.begin();
-		batch.draw(backArrow, backButtonX, backButtonY, backButtonWidth, backButtonHeight);
+		batch.draw(temp.getbackArrow(), temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
 		batch.end();
 	}
 
-	public void clickedBackButton() {
-		if (Gdx.input.getX() >= backButtonX + screenWidth / 2 // Creating start minus n hitbox
-				&& Gdx.input.getX() <= backButtonX + screenWidth / 2 + 300
-				&& Gdx.input.getY() <= backButtonY - screenHeight / 2 + 400
-				&& Gdx.input.getY() >= backButtonY - screenHeight / 2 + 300 &&
-				(Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
-			currentSceen = Scene.Main_Scene;
-		}
-	}
+	public void showButton(Button temp, Color color) {
+		shape.setColor(color);
+		shape.rect(temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
 
-	public void checkForESC() {
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-			Gdx.app.exit();
-		}
 	}
 
 	@Override
@@ -172,37 +197,37 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		checkForESC();
-		switch (currentSceen) {
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			Gdx.app.exit();
+		}
+		switch (currentScene) {
 			case Main_Scene:
 				ScreenUtils.clear(0, 0, 1, 1);
-				startButtonX = screenWidth / 2 - 100;
-				startButtonY = screenHeight / 2 - 100;
+
 				frameCounter++;
 				mousePressed = false;
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
-				shape.setColor(Color.WHITE);
-				shape.rect(startButtonX, startButtonY, 200, 200); // creating start game
-				drawBackButton();
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-					clickedBackButton();
-					mousePressed = true;
-				}
-				if (Gdx.input.getX() >= startButtonX // Creating start game button hitbox
-						&& Gdx.input.getX() <= startButtonX + 200
-						&& Gdx.input.getY() <= startButtonY + 200
-						&& Gdx.input.getY() >= startButtonY
-						&& (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
+				color = Color.GREEN;
+				showButton(startButton, color);
+				color = Color.RED;
+				showButton(featureButton, color);
 
-					gridsize = new Vector(n, m);
-					grid = new Grid(gridsize, multiplayerHandler.isEnabled(), screenHeight);
-					if (wallHandler.isEnabled()) {
-						grid.walls = grid.wallGenerator(gridsize);
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					if (startButton.clickedButton()) {
+						gridsize = new Vector(n, m);
+						grid = new Grid(gridsize,
+								multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
+								screenHeight);
+						if (wallHandler.isEnabled()) {
+							grid.walls = grid.wallGenerator(gridsize);
+						}
+						currentScene = Scene.Main_Game;
+					} else if (featureButton.clickedButton()) {
+						currentScene = Scene.Main_Enable_Features;
 					}
-					currentSceen = Scene.Main_Game;
+					mousePressed = true;
 				}
 				shape.end();
 				break;
@@ -213,50 +238,64 @@ public class SnakeProjekt extends ApplicationAdapter {
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
-				shape.setColor(Color.RED);
-				shape.rect(startButtonX + 400, startButtonY, 100, 200); // creating minus n
-				shape.setColor(Color.GREEN);
-				shape.rect(startButtonX + 500, startButtonY, 100, 200); // creating plus n
-				shape.setColor(Color.RED);
-				shape.rect(startButtonX - 400, startButtonY, 100, 200); // creating minus m
-				shape.setColor(Color.GREEN);
-				shape.rect(startButtonX - 300, startButtonY, 100, 200); // creating plus m
-				drawBackButton();
-				clickedBackButton();
+				color = Color.RED;
+				showButton(backButton);
+				for (Button x : features) {
+					showButton(x, color);
+				}
+
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					mousePressed = true;
+					if (backButton.clickedButton()) {
+						currentScene = Scene.Main_Scene;
+					}
+					for (int i = 0; i < features.length; i++) {
+						if (features[i].clickedButton()) {
+							switch (i) {
+								case (0):
+
+									break;
+								case (1):
+
+									break;
+								case (2):
+
+									break;
+								case (3):
+
+									break;
+								case (4):
+
+									break;
+								case (5):
+
+									break;
+								case (6):
+
+									break;
+								case (7):
+
+									break;
+								case (8):
+
+									break;
+								case (9):
+
+									break;
+								case (10):
+
+									break;
+								case (11):
+
+									break;
+								default:
+									break;
+							}
+						}
+					}
+
 				}
 				if (frameCounter % 3 == 0) {
-					if (Gdx.input.getX() >= startButtonX + 400 // Creating start minus n hitbox
-							&& Gdx.input.getX() <= startButtonX + 500
-							&& Gdx.input.getY() <= startButtonY + 200
-							&& Gdx.input.getY() >= startButtonY
-							&& mousePressed) {
-						n = Math.max(n - 1, 5);
-						mousePressed = false;
-					} else if (Gdx.input.getX() >= startButtonX + 500 // Creating start plus n hitbox
-							&& Gdx.input.getX() <= startButtonX + 600
-							&& Gdx.input.getY() <= startButtonY + 200
-							&& Gdx.input.getY() >= startButtonY
-							&& mousePressed) {
-						n = Math.min(n + 1, 100);
-						mousePressed = false;
-					}
-					if (Gdx.input.getX() >= startButtonX - 400// Creating start minus m hitbox
-							&& Gdx.input.getX() <= startButtonX - 300
-							&& Gdx.input.getY() <= startButtonY + 200
-							&& Gdx.input.getY() >= startButtonY
-							&& mousePressed) {
-						m = Math.max(m - 1, 5);
-						mousePressed = false;
-					} else if (Gdx.input.getX() >= startButtonX - 300 // Creating start plus n hitbox
-							&& Gdx.input.getX() <= startButtonX - 200
-							&& Gdx.input.getY() <= startButtonY + 200
-							&& Gdx.input.getY() >= startButtonY
-							&& mousePressed) {
-						m = Math.min(m + 1, 100);
-						mousePressed = false;
-					}
 				}
 				shape.end();
 				break;
@@ -322,14 +361,28 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Iterator<Fruit> fruitIterator = fruits.iterator();
 		while (fruitIterator.hasNext()) {
 			Fruit fruit = fruitIterator.next();
-			System.out.println(fruit.getSnakePos());
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
 					snake.setHasEaten(fruit);
+					if (snakeReverseHandler.isEnabled()) {
+						ArrayList<Vector> positions = snake.getPositions();
+						Collections.reverse(positions);
+						snake.setPositions(positions);
+						Vector head = positions.get(positions.size() - 1);
+						Vector second = positions.get(positions.size() - 2);
+						Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1), Math.max(Math.min(head.y - second.y, 1), -1));
+						System.out.println("new vel"  + newVel);
+						if (!newVel.equals(snake.getVel())) {
+							snake.setVel(newVel);
+							System.out.println(newVel);
+							snake.setKey(snake.keyVectorMapReversed.get(newVel));
+						}
+					}
 					fruitIterator.remove();
 				}
 			}
 		}
+
 	}
 
 	private void snakeUpdater(Rectangle[][] shower) {
@@ -380,6 +433,23 @@ public class SnakeProjekt extends ApplicationAdapter {
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 				}
 			}
+			if (quickTimeHandler.isEnabled()) {
+				Vector snakeVel = snake.getVel();
+
+				if (snakeVel.equals(snake.getQuickTimeOldVel())
+						&& snake.getQuickTimeCounter() >= 30 * quickTimeHandler.getTime() && !snake.isDead) {
+
+					snake.isDead = true;
+					snake.setQuickTimeCounter(0);
+				} else if (!snakeVel.equals(snake.getQuickTimeOldVel())) {
+					snake.setQuickTimeCounter(0);
+				}
+				if (!snake.isDead) {
+					snake.quickTime();
+				}
+
+			}
+
 		}
 	}
 
@@ -392,17 +462,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 				Vector spawningPosition = new Vector(random.nextInt(0, gridsize.x), random.nextInt(0, gridsize.y));
 				for (Snake snake : grid.snakes) {
 					snakeSize += snake.getPositions().size();
-						if (snake.getPositions().contains(spawningPosition)) {
-							invalidSpawn = true;
+					if (snake.getPositions().contains(spawningPosition)) {
+						invalidSpawn = true;
 					}
 				}
 				int totalWalls = 0;
 
 				if (wallHandler.isEnabled()) {
 					for (Wall wall : grid.walls) {
-                       if (wall.getOccupiedTiles().contains(spawningPosition)) {
-						   invalidSpawn = true;
-					   }
+						if (wall.getOccupiedTiles().contains(spawningPosition)) {
+							invalidSpawn = true;
+						}
 					}
 				}
 
@@ -418,10 +488,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				Rectangle rectangle = shower[0][0];
 				for (Fruit fruit : fruits) {
-                    if (fruit.getSnakePos().equals(spawningPosition)) {
-                        invalidSpawn = true;
-                        break;
-                    }
+					if (fruit.getSnakePos().equals(spawningPosition)) {
+						invalidSpawn = true;
+						break;
+					}
 				}
 				if (!invalidSpawn) {
 					boolean golden = (random.nextInt(0,100) + 1 <= goldenFruitHandler.getChance()) && goldenFruitHandler.isEnabled();
@@ -430,6 +500,7 @@ public class SnakeProjekt extends ApplicationAdapter {
                     } else {
                         createFruit(apple, spawningPosition, rectangle);
                     }
+
 
 
                 } else {
