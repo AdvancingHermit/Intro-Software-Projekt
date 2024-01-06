@@ -143,7 +143,7 @@ public class Snake {
     public void setPositions(ArrayList<Vector> positions) {
         this.positions = positions;
     }
-    
+
 
     public int getScore() {
         if (isDead){
