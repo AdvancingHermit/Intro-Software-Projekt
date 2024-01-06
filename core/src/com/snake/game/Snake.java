@@ -1,6 +1,8 @@
 package com.snake.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.snake.game.util.Vector;
@@ -17,9 +19,13 @@ public class Snake {
     private int counter = 0;
     private int maxcounter = 7;
 
+    private HashMap<Character, Vector> keyVectorMap = new HashMap<Character, Vector>();
+    public HashMap<Vector, Character> keyVectorMapReversed = new HashMap<Vector, Character>();
+
     //Quick Time Event Variables
     private int quickTimeCounter = 0;
     private Vector quickTimeOldVel;
+
   
     private double startTime = System.currentTimeMillis();
 
@@ -47,6 +53,14 @@ public class Snake {
         this.keys = keys;
         vel = new Vector(-1, 0);
         key = 'A';
+        keyVectorMap.put('W', new Vector(0, 1));
+        keyVectorMap.put('A', new Vector(-1, 0));
+        keyVectorMap.put('S', new Vector(0, -1));
+        keyVectorMap.put('D', new Vector(1, 0));
+        keyVectorMapReversed.put(new Vector(0, 1), 'W');
+        keyVectorMapReversed.put(new Vector(-1, 0), 'A');
+        keyVectorMapReversed.put(new Vector(0, -1), 'S');
+        keyVectorMapReversed.put(new Vector(1, 0), 'D');
     }
 
     public Snake(int x, int y, int[] keys) {
@@ -70,21 +84,9 @@ public class Snake {
         }
         if (counter % maxcounter == 0) {
 
-            switch (key) {
-                case ('W'):
-                    vel = new Vector(0, 1);
-                    break;
-                case ('A'):
-                    vel = new Vector(-1, 0);
-                    break;
-                case ('S'):
-                    vel = new Vector(0, -1);
-                    break;
-                case ('D'):
-                    vel = new Vector(1, 0);
-                    break;
+            vel = keyVectorMap.get(key);
 
-            }
+            
             positions.add(positions.get(positions.size() - 1).add(vel));
             if (checkCollision()) {
                 isDead = true;
@@ -153,6 +155,8 @@ public class Snake {
         this.positions = positions;
     }
 
+
+
     public int getScore() {
         if (isDead){
             return highscore;
@@ -163,6 +167,9 @@ public class Snake {
     public Vector getVel() {
         return vel;
     }
+    public void setVel(Vector vel) {
+        this.vel = vel;
+    }
 
     public int getCounter() {
         return counter;
@@ -171,6 +178,14 @@ public class Snake {
     public void setCounter(int counter) {
         this.counter = counter;
     }
+
+    public void setKey(char key) {
+        this.key = key;
+    }
+
+
+
+
 
     public int getQuickTimeCounter() {
         return this.quickTimeCounter;
@@ -181,5 +196,6 @@ public class Snake {
     public void setQuickTimeCounter(int quickTimeCounter) {
         this.quickTimeCounter = quickTimeCounter;
     }
+
 
 }

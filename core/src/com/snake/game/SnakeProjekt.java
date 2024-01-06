@@ -1,6 +1,7 @@
 package com.snake.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.util.InputBox;
@@ -76,15 +78,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontParameter parameter;
 
   //handlers
-	WallHandler wallHandler = new WallHandler(true);
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(true, 2);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 50);
-	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(true, 2);
+	WallHandler wallHandler = new WallHandler(false);
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(false, 0);
+	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
 
-	int fruitAmount = 5;
-	private int n = 10;
-	private int m = 10;
+	int fruitAmount = 2;
+	private int n = 15;
+	private int m = 15;
 
 	@Override
 	public void create() {
@@ -276,6 +279,20 @@ public class SnakeProjekt extends ApplicationAdapter {
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
 					snake.setHasEaten(fruit);
+					if (snakeReverseHandler.isEnabled()) {
+						ArrayList<Vector> positions = snake.getPositions();
+						Collections.reverse(positions);
+						snake.setPositions(positions);
+						Vector head = positions.get(positions.size() - 1);
+						Vector second = positions.get(positions.size() - 2);
+						Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1), Math.max(Math.min(head.y - second.y, 1), -1));
+						System.out.println("new vel"  + newVel);
+						if (!newVel.equals(snake.getVel())) {
+							snake.setVel(newVel);
+							System.out.println(newVel);
+							snake.setKey(snake.keyVectorMapReversed.get(newVel));
+						}
+					}
 					fruitIterator.remove();
 				}
 			}
