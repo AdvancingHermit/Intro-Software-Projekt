@@ -79,7 +79,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	WallHandler wallHandler = new WallHandler(true);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 50);
-	BorderHandler borderHandler = new BorderHandler(true);
+	BorderHandler borderHandler = new BorderHandler(false);
 
 	private int n = 5;
 	private int m = 5;
