@@ -33,7 +33,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Scene currentSceen = Scene.Main_Scene;
 
-
 	private Vector gridsize;
 
 	SpriteBatch batch;
@@ -74,13 +73,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 
   //handlers
 	WallHandler wallHandler = new WallHandler(true);
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(true, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 50);
+	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(true, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
 
 	int fruitAmount = 5;
-	private int n = 5;
-	private int m = 5;
+	private int n = 10;
+	private int m = 10;
 
 	@Override
 	public void create() {
@@ -189,7 +189,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 								|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
 
 					gridsize = new Vector(n, m);
-					grid = new Grid(gridsize, multiplayerHandler.isEnabled(), screenHeight);
+					int snakeAmount = multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1;
+					grid = new Grid(gridsize, snakeAmount, screenHeight);
 					if (wallHandler.isEnabled()) {
 						grid.walls = grid.wallGenerator(gridsize);
 					}
@@ -313,7 +314,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Iterator<Fruit> fruitIterator = fruits.iterator();
 		while (fruitIterator.hasNext()) {
 			Fruit fruit = fruitIterator.next();
-			System.out.println(fruit.getSnakePos());
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
 					snake.setHasEaten(fruit);
@@ -371,6 +371,23 @@ public class SnakeProjekt extends ApplicationAdapter {
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 				}
 			}
+			if (quickTimeHandler.isEnabled()) {
+				Vector snakeVel = snake.getVel();
+
+				if (snakeVel.equals(snake.getQuickTimeOldVel()) && snake.getQuickTimeCounter() >= 30*quickTimeHandler.getTime() && !snake.isDead) {
+
+					snake.isDead = true;
+					snake.setQuickTimeCounter(0);
+				} else if (!snakeVel.equals(snake.getQuickTimeOldVel())) {
+					snake.setQuickTimeCounter(0);
+				}
+				if (!snake.isDead) {
+					snake.quickTime();
+				}
+
+			}
+
+
 		}
 	}
 

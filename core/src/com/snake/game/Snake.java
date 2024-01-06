@@ -16,6 +16,10 @@ public class Snake {
     public boolean isDead;
     private int counter = 0;
     private int maxcounter = 7;
+
+    //Quick Time Event Variables
+    private int quickTimeCounter = 0;
+    private Vector quickTimeOldVel;
   
     private double startTime = System.currentTimeMillis();
 
@@ -106,6 +110,11 @@ public class Snake {
         }
         counter++;
     }
+    
+    public void quickTime(){
+        quickTimeOldVel = vel; 
+        quickTimeCounter++;
+    }
 
     public void moveBack(){
         if (hasDeadMoved){
@@ -162,4 +171,15 @@ public class Snake {
     public void setCounter(int counter) {
         this.counter = counter;
     }
+
+    public int getQuickTimeCounter() {
+        return this.quickTimeCounter;
+    }
+    public Vector getQuickTimeOldVel() {
+        return this.quickTimeOldVel;
+    }
+    public void setQuickTimeCounter(int quickTimeCounter) {
+        this.quickTimeCounter = quickTimeCounter;
+    }
+
 }
