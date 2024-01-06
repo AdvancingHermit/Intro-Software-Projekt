@@ -86,11 +86,11 @@ public class Snake {
                 isDead = true;
                 positions.remove(positions.size() - 1);
             }
-            while (grow < 0 && positions.size() > 2){
+            while (grow < 0 && positions.size() > 3){
                 grow++;
                 positions.remove(0);
             }
-            if (grow < 0 && positions.size() == 2){
+            if (grow < 0 && positions.size() == 3){
                 grow = 0;
             }
             if (grow > 0) {
