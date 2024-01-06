@@ -253,25 +253,24 @@ public class SnakeProjekt extends ApplicationAdapter {
 						if (features[i].clickedButton()) {
 							switch (i) {
 								case (0):
-
+									wallHandler.toggle();
 									break;
 								case (1):
-
+									multiplayerHandler.toggle();
 									break;
 								case (2):
-
+									goldenFruitHandler.toggle();
 									break;
 								case (3):
-
+									quickTimeHandler.toggle();
 									break;
 								case (4):
-
+									borderHandler.toggle();
 									break;
 								case (5):
-
+									snakeReverseHandler.toggle();
 									break;
 								case (6):
-
 									break;
 								case (7):
 
