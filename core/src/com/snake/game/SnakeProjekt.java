@@ -153,7 +153,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector(boxesWidth, boxesHeight));
 			}
 		}
-
 	}
 
 	public void showButton(Button temp) {
@@ -193,11 +192,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 				showButton(featureButton, color);
 
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-					System.out.println(
-							Gdx.input.getY() + " " + (screenHeight - startButton.getpos().y - startButton.getSize().y));
 					if (startButton.clickedButton()) {
 						gridsize = new Vector(n, m);
-						grid = new Grid(gridsize, multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1, screenHeight);
+						grid = new Grid(gridsize,
+								multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
+								screenHeight);
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
@@ -274,7 +273,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				}
 				if (frameCounter % 3 == 0) {
-					// for hitboxes, der behandler variabler
 				}
 				shape.end();
 				break;
