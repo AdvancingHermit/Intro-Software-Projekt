@@ -72,15 +72,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
 
-
-	int fruitAmount = 5;
-  
   //handlers
 	WallHandler wallHandler = new WallHandler(true);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 50);
 	BorderHandler borderHandler = new BorderHandler(false);
 
+	int fruitAmount = 5;
 	private int n = 5;
 	private int m = 5;
 
@@ -462,6 +460,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				for (Snake snake : grid.snakes) {
 					if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(j, 0)))) {
 						snake.isDead = true;
+						snake.moveBack();
 					}
 				}
 			}
@@ -472,6 +471,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				for (Snake snake : grid.snakes) {
 					if (snake.checkCollision(grid.walls[i].getSnakePos().add(new Vector(0, j)))) {
 						snake.isDead = true;
+						snake.moveBack();
 					}
 				}
 			}
