@@ -1,18 +1,22 @@
 package com.snake.game;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.snake.game.util.Vector;
 
-public class Fruit extends GameObject {
+public class FruitType{
+
+    private Texture sprite;
     private int score;
     private int growth;
-
-    public Fruit(Vector snakePosition, Texture sprite, Vector spritePos, int score, int growth) {
-        super(snakePosition, sprite, spritePos);
+    public FruitType(Texture sprite, int score, int growth) {
+        this.sprite = sprite;
         this.score = score;
         this.growth = growth;
-
     }
+
+    public Texture getSprite() {
+        return sprite;
+    }
+
     public int getScore() {
         return score;
     }
@@ -20,4 +24,6 @@ public class Fruit extends GameObject {
     public int getGrowth() {
         return growth;
     }
+
+
 }
