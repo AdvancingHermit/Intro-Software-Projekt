@@ -8,18 +8,28 @@ import com.snake.game.util.Vector;
 public class Snake {
 
     private ArrayList<Vector> positions;
+
+    private final int snakeSize = 2;
     private Vector vel;
     private char key;
     private int[] keys;
-    private boolean hasEaten;
     public boolean isDead;
     private int counter = 0;
     private int maxcounter = 7;
+
+    //Quick Time Event Variables
+    private int quickTimeCounter = 0;
+    private Vector quickTimeOldVel;
   
     private double startTime = System.currentTimeMillis();
-    private int fruitsEaten = 0;
 
     private int highscore;
+
+    private int grow = 0;
+    private int score = 0;
+
+    private boolean hasDeadMoved = false;
+    private Vector lastRemoved;
 
     public int getHighscore() {
         return highscore;
@@ -28,7 +38,7 @@ public class Snake {
     public Snake(int x, int y) {
         Vector pos = new Vector(x, y);
         positions = new ArrayList<Vector>();
-        for (int i = 1; i >= 0; i--) {
+        for (int i = snakeSize; i >= 0; i--) {
             Vector position = new Vector(pos.x, pos.y - i);
             this.positions.add(position);
         }
@@ -80,17 +90,39 @@ public class Snake {
                 isDead = true;
                 positions.remove(positions.size() - 1);
             }
-            if (hasEaten) {
+            while (grow < 0 && positions.size() > 3){
+                grow++;
+                positions.remove(0);
+            }
+            if (grow < 0 && positions.size() == 3){
+                grow = 0;
+            }
+            if (grow > 0) {
                 counter++;
-                hasEaten = false;
+                grow--;
                 return;
             }
             if (!isDead) {
+                lastRemoved = positions.get(0);
                 positions.remove(0);
             }
 
         }
         counter++;
+    }
+    
+    public void quickTime(){
+        quickTimeOldVel = vel; 
+        quickTimeCounter++;
+    }
+
+    public void moveBack(){
+        if (hasDeadMoved){
+            return;
+        }
+        positions.add(0, lastRemoved);
+        positions.remove(positions.size() - 1);
+        hasDeadMoved = true;
     }
 
     public boolean checkCollision() {
@@ -108,9 +140,9 @@ public class Snake {
         return (positions.get(positions.size() - 1)).equals(pos);
     }
 
-    public void setHasEaten() {
-        fruitsEaten++;
-        this.hasEaten = true;
+    public void setHasEaten(Fruit fruit) {
+        score += fruit.isGolden() ? 3 * fruit.getScore() : fruit.getScore();
+        grow += fruit.isGolden() ? -3 * fruit.getSize() : fruit.getSize();
     }
 
     public ArrayList<Vector> getPositions() {
@@ -125,7 +157,7 @@ public class Snake {
         if (isDead){
             return highscore;
         }
-        highscore = (int) ((System.currentTimeMillis() - startTime) * 0.001 + fruitsEaten * 30);
+        highscore = (int) ((System.currentTimeMillis() - startTime) * 0.001 + score);
         return highscore;
     }
     public Vector getVel() {
@@ -139,4 +171,15 @@ public class Snake {
     public void setCounter(int counter) {
         this.counter = counter;
     }
+
+    public int getQuickTimeCounter() {
+        return this.quickTimeCounter;
+    }
+    public Vector getQuickTimeOldVel() {
+        return this.quickTimeOldVel;
+    }
+    public void setQuickTimeCounter(int quickTimeCounter) {
+        this.quickTimeCounter = quickTimeCounter;
+    }
+
 }

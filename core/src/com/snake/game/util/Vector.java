@@ -1,5 +1,7 @@
 package com.snake.game.util;
 
+import java.util.Objects;
+
 public class Vector{
     public int x;
     public int y;
@@ -12,8 +14,22 @@ public class Vector{
     public Vector add(Vector other) {
         return new Vector(x + other.x, y + other.y);
     }
+  
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vector vector = (Vector) o;
+        return x == vector.x && y == vector.y;
+    }
 
-    public boolean equals(Vector other) {
-        return (x == other.x && y == other.y);
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+  
+    @Override
+    public String toString(){
+        return "X: " + x + " Y:" + y;
     }
 }
