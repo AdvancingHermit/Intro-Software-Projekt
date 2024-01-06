@@ -72,12 +72,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
 
-    //Handlers
-	WallHandler wallHandler = new WallHandler(true);
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 100);
 
 	int fruitAmount = 5;
+  
+  //handlers
+	WallHandler wallHandler = new WallHandler(true);
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 50);
+	BorderHandler borderHandler = new BorderHandler(true);
 
 	private int n = 5;
 	private int m = 5;
@@ -132,9 +134,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backButtonHeight = 100;
 
 
-
-
-
 	}
 
 	public void drawBackButton() {
@@ -152,10 +151,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 			currentSceen = Scene.Main_Scene;
 		}
 	}
-	public void checkForESC(){
+
+	public void checkForESC() {
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-					Gdx.app.exit();
-				}
+			Gdx.app.exit();
+		}
 	}
 
 	@Override
@@ -333,15 +333,28 @@ public class SnakeProjekt extends ApplicationAdapter {
 				int cy = positions.get(k).y;
 
 				if (cx == grid.gridSize.x || cx == -1) {
-					// Skiftes til i, når vi looper over slanger.
-					cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
-					snake.move();
-
+					if (borderHandler.isEnabled()) {
+						snake.isDead = true;
+						snake.moveBack();
+						cx = positions.get(k).x;
+						cy = positions.get(k).y;
+					} else {
+						// Skiftes til i, når vi looper over slanger.
+						cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
+						snake.move();
+					}
 				}
 				if (cy == grid.gridSize.y || cy == -1) {
-					// Skiftes til i, når vi looper over slanger.
-					cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
-					snake.move();
+					if (borderHandler.isEnabled()) {
+						snake.isDead = true;
+						snake.moveBack();
+						cx = positions.get(k).x;
+						cy = positions.get(k).y;
+					} else {
+						// Skiftes til i, når vi looper over slanger.
+						cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
+						snake.move();
+					}
 				}
 
 				if (k == positions.size() - 1) {
@@ -365,7 +378,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	private void spawnFruit(Rectangle[][] shower) {
 		if (fruits.isEmpty()) {
-			for (int k = 0; k< fruitAmount;k++) {
+			for (int k = 0; k < fruitAmount; k++) {
 				boolean snakeCoversFullScreen = false;
 				boolean invalidSpawn = false;
 				int snakeSize = 0;
@@ -389,7 +402,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (snakeSize >= gridsize.x * gridsize.y - totalWalls) {
 					snakeCoversFullScreen = true;
 				}
-				if (gridsize.x * gridsize.y - snakeSize - totalWalls - fruits.size() <= 0){
+				if (gridsize.x * gridsize.y - snakeSize - totalWalls - fruits.size() <= 0) {
 					snakeCoversFullScreen = true;
 				}
 
@@ -439,7 +452,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch.end();
 	}
 
-	private void drawWalls(){
+	private void drawWalls() {
 		batch.begin();
 
 		for (int i = 0; i < grid.walls.length; i++) {
