@@ -26,6 +26,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.util.InputBox;
 import com.snake.game.util.Vector;
+import com.snake.game.handlers.BorderHandler;
+import com.snake.game.handlers.GoldenFruitHandler;
+import com.snake.game.handlers.MultiplayerHandler;
+import com.snake.game.handlers.QuickTimeHandler;
+import com.snake.game.handlers.SnakeReverseHandler;
+import com.snake.game.handlers.WallHandler;
 import com.snake.game.util.Button;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -36,7 +42,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 
-	Scene currentSceen = Scene.Main_Scene;
+	Scene currentScene = Scene.Main_Scene;
 
 	private Vector gridsize;
 

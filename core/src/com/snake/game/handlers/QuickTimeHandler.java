@@ -1,4 +1,6 @@
-package com.snake.game;
+package com.snake.game.handlers;
+
+import com.snake.game.GameFeature;
 
 public class QuickTimeHandler extends GameFeature{
     private int time;
