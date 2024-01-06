@@ -1,6 +1,6 @@
 package com.snake.game;
 
-public class QuickTimeHandler extends GameFeatures{
+public class QuickTimeHandler extends GameFeature{
     private int time;
     public QuickTimeHandler(boolean enabled, int time) {
         super(enabled);

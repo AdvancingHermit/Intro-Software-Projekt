@@ -1,6 +1,6 @@
 package com.snake.game;
 
-public class MultiplayerHandler extends GameFeatures{
+public class MultiplayerHandler extends GameFeature{
     
     private int playerAmount;
     private final int maxPlayerAmount = 3;
