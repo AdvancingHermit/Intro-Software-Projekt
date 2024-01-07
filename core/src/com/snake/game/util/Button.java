@@ -47,11 +47,11 @@ public class Button {
     public Texture getbackArrow() {
         return backArrow;
     }
-    public boolean getisEnabled(){
-        return isEnabled;
-    }
     public void toggleisEnabled(){
-        isEnabled = !isEnabled;
+        handler.toggle();
+    }
+    public boolean getState(){
+        return handler.isEnabled();
     }
     public boolean clickedButton() {
         if (backArrow == null) {

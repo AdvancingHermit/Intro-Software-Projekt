@@ -93,11 +93,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 	WallHandler wallHandler = new WallHandler(false);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 0);
-
 	CherryHandler cherryHandler = new CherryHandler(false, 100);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
+
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
 			borderHandler, snakeReverseHandler };
 	Button[] features = new Button[handlers.length];
@@ -184,12 +184,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 				features[i] = new Button(
 						new Vector((screenWidth - screenWidth * 2 / 3) - boxesWidth / 2,
 								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 8)),
-						new Vector(boxesWidth, boxesHeight));
+						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			} else {
 				features[i] = new Button(
 						new Vector((screenWidth - screenWidth / 3) - boxesWidth / 2,
 								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 8)),
-						new Vector(boxesWidth, boxesHeight));
+						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			}
 		}
 	}
@@ -258,8 +258,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 				showButton(backButton);
+				System.out.println(features[0].getState());
 				for (Button x : features) {
-					if (x.getisEnabled()) {
+					System.out.println(x.getState());
+					if (x.gethandler().isEnabled()) {
 						color = Color.GREEN;
 						showButton(x, color);
 					} else {
@@ -277,8 +279,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 					for (int i = 0; i < features.length; i++) {
 						if (features[i].clickedButton()) {
-								features[i].gethandler().toggle();
-                features[i].toggleisEnabled();
+								features[i].toggleisEnabled();
 						}
 					}
 				}
