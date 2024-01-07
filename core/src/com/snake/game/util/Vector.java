@@ -32,4 +32,8 @@ public class Vector{
     public String toString(){
         return "X: " + x + " Y:" + y;
     }
+
+    public double angle() {
+        return Math.toDegrees(Math.atan2(y, x));
+    }
 }
