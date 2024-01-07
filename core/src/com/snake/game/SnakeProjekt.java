@@ -93,15 +93,16 @@ public class SnakeProjekt extends ApplicationAdapter {
   //handlers
 	WallHandler wallHandler = new WallHandler(false);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(false, 0);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 100);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
-	BorderHandler borderHandler = new BorderHandler(false);
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
+	BorderHandler borderHandler = new BorderHandler(true);
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false);
   
   //fruits
 	FruitType apple;
 	FruitType goldenApple;
-  int fruitAmount = 2;
+	FruitType cherry;
+    int fruitAmount = 2;
   
 	private int n = 15;
 	private int m = 15;
@@ -157,7 +158,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		//Fruits
 		apple = new FruitType(appleSprite, 1, 1);
-		goldenApple = new FruitType(goldenAppleSprite, 10, -1);
+		goldenApple = new FruitType(goldenAppleSprite, 10, 1);
+		cherry = new FruitType(goldenAppleSprite, 10, 0);
 
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
@@ -368,26 +370,43 @@ public class SnakeProjekt extends ApplicationAdapter {
 			Fruit fruit = fruitIterator.next();
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
-					snake.setHasEaten(fruit);
 					if (snakeReverseHandler.isEnabled()) {
-						ArrayList<Vector> positions = snake.getPositions();
-						Collections.reverse(positions);
-						snake.setPositions(positions);
-						Vector head = positions.get(positions.size() - 1);
-						Vector second = positions.get(positions.size() - 2);
-						Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1), Math.max(Math.min(head.y - second.y, 1), -1));
-						System.out.println("new vel"  + newVel);
-						if (!newVel.equals(snake.getVel())) {
-							snake.setVel(newVel);
-							System.out.println(newVel);
-							snake.setKey(snake.keyVectorMapReversed.get(newVel));
-						}
+						reverseSnake(snake);
 					}
+					if (fruit.getSprite().equals(goldenAppleSprite)){
+						teleportSnake(snake, fruit);
+					}
+					snake.setHasEaten(fruit);
 					fruitIterator.remove();
 				}
 			}
 		}
 
+	}
+
+	private void teleportSnake(Snake snake, Fruit eatenFruit) {
+		for (Fruit fruit : fruits){
+			if (fruit.getSprite().equals(eatenFruit.getSprite()) && !fruit.getSnakePos().equals(eatenFruit.getSnakePos())){
+				List<Vector> newPositions = snake.getPositions();
+				newPositions.add((fruit.getSnakePos()));
+				newPositions.remove(0);
+				snake.setPositions((ArrayList<Vector>) newPositions);
+				snake.setGrow(snake.getGrow()- fruit.getGrowth());
+			}
+		}
+	}
+
+	private static void reverseSnake(Snake snake) {
+		ArrayList<Vector> positions = snake.getPositions();
+		Collections.reverse(positions);
+		snake.setPositions(positions);
+		Vector head = positions.get(positions.size() - 1);
+		Vector second = positions.get(positions.size() - 2);
+		Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1), Math.max(Math.min(head.y - second.y, 1), -1));
+		if (!newVel.equals(snake.getVel())) {
+			snake.setVel(newVel);
+			snake.setKey(snake.keyVectorMapReversed.get(newVel));
+		}
 	}
 
 	private void snakeUpdater(Rectangle[][] shower) {
@@ -466,6 +485,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 				int snakeSize = 0;
 				Vector spawningPosition = new Vector(random.nextInt(0, gridsize.x), random.nextInt(0, gridsize.y));
 				for (Snake snake : grid.snakes) {
+					if (snake.isDead && (borderHandler.isEnabled() || wallHandler.isEnabled())){
+						fruits.removeIf(fruit -> fruit.getSnakePos().equals(snake.getPositions().get(0)));
+					}
 					snakeSize += snake.getPositions().size();
 					if (snake.getPositions().contains(spawningPosition)) {
 						invalidSpawn = true;
