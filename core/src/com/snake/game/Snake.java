@@ -15,6 +15,15 @@ public class Snake {
     private Vector vel;
     private char key;
     private int[] keys;
+
+    public int getMaxcounter() {
+        return maxcounter;
+    }
+
+    public void setMaxcounter(int maxcounter) {
+        this.maxcounter = maxcounter;
+    }
+
     public boolean isDead;
     private int counter = 0;
     private int maxcounter = 7;
