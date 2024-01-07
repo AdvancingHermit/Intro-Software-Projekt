@@ -42,7 +42,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Main_Scene, Main_Game, Main_Setting, Main_Enable_Features
 	}
 
-
 	Scene currentScene = Scene.Main_Scene;
 
 	private Vector gridsize;
@@ -86,16 +85,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 			boxesWidth;
 	Button backButton, startButton, featureButton;
 	Color color;
-	Button[] features = new Button[12];
 
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
 
-
-
-
-
-  //handlers
+	// handlers
 	WallHandler wallHandler = new WallHandler(false);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 0);
@@ -104,14 +98,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(true);
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
-  
-  //fruits
+	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
+			borderHandler, snakeReverseHandler };
+	Button[] features = new Button[handlers.length];
+	// fruits
 	FruitType apple;
 	FruitType goldenApple;
 	FruitType cherry1;
 	FruitType cherry2;
-    int fruitAmount = 2;
-  
+	int fruitAmount = 2;
+
 	private int n = 15;
 	private int m = 15;
 
@@ -166,12 +162,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backButtonWidth = 300;
 		backButtonHeight = 100;
 
-		//Fruits
+		// Fruits
 		apple = new FruitType(appleSprite, 1, 1);
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1);
 		cherry1 = new FruitType(cherry1Sprite, 10, 1);
 		cherry2 = new FruitType(cherry2Sprite, 0, 0);
-
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
@@ -272,38 +267,44 @@ public class SnakeProjekt extends ApplicationAdapter {
 						if (features[i].clickedButton()) {
 							switch (i) {
 								case (0):
-									wallHandler.toggle();
+									features[i].gethandler().toggle();
 									break;
 								case (1):
-									multiplayerHandler.toggle();
+									features[i].gethandler().toggle();
 									break;
 								case (2):
-									goldenFruitHandler.toggle();
+									features[i].gethandler().toggle();
 									break;
 								case (3):
-									quickTimeHandler.toggle();
+									features[i].gethandler().toggle();
 									break;
 								case (4):
-									borderHandler.toggle();
+									features[i].gethandler().toggle();
 									break;
 								case (5):
-									snakeReverseHandler.toggle();
+									features[i].gethandler().toggle();
 									break;
 								case (6):
+									features[i].gethandler().toggle();
 									break;
 								case (7):
+									features[i].gethandler().toggle();
 
 									break;
 								case (8):
+									features[i].gethandler().toggle();
 
 									break;
 								case (9):
+									features[i].gethandler().toggle();
 
 									break;
 								case (10):
+									features[i].gethandler().toggle();
 
 									break;
 								case (11):
+									features[i].gethandler().toggle();
 
 									break;
 								default:
@@ -384,7 +385,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (snakeReverseHandler.isEnabled()) {
 						reverseSnake(snake);
 					}
-					if (fruit.getSprite().equals(cherry1Sprite) || fruit.getSprite().equals(cherry2Sprite)){
+					if (fruit.getSprite().equals(cherry1Sprite) || fruit.getSprite().equals(cherry2Sprite)) {
 						teleportSnake(snake, fruit);
 					}
 					snake.setHasEaten(fruit);
@@ -396,9 +397,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	private void teleportSnake(Snake snake, Fruit eatenFruit) {
-		for (Fruit fruit : fruits){
+		for (Fruit fruit : fruits) {
 			System.out.println("Cherries");
-			if (((fruit.getSprite().equals(cherry1Sprite) && eatenFruit.getSprite().equals(cherry2Sprite)) || ((fruit.getSprite().equals(cherry2Sprite) && eatenFruit.getSprite().equals(cherry1Sprite))))){
+			if (((fruit.getSprite().equals(cherry1Sprite) && eatenFruit.getSprite().equals(cherry2Sprite))
+					|| ((fruit.getSprite().equals(cherry2Sprite) && eatenFruit.getSprite().equals(cherry1Sprite))))) {
 
 				List<Vector> newPositions = snake.getPositions();
 				newPositions.add((fruit.getSnakePos()));
@@ -414,7 +416,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		snake.setPositions(positions);
 		Vector head = positions.get(positions.size() - 1);
 		Vector second = positions.get(positions.size() - 2);
-		Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1), Math.max(Math.min(head.y - second.y, 1), -1));
+		Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1),
+				Math.max(Math.min(head.y - second.y, 1), -1));
 		if (!newVel.equals(snake.getVel())) {
 			snake.setVel(newVel);
 			snake.setKey(snake.keyVectorMapReversed.get(newVel));
@@ -499,7 +502,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				int snakeSize = 0;
 				Vector spawningPosition = new Vector(random.nextInt(0, gridsize.x), random.nextInt(0, gridsize.y));
 				for (Snake snake : grid.snakes) {
-					if (snake.isDead && (borderHandler.isEnabled() || wallHandler.isEnabled())){
+					if (snake.isDead && (borderHandler.isEnabled() || wallHandler.isEnabled())) {
 						fruits.removeIf(fruit -> fruit.getSnakePos().equals(snake.getPositions().get(0)));
 					}
 					snakeSize += snake.getPositions().size();
@@ -535,25 +538,25 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 				}
 				if (validSpawn) {
-					if (cherry1Spawned && !cherry2Spawned){
+					if (cherry1Spawned && !cherry2Spawned) {
 						createFruit(cherry2, spawningPosition, rectangle);
 						cherry2Spawned = true;
 						continue;
 					}
-					int spawnEffect = (random.nextInt(0,100) + 1);
+					int spawnEffect = (random.nextInt(0, 100) + 1);
 					if (goldenFruitHandler.isEnabled() && spawnEffect <= goldenFruitHandler.getChance()) {
 						createFruit(goldenApple, spawningPosition, rectangle);
-					} else if (cherryHandler.isEnabled() && spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() && !cherry1Spawned && !snakeReverseHandler.isEnabled()){
+					} else if (cherryHandler.isEnabled()
+							&& spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance()
+							&& !cherry1Spawned && !snakeReverseHandler.isEnabled()) {
 						createFruit(cherry1, spawningPosition, rectangle);
 						cherry1Spawned = true;
 						k--;
-                    } else {
-                        createFruit(apple, spawningPosition, rectangle);
-                    }
+					} else {
+						createFruit(apple, spawningPosition, rectangle);
+					}
 
-
-
-                } else {
+				} else {
 					k--;
 				}
 			}
