@@ -124,10 +124,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitType cherry2;
   FruitType dragonFruit;
 
-	int fruitAmount = 2;
+	int fruitAmount = 4;
 
-	private int n = 15;
-	private int m = 15;
+	private int n = 50;
+	private int m = 50;
 
 	Data data;
 
@@ -196,7 +196,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1);
 		cherry1 = new FruitType(cherry1Sprite, 10, 1);
 		cherry2 = new FruitType(cherry2Sprite, 0, 0);
-    dragonFruit = new FruitType(dragonFruitSprite, 5, 0);
+    	dragonFruit = new FruitType(dragonFruitSprite, 5, 0);
 
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
@@ -379,7 +379,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (snake.checkCollision(fruit.getSnakePos())) {
 					if (snakeReverseHandler.isEnabled()) {
 
-						snakeReverser(snake);
+						reverseSnake(snake);
+
 					}
 					if (fruit.getSprite().equals(dragonFruitSprite)) {
 						snake.fireActive = true;
@@ -474,6 +475,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (snake.fireActive) {
 
 						ParticleEffect effect = snake.getEffect();
+						if (snake.getFireCounter() == 0) {
+							effect.getEmitters().first().getXScale().setHigh((int) (grid.squareSize / 1.4));
+							effect.getEmitters().first().getYScale().setLow((int) (grid.squareSize / 1.4));
+						}
+
 
 						effect.setPosition(
 								shower[cx][cy].x - screenWidth / 2 + grid.squareSize / 2
@@ -487,6 +493,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 								(int) snake.getVel().angle() + 10);
 						if (!snake.getVel().equals(snake.getOldVel())) {
 							effect.reset();
+							effect.getEmitters().first().getXScale().setHigh((int) (grid.squareSize / 1.4));
+							effect.getEmitters().first().getYScale().setLow((int) (grid.squareSize / 1.4));
 							effect.start();
 						}
 						effect.draw(batch, Gdx.graphics.getDeltaTime());
@@ -588,7 +596,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					} else if ( dragonFruitHandler.isEnabled()
 							&& spawnEffect <= dragonFruitHandler.getChance()) {
 						createFruit(dragonFruit, spawningPosition, rectangle);
-          else {
+							} else {
 						createFruit(apple, spawningPosition, rectangle);
 					}
 
