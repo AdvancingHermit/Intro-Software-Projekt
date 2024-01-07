@@ -9,7 +9,7 @@ buildscript {
         google()
     }
     dependencies {
-        
+        classpath group: 'org.mini2Dx', name: 'parcl', version: '1.8.0'
 
     }
 }
@@ -39,8 +39,38 @@ allprojects {
     }
 }
 
+project(":projectName") {
+   apply plugin: "java"
+   apply plugin: "application"
+   apply plugin: "org.mini2Dx.parcl"
+   
+   ........
+
+   mainClassName = "com.example.MyMainClass"
+
+   parcl {
+      exe {
+         exeName = "myapplication"
+      }
+		
+      app {
+         appName = "My Application"
+         icon = "relative/path/to/icon.icns"
+         applicationCategory = "public.app-category.adventure-games"
+         displayName = 'My Application'
+         identifier = 'com.example.my.apple.identifier'
+         copyright = 'Copyright 2015 Your Name Here'
+      }
+		
+      linux {
+         binName = "myapplication"
+      }
+   }
+}
+
 project(":desktop") {
     apply plugin: "java-library"
+    
 
 
     dependencies {
@@ -61,6 +91,7 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        
         
     }
 }

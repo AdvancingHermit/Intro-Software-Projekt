@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.snake.game.util.Vector;
 
 public class Snake {
@@ -40,9 +41,12 @@ public class Snake {
     private int speedCounter = 0;
 
 
-    private Vector quickTimeOldVel;
+    //Dragon Fruit Variables
+    private int fireCounter = 0;
+    boolean fireActive = false;
 
-  
+    private Vector oldVel;
+
     private double startTime = System.currentTimeMillis();
 
     private int highscore;
@@ -52,6 +56,7 @@ public class Snake {
 
     private boolean hasDeadMoved = false;
     private Vector lastRemoved;
+    private ParticleEffect effect = new ParticleEffect();
 
     public int getHighscore() {
         return highscore;
@@ -77,6 +82,10 @@ public class Snake {
         keyVectorMapReversed.put(new Vector(-1, 0), 'A');
         keyVectorMapReversed.put(new Vector(0, -1), 'S');
         keyVectorMapReversed.put(new Vector(1, 0), 'D');
+
+		effect.load(Gdx.files.internal("particles/fire.p"), Gdx.files.internal("particles"));
+		effect.start();
+
     }
 
     public Snake(int x, int y, int[] keys) {
@@ -140,8 +149,23 @@ public class Snake {
     }
 
     public void quickTime(){
-        quickTimeOldVel = vel; 
+        updateOldVel();
         quickTimeCounter++;
+    }
+
+    public void dragonFruit(){
+        updateOldVel();
+        fireCounter++;
+    }
+
+    public int getFireCounter() {
+        return fireCounter;
+    }
+    public void setFireCounter(int fireCounter) {
+        this.fireCounter = fireCounter;
+    }
+    public void updateOldVel(){
+        oldVel = vel;
     }
 
     public void moveBack(){
@@ -214,7 +238,14 @@ public class Snake {
     public void setKey(char key) {
         this.key = key;
     }
-
+    public int getMaxCounter() {
+        return maxcounter;
+    }
+    public ParticleEffect getEffect() {
+        effect.getEmitters().first().getAngle().setHigh((int) vel.angle() -10, (int) vel.angle() + 10);
+        effect.getEmitters().first().getAngle().setLow((int) vel.angle() -10, (int) vel.angle() + 10);
+        return effect;
+   }
     public int getSpeedCounter() {
         return speedCounter;
     }
@@ -228,8 +259,8 @@ public class Snake {
     public int getQuickTimeCounter() {
         return this.quickTimeCounter;
     }
-    public Vector getQuickTimeOldVel() {
-        return this.quickTimeOldVel;
+    public Vector getOldVel() {
+        return this.oldVel;
     }
     public void setQuickTimeCounter(int quickTimeCounter) {
         this.quickTimeCounter = quickTimeCounter;
