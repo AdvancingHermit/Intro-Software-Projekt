@@ -11,6 +11,7 @@ public class CoffeeBeanHandler extends GameFeature {
         this.chance = chance;
         if (!enabled) this.chance = 0;
     }
+
     public int getChance() {
         return chance;
     }

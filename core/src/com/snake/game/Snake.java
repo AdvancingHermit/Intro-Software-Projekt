@@ -17,17 +17,10 @@ public class Snake {
     private char key;
     private int[] keys;
 
-    public int getMaxcounter() {
-        return maxcounter;
-    }
-
-    public void setMaxcounter(int maxcounter) {
-        this.maxcounter = maxcounter;
-    }
 
     public boolean isDead;
     private int counter = 0;
-    private final int startMaxCounter = 7;
+    private final int startMaxCounter = 8;
     private int maxcounter = startMaxCounter;
 
 
@@ -265,6 +258,14 @@ public class Snake {
     public void setQuickTimeCounter(int quickTimeCounter) {
         this.quickTimeCounter = quickTimeCounter;
     }
+    public int getMaxcounter() {
+        return maxcounter;
+    }
+
+    public void setMaxcounter(int maxcounter) {
+        this.maxcounter = maxcounter;
+    }
+
 
 
 }
