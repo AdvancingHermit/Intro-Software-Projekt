@@ -1,12 +1,12 @@
 package com.snake.game;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.snake.game.util.Vector;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Snake {
 

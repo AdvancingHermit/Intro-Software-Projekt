@@ -1,10 +1,5 @@
 package com.snake.game;
 
-import com.snake.game.handlers.CherryHandler;
-import com.snake.game.handlers.CoffeeBeanHandler;
-import com.snake.game.handlers.DragonFruitHandler;
-import com.snake.game.handlers.GoldenFruitHandler;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -26,7 +21,7 @@ public class FruitPicker {
         int totalWeight = fruitTypeList.stream().map(FruitType::getChance).reduce(0, Integer::sum);
         int random = new Random().nextInt(0, totalWeight) + 1;
         for (FruitType fruitType:fruitTypes) {
-            if (random>sum && random<sum+fruitType.getChance()+sum) {
+            if (random>sum && random<(sum+fruitType.getChance())) {
                 return fruitType;
             } else {
                 sum+=fruitType.getChance();

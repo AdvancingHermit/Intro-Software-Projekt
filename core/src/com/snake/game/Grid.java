@@ -1,7 +1,6 @@
 package com.snake.game;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.snake.game.util.Vector;
 

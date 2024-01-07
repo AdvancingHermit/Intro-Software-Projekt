@@ -1,16 +1,5 @@
 package com.snake.game;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -20,26 +9,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter.Particle;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Size;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.snake.game.handlers.BorderHandler;
 import com.snake.game.handlers.CherryHandler;
 import com.snake.game.handlers.CoffeeBeanHandler;
-import com.snake.game.util.InputBox;
-import com.snake.game.util.JSON;
-import com.snake.game.util.Vector;
-import com.snake.game.handlers.BorderHandler;
 import com.snake.game.handlers.DragonFruitHandler;
 import com.snake.game.handlers.GoldenFruitHandler;
 import com.snake.game.handlers.MultiplayerHandler;
@@ -48,7 +29,17 @@ import com.snake.game.handlers.SnakeReverseHandler;
 import com.snake.game.handlers.WallHandler;
 import com.snake.game.util.Button;
 import com.snake.game.util.Data;
-import com.badlogic.gdx.math.Rectangle;
+import com.snake.game.util.InputBox;
+import com.snake.game.util.JSON;
+import com.snake.game.util.Vector;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class SnakeProjekt extends ApplicationAdapter {
 
@@ -109,11 +100,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 	WallHandler wallHandler = new WallHandler(false);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 0);
-	CherryHandler cherryHandler = new CherryHandler(false, 100);
+	CherryHandler cherryHandler = new CherryHandler(true, 100);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 50, 6);
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(false, 0, 6);
 
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, 100);
 
