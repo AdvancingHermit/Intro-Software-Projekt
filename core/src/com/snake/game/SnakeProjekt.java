@@ -1,7 +1,12 @@
 package com.snake.game;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -22,9 +27,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.util.InputBox;
+import com.snake.game.util.JSON;
 import com.snake.game.util.Vector;
 import com.snake.game.handlers.BorderHandler;
 import com.snake.game.handlers.GoldenFruitHandler;
@@ -33,6 +40,7 @@ import com.snake.game.handlers.QuickTimeHandler;
 import com.snake.game.handlers.SnakeReverseHandler;
 import com.snake.game.handlers.WallHandler;
 import com.snake.game.util.Button;
+import com.snake.game.util.Data;
 import com.badlogic.gdx.math.Rectangle;
 
 public class SnakeProjekt extends ApplicationAdapter {
@@ -101,6 +109,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	private int n = 15;
 	private int m = 15;
 
+	Data data;
+
 	@Override
 	public void create() {
 
@@ -150,6 +160,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backButtonWidth = 300;
 		backButtonHeight = 100;
 
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+		JSON json = new JSON(new Data("Test", 10, formatter.format(new Date())));
+		json.createFile("data");
+		json = new JSON("data/data.json");
+		System.out.println(json);
+
+
 		// Fruits
 		apple = new FruitType(appleSprite, 1, 1);
 		goldenApple = new FruitType(goldenAppleSprite, 10, -1);
@@ -197,6 +215,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+
+
+
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
@@ -598,5 +619,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		appleSprite.dispose();
 		generator.dispose();
 	}
-
 }
+
+
