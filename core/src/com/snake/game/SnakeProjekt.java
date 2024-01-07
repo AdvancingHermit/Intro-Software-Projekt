@@ -41,7 +41,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Main_Scene, Main_Game, Main_Setting, Main_Enable_Features
 	}
 
-
 	Scene currentScene = Scene.Main_Scene;
 
 	private Vector gridsize;
@@ -74,7 +73,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int screenWidth;
 	int startButtonX;
 	int startButtonY;
-	boolean mousePressed;
+	boolean canClick = true;
 	int frameCounter = 0;
 	InputBox inputBox;
 	int backButtonHeight, backButtonWidth, backButtonX, backButtonY, startButtonWidth, startButtonHeight, boxesHeight,
@@ -86,23 +85,19 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
 
-
-
-
-
-  //handlers
+	// handlers
 	WallHandler wallHandler = new WallHandler(false);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(false, 0);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
-  
-  //fruits
+
+	// fruits
 	FruitType apple;
 	FruitType goldenApple;
-  int fruitAmount = 2;
-  
+	int fruitAmount = 2;
+
 	private int n = 15;
 	private int m = 15;
 
@@ -155,10 +150,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backButtonWidth = 300;
 		backButtonHeight = 100;
 
-		//Fruits
+		// Fruits
 		apple = new FruitType(appleSprite, 1, 1);
 		goldenApple = new FruitType(goldenAppleSprite, 10, -1);
-
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
@@ -211,7 +205,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				ScreenUtils.clear(0, 0, 1, 1);
 
 				frameCounter++;
-				mousePressed = false;
+
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
@@ -233,7 +227,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 					} else if (featureButton.clickedButton()) {
 						currentScene = Scene.Main_Enable_Features;
 					}
-					mousePressed = true;
 				}
 				shape.end();
 				break;
@@ -244,63 +237,86 @@ public class SnakeProjekt extends ApplicationAdapter {
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
-				color = Color.RED;
-				showButton(backButton);
-				for (Button x : features) {
-					showButton(x, color);
+				if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					canClick = true;
 				}
 
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-					mousePressed = true;
+				showButton(backButton);
+				for (Button x : features) {
+					if (x.getisEnabled()) {
+						color = Color.GREEN;
+						showButton(x, color);
+					} else {
+						color = Color.RED;
+						showButton(x, color);
+					}
+
+				}
+
+				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && canClick) {
+					canClick = false;
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
 					}
 					for (int i = 0; i < features.length; i++) {
 						if (features[i].clickedButton()) {
+							System.out.println(i + " " + frameCounter);
 							switch (i) {
 								case (0):
 									wallHandler.toggle();
+									features[i].toggleisEnabled();
 									break;
 								case (1):
 									multiplayerHandler.toggle();
+									features[i].toggleisEnabled();
 									break;
 								case (2):
 									goldenFruitHandler.toggle();
+									features[i].toggleisEnabled();
 									break;
 								case (3):
 									quickTimeHandler.toggle();
+									features[i].toggleisEnabled();
 									break;
 								case (4):
 									borderHandler.toggle();
+									features[i].toggleisEnabled();
 									break;
 								case (5):
 									snakeReverseHandler.toggle();
+									features[i].toggleisEnabled();
 									break;
 								case (6):
+
+									features[i].toggleisEnabled();
 									break;
 								case (7):
 
+									features[i].toggleisEnabled();
 									break;
 								case (8):
 
+									features[i].toggleisEnabled();
 									break;
 								case (9):
 
+									features[i].toggleisEnabled();
 									break;
 								case (10):
 
+									features[i].toggleisEnabled();
 									break;
 								case (11):
 
+									features[i].toggleisEnabled();
 									break;
 								default:
 									break;
 							}
 						}
-					}
 
-				}
-				if (frameCounter % 3 == 0) {
+					}
 				}
 				shape.end();
 				break;
@@ -375,8 +391,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						snake.setPositions(positions);
 						Vector head = positions.get(positions.size() - 1);
 						Vector second = positions.get(positions.size() - 2);
-						Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1), Math.max(Math.min(head.y - second.y, 1), -1));
-						System.out.println("new vel"  + newVel);
+						Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1),
+								Math.max(Math.min(head.y - second.y, 1), -1));
+						System.out.println("new vel" + newVel);
 						if (!newVel.equals(snake.getVel())) {
 							snake.setVel(newVel);
 							System.out.println(newVel);
@@ -499,16 +516,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 				}
 				if (!invalidSpawn) {
-					boolean golden = (random.nextInt(0,100) + 1 <= goldenFruitHandler.getChance()) && goldenFruitHandler.isEnabled();
-                    if (golden) {
-                        createFruit(goldenApple, spawningPosition, rectangle);
-                    } else {
-                        createFruit(apple, spawningPosition, rectangle);
-                    }
+					boolean golden = (random.nextInt(0, 100) + 1 <= goldenFruitHandler.getChance())
+							&& goldenFruitHandler.isEnabled();
+					if (golden) {
+						createFruit(goldenApple, spawningPosition, rectangle);
+					} else {
+						createFruit(apple, spawningPosition, rectangle);
+					}
 
-
-
-                } else {
+				} else {
 					k--;
 				}
 			}
