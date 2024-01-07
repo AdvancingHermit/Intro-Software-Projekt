@@ -103,7 +103,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	CherryHandler cherryHandler = new CherryHandler(true, 100);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(true);
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false);
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
   
   //fruits
 	FruitType apple;
@@ -543,7 +543,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					int spawnEffect = (random.nextInt(0,100) + 1);
 					if (goldenFruitHandler.isEnabled() && spawnEffect <= goldenFruitHandler.getChance()) {
 						createFruit(goldenApple, spawningPosition, rectangle);
-					} else if (cherryHandler.isEnabled() && spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() && !cherry1Spawned){
+					} else if (cherryHandler.isEnabled() && spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() && !cherry1Spawned && !snakeReverseHandler.isEnabled()){
 						createFruit(cherry1, spawningPosition, rectangle);
 						cherry1Spawned = true;
 						k--;
