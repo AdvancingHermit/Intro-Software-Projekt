@@ -5,8 +5,8 @@ import com.snake.game.GameFeature;
 public class CherryHandler extends GameFeature  {
     private int chance;
 
-    public CherryHandler(boolean enabled, int chance) {
-        super(enabled);
+    public CherryHandler(boolean enabled, String featureName, int chance) {
+        super(enabled, featureName);
         this.chance = chance;
         if (!enabled) this.chance = 0;
 
