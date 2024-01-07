@@ -2,13 +2,12 @@ package com.snake.game.handlers;
 
 import com.snake.game.GameFeature;
 
-public class GoldenFruitHandler extends GameFeature
-{
+public class CoffeeBeanHandler extends GameFeature {
     private int chance;
 
 
-    public GoldenFruitHandler(boolean enabled, String featureName, int chance) {
-        super(enabled, featureName);
+    public CoffeeBeanHandler(boolean enabled, int chance) {
+        super(enabled);
         this.chance = chance;
         if (!enabled) this.chance = 0;
     }
@@ -20,5 +19,4 @@ public class GoldenFruitHandler extends GameFeature
     public void setChance(int chance) {
         this.chance = chance;
     }
-
 }

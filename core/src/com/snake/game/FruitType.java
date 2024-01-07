@@ -7,10 +7,14 @@ public class FruitType{
     private Texture sprite;
     private int score;
     private int growth;
-    public FruitType(Texture sprite, int score, int growth) {
+    private int chance;
+
+
+    public FruitType(Texture sprite, int score, int growth, int chance) {
         this.sprite = sprite;
         this.score = score;
         this.growth = growth;
+        this.chance = chance;
     }
 
     public Texture getSprite() {
@@ -25,5 +29,12 @@ public class FruitType{
         return growth;
     }
 
+
+    public int getChance() {
+        return chance;
+    }
+    public void setChance(int chance) {
+        this.chance = chance;
+    }
 
 }
