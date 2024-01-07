@@ -98,7 +98,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 40, 10);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 40, 6);
 
 	// fruits
 	FruitType apple;
@@ -375,6 +375,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 					if (fruit.getSprite().equals(dragonFruitSprite)) {
 						snake.fireActive = true;
+						snake.setFireCounter(0);
 
 					}
 					fruitIterator.remove();
