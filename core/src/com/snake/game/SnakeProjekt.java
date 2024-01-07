@@ -92,7 +92,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontParameter parameter;
 
 	// handlers
-	WallHandler wallHandler = new WallHandler(false);
+	WallHandler wallHandler = new WallHandler(true);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(true, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(false, 30);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
@@ -118,7 +118,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		goldenAppleSprite = new Texture((Gdx.files.internal("GoldenApple.png")));
 		dragonFruitSprite = new Texture((Gdx.files.internal("DragonFruit.png")));
-		wallSprite = new Texture((Gdx.files.internal("wall.jpg")));
+		wallSprite = new Texture((Gdx.files.internal("wall.png")));
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
 		snakeHeadSprite = new Texture((Gdx.files.internal("snakehead.png")));
 		snakeHeadSidewaysSprite = new Texture((Gdx.files.internal("snakeheadsideways.png")));
