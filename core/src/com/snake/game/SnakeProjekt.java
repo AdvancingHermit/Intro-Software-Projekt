@@ -109,6 +109,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitType cherry1;
 	FruitType cherry2;
 	FruitType coffeeBean;
+	final int coffeeSpeed = 3;
+	final int coffeeDuration = 10;
     int fruitAmount = 3;
   
 	private int n = 15;
@@ -390,7 +392,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 					if (fruit.getSprite().equals(coffeeBeanSprite)){
 						System.out.println("Coffee");
-						snake.setMaxcounter(4);
+						snake.setMaxcounter(coffeeSpeed);
+						snake.setSpeedCounter(coffeeDuration);
 					}
 					snake.setHasEaten(fruit);
 					fruitIterator.remove();

@@ -26,13 +26,20 @@ public class Snake {
 
     public boolean isDead;
     private int counter = 0;
-    private int maxcounter = 7;
+    private final int startMaxCounter = 7;
+    private int maxcounter = startMaxCounter;
+
+
 
     private HashMap<Character, Vector> keyVectorMap = new HashMap<Character, Vector>();
     public HashMap<Vector, Character> keyVectorMapReversed = new HashMap<Vector, Character>();
 
     //Quick Time Event Variables
     private int quickTimeCounter = 0;
+
+    private int speedCounter = 0;
+
+
     private Vector quickTimeOldVel;
 
   
@@ -92,6 +99,11 @@ public class Snake {
             key = 'D';
         }
         if (counter % maxcounter == 0) {
+            if (speedCounter > 0){
+                speedCounter--;
+            } else {
+                maxcounter = startMaxCounter;
+            }
 
             vel = keyVectorMap.get(key);
 
@@ -203,7 +215,13 @@ public class Snake {
         this.key = key;
     }
 
+    public int getSpeedCounter() {
+        return speedCounter;
+    }
 
+    public void setSpeedCounter(int speedCounter) {
+        this.speedCounter = speedCounter;
+    }
 
 
 
