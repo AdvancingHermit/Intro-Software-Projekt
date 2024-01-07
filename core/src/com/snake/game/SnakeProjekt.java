@@ -467,26 +467,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 							snake.fireActive = false;
 							snake.setFireCounter(0);
 						}
-						/*
-
-						if (dragonFruitHandler.isEnabled()) {
-							for (Snake otherSnake : grid.snakes) {
-								if (otherSnake != snake && otherSnake.fireActive) {
-									Vector otherHead = otherSnake.getPositions()
-											.get(otherSnake.getPositions().size() - 1);
-									Vector otherVel = otherSnake.getVel();
-
-									if (snake.checkCollision(
-											new Vector(otherHead.x + otherVel.x, otherHead.y + otherVel.y)) ||
-											snake.checkCollision(new Vector(otherHead.x + otherVel.x * 2,
-													otherHead.y + otherVel.y * 2))) {
-										snake.isDead = true;
-										System.out.println("dead");
-										// snake.moveBack();
-									}
-								}
-							}
-						}*/
 
 					}
 
