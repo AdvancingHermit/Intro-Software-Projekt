@@ -102,13 +102,8 @@ public class Snake {
                 isDead = true;
                 positions.remove(positions.size() - 1);
             }
-            while (grow < 0 && positions.size() > 3){
-                grow++;
-                positions.remove(0);
-            }
-            if (grow < 0 && positions.size() == 3){
-                grow = 0;
-            }
+            handleNegativeGrowth();
+
             if (grow > 0) {
                 counter++;
                 grow--;
@@ -122,7 +117,17 @@ public class Snake {
         }
         counter++;
     }
-    
+
+    private void handleNegativeGrowth() {
+        while (grow < 0 && positions.size() > 3){
+            grow++;
+            positions.remove(0);
+        }
+        if (grow < 0 && positions.size() == 3){
+            grow = 0;
+        }
+    }
+
     public void quickTime(){
         updateOldVel();
         quickTimeCounter++;
@@ -179,6 +184,15 @@ public class Snake {
     public void setPositions(ArrayList<Vector> positions) {
         this.positions = positions;
     }
+
+    public int getGrow() {
+        return grow;
+    }
+
+    public void setGrow(int grow) {
+        this.grow = grow;
+    }
+
     public int getScore() {
         if (isDead){
             return highscore;
