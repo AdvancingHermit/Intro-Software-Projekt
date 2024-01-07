@@ -2,6 +2,7 @@ package com.snake.game.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.snake.game.GameFeature;
 
 public class Button {
 
@@ -10,11 +11,18 @@ public class Button {
     private Texture backArrow;
     private int screenHeight = Gdx.graphics.getHeight();
     private int screenWidth = Gdx.graphics.getWidth();
+    private GameFeature handler;
     private boolean isEnabled;
 
     public Button(Vector pos, Vector Size) {
         this.Size = Size;
         this.pos = pos;
+
+    }
+      public Button(Vector pos, Vector Size, GameFeature handler) {
+        this.Size = Size;
+        this.pos = pos;
+        this.handler = handler;
 
     }
 
@@ -23,6 +31,9 @@ public class Button {
         this.pos = pos;
         this.backArrow = backArrow;
 
+    }
+    public GameFeature gethandler(){
+        return handler;
     }
 
     public Vector getpos() {
