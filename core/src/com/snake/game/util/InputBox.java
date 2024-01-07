@@ -22,12 +22,12 @@ public class InputBox {
     boolean isEnabled;
     Vector position;
     Vector size;
-    int countFrame = 0;
     FreeTypeFontGenerator generator;
     FreeTypeFontParameter parameter;
     BitmapFont font;
     GlyphLayout text;
     int textWidth;
+    boolean mouseUp = true;
 
     public InputBox(int type, Vector position, Vector size) {
         inputs = new ArrayList<Character>();
@@ -56,14 +56,18 @@ public class InputBox {
     }
 
     public void enable(int screenHeight) {
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && countFrame % 3 == 0) {
-            int y = screenHeight - Gdx.input.getY();
-            if (Gdx.input.getX() > position.x && Gdx.input.getX() < position.x + size.x && y > position.y
-                    && y < position.y + size.y) {
-                isEnabled = !isEnabled;
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            if (mouseUp) {
+                mouseUp = false;
+                int y = screenHeight - Gdx.input.getY();
+                if (Gdx.input.getX() > position.x && Gdx.input.getX() < position.x + size.x && y > position.y
+                        && y < position.y + size.y) {
+                    isEnabled = !isEnabled;
+                }
             }
+        } else if(!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            mouseUp = true;
         }
-        countFrame++;
     }
 
     public void update() {
@@ -87,12 +91,13 @@ public class InputBox {
 
     public Rectangle[] show() {
         Rectangle rect = new Rectangle(position.x, position.y, size.x, size.y);
-        Rectangle curserBlink = new Rectangle(position.x + 2 + textWidth, position.y + 2, 0, 0);;
+        Rectangle curserBlink = new Rectangle(position.x + 2 + textWidth, position.y + 2, 0, 0);
+        ;
         if (isEnabled) {
             textWidth = (int) text.width;
             if (counter % 60 < 30) {
                 curserBlink = new Rectangle(position.x + 2 + textWidth, position.y + 2, 4, size.y - 4);
-            } 
+            }
             counter++;
         }
         return new Rectangle[] { rect, curserBlink };

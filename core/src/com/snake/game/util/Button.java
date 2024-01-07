@@ -12,6 +12,7 @@ public class Button {
     private int screenHeight = Gdx.graphics.getHeight();
     private int screenWidth = Gdx.graphics.getWidth();
     private GameFeature handler;
+    private boolean isEnabled;
 
     public Button(Vector pos, Vector Size) {
         this.Size = Size;
@@ -46,7 +47,12 @@ public class Button {
     public Texture getbackArrow() {
         return backArrow;
     }
-
+    public boolean getisEnabled(){
+        return isEnabled;
+    }
+    public void toggleisEnabled(){
+        isEnabled = !isEnabled;
+    }
     public boolean clickedButton() {
         if (backArrow == null) {
             if (Gdx.input.getX() >= pos.x // Hitbox, if create by shape

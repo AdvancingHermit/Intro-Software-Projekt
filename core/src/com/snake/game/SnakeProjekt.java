@@ -78,7 +78,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int screenWidth;
 	int startButtonX;
 	int startButtonY;
-	boolean mousePressed;
+	boolean canClick = true;
 	int frameCounter = 0;
 	InputBox inputBox;
 	int backButtonHeight, backButtonWidth, backButtonX, backButtonY, startButtonWidth, startButtonHeight, boxesHeight,
@@ -106,6 +106,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitType goldenApple;
 	FruitType cherry1;
 	FruitType cherry2;
+
 	int fruitAmount = 2;
 
 	private int n = 15;
@@ -168,6 +169,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		cherry1 = new FruitType(cherry1Sprite, 10, 1);
 		cherry2 = new FruitType(cherry2Sprite, 0, 0);
 
+
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
@@ -219,7 +221,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				ScreenUtils.clear(0, 0, 1, 1);
 
 				frameCounter++;
-				mousePressed = false;
+
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
@@ -241,7 +243,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 					} else if (featureButton.clickedButton()) {
 						currentScene = Scene.Main_Enable_Features;
 					}
-					mousePressed = true;
 				}
 				shape.end();
 				break;
@@ -252,69 +253,34 @@ public class SnakeProjekt extends ApplicationAdapter {
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
-				color = Color.RED;
-				showButton(backButton);
-				for (Button x : features) {
-					showButton(x, color);
+				if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					canClick = true;
 				}
 
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-					mousePressed = true;
+				showButton(backButton);
+				for (Button x : features) {
+					if (x.getisEnabled()) {
+						color = Color.GREEN;
+						showButton(x, color);
+					} else {
+						color = Color.RED;
+						showButton(x, color);
+					}
+
+				}
+
+				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && canClick) {
+					canClick = false;
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
 					}
 					for (int i = 0; i < features.length; i++) {
 						if (features[i].clickedButton()) {
-							switch (i) {
-								case (0):
-									features[i].gethandler().toggle();
-									break;
-								case (1):
-									features[i].gethandler().toggle();
-									break;
-								case (2):
-									features[i].gethandler().toggle();
-									break;
-								case (3):
-									features[i].gethandler().toggle();
-									break;
-								case (4):
-									features[i].gethandler().toggle();
-									break;
-								case (5):
-									features[i].gethandler().toggle();
-									break;
-								case (6):
-									features[i].gethandler().toggle();
-									break;
-								case (7):
-									features[i].gethandler().toggle();
-
-									break;
-								case (8):
-									features[i].gethandler().toggle();
-
-									break;
-								case (9):
-									features[i].gethandler().toggle();
-
-									break;
-								case (10):
-									features[i].gethandler().toggle();
-
-									break;
-								case (11):
-									features[i].gethandler().toggle();
-
-									break;
-								default:
-									break;
-							}
+								features[i].gethandler().toggle();
+                features[i].toggleisEnabled();
 						}
 					}
-
-				}
-				if (frameCounter % 3 == 0) {
 				}
 				shape.end();
 				break;
@@ -537,6 +503,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						break;
 					}
 				}
+
 				if (validSpawn) {
 					if (cherry1Spawned && !cherry2Spawned) {
 						createFruit(cherry2, spawningPosition, rectangle);
@@ -552,6 +519,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						createFruit(cherry1, spawningPosition, rectangle);
 						cherry1Spawned = true;
 						k--;
+
 					} else {
 						createFruit(apple, spawningPosition, rectangle);
 					}
