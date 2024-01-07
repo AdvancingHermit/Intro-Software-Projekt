@@ -16,15 +16,30 @@ public class Snake {
     private Vector vel;
     private char key;
     private int[] keys;
+
+    public int getMaxcounter() {
+        return maxcounter;
+    }
+
+    public void setMaxcounter(int maxcounter) {
+        this.maxcounter = maxcounter;
+    }
+
     public boolean isDead;
     private int counter = 0;
-    private int maxcounter = 7;
+    private final int startMaxCounter = 7;
+    private int maxcounter = startMaxCounter;
+
+
 
     private HashMap<Character, Vector> keyVectorMap = new HashMap<Character, Vector>();
     public HashMap<Vector, Character> keyVectorMapReversed = new HashMap<Vector, Character>();
 
     //Quick Time Event Variables
     private int quickTimeCounter = 0;
+
+    private int speedCounter = 0;
+
 
     //Dragon Fruit Variables
     private int fireCounter = 0;
@@ -93,6 +108,11 @@ public class Snake {
             key = 'D';
         }
         if (counter % maxcounter == 0) {
+            if (speedCounter > 0){
+                speedCounter--;
+            } else {
+                maxcounter = startMaxCounter;
+            }
 
             vel = keyVectorMap.get(key);
 
@@ -225,8 +245,16 @@ public class Snake {
         effect.getEmitters().first().getAngle().setHigh((int) vel.angle() -10, (int) vel.angle() + 10);
         effect.getEmitters().first().getAngle().setLow((int) vel.angle() -10, (int) vel.angle() + 10);
         return effect;
-
+   }
+    public int getSpeedCounter() {
+        return speedCounter;
     }
+
+    public void setSpeedCounter(int speedCounter) {
+        this.speedCounter = speedCounter;
+    }
+
+
 
     public int getQuickTimeCounter() {
         return this.quickTimeCounter;

@@ -8,6 +8,8 @@ public class CherryHandler extends GameFeature {
     public CherryHandler(boolean enabled, int chance) {
         super(enabled);
         this.chance = chance;
+        if (!enabled) this.chance = 0;
+
     }
     public int getChance() {
         return chance;
