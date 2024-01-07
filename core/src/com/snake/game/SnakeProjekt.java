@@ -237,7 +237,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
-				if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT) || !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+				if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					canClick = true;
 				}
 
