@@ -105,13 +105,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	// handlers
 
-	WallHandler wallHandler = new WallHandler(false);
+	WallHandler wallHandler = new WallHandler(true);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 0);
 	CherryHandler cherryHandler = new CherryHandler(false, 100);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 40, 6);
 
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
@@ -483,8 +483,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 						ParticleEffect effect = snake.getEffect();
 						if (snake.getFireCounter() == 0) {
-							effect.getEmitters().first().getXScale().setHigh((int) (grid.squareSize / 1.4));
-							effect.getEmitters().first().getYScale().setLow((int) (grid.squareSize / 1.4));
+							effect = scaleEffect(effect);
 						}
 
 
@@ -500,9 +499,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 								(int) snake.getVel().angle() + 10);
 						if (!snake.getVel().equals(snake.getOldVel())) {
 							effect.reset();
-							effect.getEmitters().first().getXScale().setHigh((int) (grid.squareSize / 1.4));
-							effect.getEmitters().first().getYScale().setLow((int) (grid.squareSize / 1.4));
-							effect.getEmitters().first().getLife().setHigh((grid.squareSize / 50) * 325 );
+							effect = scaleEffect(effect);
 							effect.start();
 						}
 						effect.draw(batch, Gdx.graphics.getDeltaTime());
@@ -644,7 +641,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 		fontReceived.draw(batch, glyphReceived, posX, posY);
 		batch.end();
 	}
-
+	public ParticleEffect scaleEffect(ParticleEffect effect) {
+		effect.getEmitters().first().getXScale().setHigh((int) (grid.squareSize / 1.4));
+		effect.getEmitters().first().getYScale().setLow((int) (grid.squareSize / 1.4));
+		effect.getEmitters().first().getLife().setHigh( (int) ((grid.squareSize / 50.0) * 325));
+		return effect;
+	}
 	private void drawWalls() {
 		batch.begin();
 
