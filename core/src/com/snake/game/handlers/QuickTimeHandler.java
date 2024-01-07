@@ -4,8 +4,8 @@ import com.snake.game.GameFeature;
 
 public class QuickTimeHandler extends GameFeature{
     private int time;
-    public QuickTimeHandler(boolean enabled, int time) {
-        super(enabled);
+    public QuickTimeHandler(boolean enabled,String featureName, int time) {
+        super(enabled, featureName);
         this.time = time;
     }
 

@@ -2,9 +2,11 @@ package com.snake.game;
 
 public class GameFeature {
     private boolean enabled;
+    private String featureName;
 
-    public GameFeature(boolean enabled){
+    public GameFeature(boolean enabled, String featureName){
         this.enabled = enabled;
+        this.featureName = featureName;
     }
 
     public boolean isEnabled() {
@@ -20,5 +22,8 @@ public class GameFeature {
     }
     public void toggle() {
         this.enabled = !this.enabled;
+    }
+    public String getfeatureName(){
+        return featureName;
     }
 }

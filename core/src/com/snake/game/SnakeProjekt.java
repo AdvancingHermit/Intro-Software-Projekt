@@ -84,12 +84,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout scoreText;
 	int screenHeight;
 	int screenWidth;
-	int startButtonX;
-	int startButtonY;
+
 	boolean canClick = true;
 	int frameCounter = 0;
 	InputBox inputBox;
-	int backButtonHeight, backButtonWidth, backButtonX, backButtonY, startButtonWidth, startButtonHeight, boxesHeight,
+	int boxesHeight,
 			boxesWidth;
 	Button backButton, startButton, featureButton;
 	Color color;
@@ -98,13 +97,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontParameter parameter;
 
 	// handlers
-	WallHandler wallHandler = new WallHandler(false);
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 0);
-	CherryHandler cherryHandler = new CherryHandler(false, 100);
-	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
-	BorderHandler borderHandler = new BorderHandler(false);
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
+	WallHandler wallHandler = new WallHandler(false, "Wall");
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "Multiplayer", 2);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
+	CherryHandler cherryHandler = new CherryHandler(false, "Cherries",  100);
+	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
+	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true, "Reverse");
 
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
 			borderHandler, snakeReverseHandler };
@@ -168,11 +167,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
-		backButtonX = -screenWidth / 2 + 150;
-		backButtonY = screenHeight / 2 - 200;
-		backButtonWidth = 300;
-		backButtonHeight = 100;
-
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 		JSON json = new JSON(new Data("Test", 10, formatter.format(new Date())));
@@ -203,6 +197,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector((screenWidth - screenWidth * 2 / 3) - boxesWidth / 2,
 								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 8)),
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
+				
 			} else {
 				features[i] = new Button(
 						new Vector((screenWidth - screenWidth / 3) - boxesWidth / 2,
@@ -221,7 +216,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public void showButton(Button temp, Color color) {
 		shape.setColor(color);
 		shape.rect(temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
-
+		if (temp.gethandler() != null) {
+			batch.begin();
+			font.draw(batch, temp.getfeatureName(), temp.getpos().x - screenWidth / 2, temp.getpos().y - screenHeight / 2 + Math.round(1.75 * temp.getSize().y));
+			batch.end();
+		}
+		
 	}
 
 	@Override

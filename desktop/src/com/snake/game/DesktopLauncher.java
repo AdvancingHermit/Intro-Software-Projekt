@@ -1,8 +1,5 @@
 package com.snake.game;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -16,8 +13,8 @@ public class DesktopLauncher {
     public static void main (String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         DisplayMode desktopMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
-        //config.setFullscreenMode(desktopMode);
-        config.setWindowedMode(600, 600);
+        config.setFullscreenMode(desktopMode);
+        // config.setWindowedMode(600, 600);
         config.setHdpiMode(HdpiMode.Pixels);
         config.setForegroundFPS(30);
         config.setTitle("IntroSnakeProjekt");
