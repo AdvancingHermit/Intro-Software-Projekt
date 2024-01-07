@@ -19,8 +19,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter.Particle;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Size;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -35,6 +39,7 @@ import com.snake.game.util.InputBox;
 import com.snake.game.util.JSON;
 import com.snake.game.util.Vector;
 import com.snake.game.handlers.BorderHandler;
+import com.snake.game.handlers.DragonFruitHandler;
 import com.snake.game.handlers.GoldenFruitHandler;
 import com.snake.game.handlers.MultiplayerHandler;
 import com.snake.game.handlers.QuickTimeHandler;
@@ -69,9 +74,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Texture appleSprite;
 	Texture goldenAppleSprite;
 
+	Texture dragonFruitSprite;
 	Texture cherry1Sprite;
-
 	Texture cherry2Sprite;
+
 	Texture wallSprite;
 	Texture snakeBodySprite;
 	Texture snakeHeadSprite;
@@ -98,6 +104,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontParameter parameter;
 
 	// handlers
+
 	WallHandler wallHandler = new WallHandler(false);
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 0);
@@ -105,6 +112,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
+  DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 40, 6);
 
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
 			borderHandler, snakeReverseHandler };
@@ -114,6 +122,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitType goldenApple;
 	FruitType cherry1;
 	FruitType cherry2;
+  FruitType dragonFruit;
 
 	int fruitAmount = 2;
 
@@ -129,9 +138,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backArrow = new Texture(Gdx.files.internal("Arrow.png"));
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
 		goldenAppleSprite = new Texture((Gdx.files.internal("GoldenApple.png")));
+		dragonFruitSprite = new Texture((Gdx.files.internal("DragonFruit.png")));
+		wallSprite = new Texture((Gdx.files.internal("wall.png")));
 		cherry1Sprite = new Texture((Gdx.files.internal("Cherry1.png")));
 		cherry2Sprite = new Texture((Gdx.files.internal("Cherry2.png")));
-		wallSprite = new Texture((Gdx.files.internal("wall.jpg")));
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
 		snakeHeadSprite = new Texture((Gdx.files.internal("snakehead.png")));
 		snakeHeadSidewaysSprite = new Texture((Gdx.files.internal("snakeheadsideways.png")));
@@ -149,15 +159,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		parameter = new FreeTypeFontParameter();
 		parameter.size = 72;
-		font = generator.generateFont(parameter); // font size 12 pixels
+		font = generator.generateFont(parameter);
 		font.setColor(Color.ORANGE);
-		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+		generator.dispose();
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/snes.ttf"));
 		parameter = new FreeTypeFontParameter();
 		parameter.size = 90;
-		font2 = generator.generateFont(parameter); // font size 12 pixels
+		font2 = generator.generateFont(parameter);
 		font2.setColor(Color.ORANGE);
-		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+		generator.dispose();
 
 		scoreText = new GlyphLayout();
 		scoreText.setText(font2, "Player 1 SCORE");
@@ -186,6 +196,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1);
 		cherry1 = new FruitType(cherry1Sprite, 10, 1);
 		cherry2 = new FruitType(cherry2Sprite, 0, 0);
+    dragonFruit = new FruitType(dragonFruitSprite, 5, 0);
 
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
@@ -346,10 +357,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				snakeUpdater(shower);
 
-				batch.end();
-
-				batch.begin();
-
 				for (Fruit fruit : fruits) {
 					batch.draw(fruit.getSprite(), (fruit.getSpritePos().x), (fruit.getSpritePos().y), grid.squareSize,
 							grid.squareSize);
@@ -371,10 +378,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
 					if (snakeReverseHandler.isEnabled()) {
-						reverseSnake(snake);
+
+						snakeReverser(snake);
+					}
+					if (fruit.getSprite().equals(dragonFruitSprite)) {
+						snake.fireActive = true;
+						snake.setFireCounter(0);
+
+
 					}
 					if (fruit.getSprite().equals(cherry1Sprite) || fruit.getSprite().equals(cherry2Sprite)) {
 						teleportSnake(snake, fruit);
+
 					}
 					snake.setHasEaten(fruit);
 					fruitIterator.remove();
@@ -383,6 +398,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 
 	}
+
 
 	private void teleportSnake(Snake snake, Fruit eatenFruit) {
 		for (Fruit fruit : fruits) {
@@ -406,6 +422,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Vector second = positions.get(positions.size() - 2);
 		Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1),
 				Math.max(Math.min(head.y - second.y, 1), -1));
+
 		if (!newVel.equals(snake.getVel())) {
 			snake.setVel(newVel);
 			snake.setKey(snake.keyVectorMapReversed.get(newVel));
@@ -454,6 +471,33 @@ public class SnakeProjekt extends ApplicationAdapter {
 					Sprite spr = vel.x == 0 ? sprY : sprX;
 					batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2),
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
+					if (snake.fireActive) {
+
+						ParticleEffect effect = snake.getEffect();
+
+						effect.setPosition(
+								shower[cx][cy].x - screenWidth / 2 + grid.squareSize / 2
+										+ snake.getVel().x * (grid.squareSize / 2),
+								shower[cx][cy].y - screenHeight / 2 + grid.squareSize / 2
+										+ snake.getVel().y * (grid.squareSize / 2));
+
+						effect.getEmitters().first().getAngle().setHigh((int) snake.getVel().angle() - 10,
+								(int) snake.getVel().angle() + 10);
+						effect.getEmitters().first().getAngle().setLow((int) snake.getVel().angle() - 10,
+								(int) snake.getVel().angle() + 10);
+						if (!snake.getVel().equals(snake.getOldVel())) {
+							effect.reset();
+							effect.start();
+						}
+						effect.draw(batch, Gdx.graphics.getDeltaTime());
+						snake.dragonFruit();
+
+						if (snake.getFireCounter() >= 30 * dragonFruitHandler.getFireTime()) {
+							snake.fireActive = false;
+							snake.setFireCounter(0);
+						}
+
+					}
 
 				} else {
 					batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
@@ -463,12 +507,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 			if (quickTimeHandler.isEnabled()) {
 				Vector snakeVel = snake.getVel();
 
-				if (snakeVel.equals(snake.getQuickTimeOldVel())
+				if (snakeVel.equals(snake.getOldVel())
 						&& snake.getQuickTimeCounter() >= 30 * quickTimeHandler.getTime() && !snake.isDead) {
 
 					snake.isDead = true;
 					snake.setQuickTimeCounter(0);
-				} else if (!snakeVel.equals(snake.getQuickTimeOldVel())) {
+				} else if (!snakeVel.equals(snake.getOldVel())) {
 					snake.setQuickTimeCounter(0);
 				}
 				if (!snake.isDead) {
@@ -525,7 +569,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						break;
 					}
 				}
-
 				if (validSpawn) {
 					if (cherry1Spawned && !cherry2Spawned) {
 						createFruit(cherry2, spawningPosition, rectangle);
@@ -542,7 +585,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 						cherry1Spawned = true;
 						k--;
 
-					} else {
+					} else if ( dragonFruitHandler.isEnabled()
+							&& spawnEffect <= dragonFruitHandler.getChance()) {
+						createFruit(dragonFruit, spawningPosition, rectangle);
+          else {
 						createFruit(apple, spawningPosition, rectangle);
 					}
 
