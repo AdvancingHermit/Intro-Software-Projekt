@@ -112,31 +112,27 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
-  DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 40, 6);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 40, 6);
 
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
 			borderHandler, snakeReverseHandler };
 	Button[] features = new Button[handlers.length];
 	// fruits
-  
+
 	FruitType apple;
 	FruitType goldenApple;
 	FruitType cherry1;
 	FruitType cherry2;
-  FruitType dragonFruit;
+	FruitType dragonFruit;
 	FruitType coffeeBean;
-  
+
 	final int coffeeSpeed = 3;
 	final int coffeeDuration = 10;
-    int fruitAmount = 3;
-  
-	private int n = 15;
-	private int m = 15;
-  
+
 	int fruitAmount = 4;
 
-	private int n = 50;
-	private int m = 50;
+	private int n = 15;
+	private int m = 15;
 
 	Data data;
 
@@ -201,15 +197,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		json = new JSON("data/data.json");
 		System.out.println(json);
 
-
 		// Fruits
 		apple = new FruitType(appleSprite, 1, 1);
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1);
 		cherry1 = new FruitType(cherry1Sprite, 10, 1);
 		cherry2 = new FruitType(cherry2Sprite, 0, 0);
 		coffeeBean = new FruitType(coffeeBeanSprite, 100, 0);
-    dragonFruit = new FruitType(dragonFruitSprite, 5, 0);
-
+		dragonFruit = new FruitType(dragonFruitSprite, 5, 0);
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
@@ -254,8 +248,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-
-
 
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 			Gdx.app.exit();
@@ -323,7 +315,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 					for (int i = 0; i < features.length; i++) {
 						if (features[i].clickedButton()) {
-								features[i].toggleisEnabled();
+							features[i].toggleisEnabled();
 						}
 					}
 				}
@@ -398,13 +390,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 						snake.fireActive = true;
 						snake.setFireCounter(0);
 
-
 					}
 					if (fruit.getSprite().equals(cherry1Sprite) || fruit.getSprite().equals(cherry2Sprite)) {
 						teleportSnake(snake, fruit);
 
 					}
-					if (fruit.getSprite().equals(coffeeBeanSprite)){
+					if (fruit.getSprite().equals(coffeeBeanSprite)) {
 						System.out.println("Coffee");
 						snake.setMaxcounter(coffeeSpeed);
 						snake.setSpeedCounter(coffeeDuration);
@@ -416,7 +407,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 
 	}
-
 
 	private void teleportSnake(Snake snake, Fruit eatenFruit) {
 		for (Fruit fruit : fruits) {
@@ -512,6 +502,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							effect.reset();
 							effect.getEmitters().first().getXScale().setHigh((int) (grid.squareSize / 1.4));
 							effect.getEmitters().first().getYScale().setLow((int) (grid.squareSize / 1.4));
+							effect.getEmitters().first().getLife().setHigh((grid.squareSize / 50) * 325 );
 							effect.start();
 						}
 						effect.draw(batch, Gdx.graphics.getDeltaTime());
@@ -616,25 +607,12 @@ public class SnakeProjekt extends ApplicationAdapter {
                     }
 
 				 */
-					createFruit(coffeeBean, spawningPosition, rectangle);
-          
-					} else if (cherryHandler.isEnabled()
-							&& spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance()
-							&& !cherry1Spawned && !snakeReverseHandler.isEnabled()) {
-						createFruit(cherry1, spawningPosition, rectangle);
-						cherry1Spawned = true;
-						k--;
-
-					} else if ( dragonFruitHandler.isEnabled()
-							&& spawnEffect <= dragonFruitHandler.getChance()) {
-						createFruit(dragonFruit, spawningPosition, rectangle);
-							} else {
-						createFruit(apple, spawningPosition, rectangle);
-					}
+					createFruit(dragonFruit, spawningPosition, rectangle);
 
 				} else {
 					k--;
 				}
+			
 			}
 		}
 	}
@@ -707,5 +685,3 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator.dispose();
 	}
 }
-
-
