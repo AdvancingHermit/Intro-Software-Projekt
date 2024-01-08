@@ -97,15 +97,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 	// handlers
 	WallHandler wallHandler = new WallHandler(false, "Wall");
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "Multiplayer", 2);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 1);
-	CherryHandler cherryHandler = new CherryHandler(false, "Cherries",  100);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
+	CherryHandler cherryHandler = new CherryHandler(true, "Cherries",  100);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
 	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true, "Reverse");
-	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(false, "Coffee", 1);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(false, "Dragon Fruit", 1, 0);
+	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
-
+	
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
 			borderHandler, snakeReverseHandler , coffeeBeanHandler};
 	Button[] features = new Button[handlers.length];
@@ -190,7 +190,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
 		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance());
 		cherry2 = new FruitType(cherry2Sprite, 0, 0, 0);
-		coffeeBean = new FruitType(coffeeBeanSprite, 100, 0, coffeeBeanHandler.getChance());
+		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance());
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance());
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
