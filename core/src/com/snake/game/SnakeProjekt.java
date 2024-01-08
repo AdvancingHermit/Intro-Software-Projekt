@@ -334,7 +334,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 
 				shape.end();
+				showButton(backButton);
 				batch.begin();
+				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) &&  backButton.clickedButton()){
+					currentScene = Scene.Main_Scene;
+				}
 				for (int i = 0; i < grid.snakes.length; i++) {
 
 					scoreNumText.setText(font2, "22");
