@@ -18,21 +18,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.snake.game.handlers.BorderHandler;
-import com.snake.game.handlers.CherryHandler;
-import com.snake.game.handlers.CoffeeBeanHandler;
-import com.snake.game.handlers.DragonFruitHandler;
-import com.snake.game.handlers.GoldenFruitHandler;
-import com.snake.game.handlers.MultiplayerHandler;
-import com.snake.game.handlers.QuickTimeHandler;
-import com.snake.game.handlers.SnakeReverseHandler;
-import com.snake.game.handlers.WallHandler;
-import com.snake.game.util.Button;
-import com.snake.game.util.Data;
-import com.snake.game.util.InputBox;
-import com.snake.game.util.JSON;
+import com.snake.game.handlers.*;
+import com.snake.game.util.*;
 import com.snake.game.util.Vector;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -516,6 +504,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 
 				} else {
+					Vector lastPos = (k > 0) ? positions.get(k-1) : null;
+					Vector nextPos = (k < positions.size()-1) ? positions.get(k+1) : null;
+					Vector currPos = positions.get(k);
+
 					batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 				}

@@ -14,6 +14,9 @@ public class Vector{
     public Vector add(Vector other) {
         return new Vector(x + other.x, y + other.y);
     }
+    public Vector mult(int scalar) {
+        return new Vector(x * scalar, y * scalar);
+    }
   
     @Override
     public boolean equals(Object o) {
