@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class FruitPicker {
     //20% chance for default
-    static double defaultFruitTypeChance = 0.2;
+    static double defaultFruitTypeChance = 1.2;
 
     public static FruitType pickFruitType(FruitType defaultFruitType, FruitType... fruitTypes
     ) {
@@ -19,7 +19,9 @@ public class FruitPicker {
         int sum=0;
         List<FruitType> fruitTypeList = Arrays.stream(fruitTypes).filter(fruitType -> fruitType.getChance()>0).collect(Collectors.toList());
         int totalWeight = fruitTypeList.stream().map(FruitType::getChance).reduce(0, Integer::sum);
-        int random = new Random().nextInt(0, totalWeight) + 1;
+        totalWeight = 1;
+        Random rand = new Random(System.currentTimeMillis());
+        int random  = rand.nextInt(0, totalWeight) + 1;
         for (FruitType fruitType:fruitTypes) {
             if (random>sum && random<(sum+fruitType.getChance())) {
                 return fruitType;
