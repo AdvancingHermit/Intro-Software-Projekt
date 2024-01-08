@@ -99,12 +99,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 	WallHandler wallHandler = new WallHandler(false, "Wall");
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(true, "2 Player", 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
-	CherryHandler cherryHandler = new CherryHandler(true, "Cherries",  100);
+	CherryHandler cherryHandler = new CherryHandler(true, "Cherries",  80);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
 	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 200, 6);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
 
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
@@ -532,7 +532,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 			}
-			batch.setColor(Color.GREEN);
+			batch.setColor(Color.CHARTREUSE);
 
 		}
 		batch.setColor(Color.WHITE);
