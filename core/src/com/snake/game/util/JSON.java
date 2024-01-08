@@ -1,9 +1,10 @@
 package com.snake.game.util;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class JSON {
     Data data;
@@ -15,8 +16,9 @@ public class JSON {
     public JSON(String path) {
         String info = "";
         try {
-            File file = new File(path);
-            Scanner fileReader = new Scanner(file);
+            System.out.println(path);
+            FileHandle file = Gdx.files.internal(path);
+            Scanner fileReader = new Scanner(file.read());
             while (fileReader.hasNextLine()) {
                 info = fileReader.nextLine();
             }
@@ -52,17 +54,15 @@ public class JSON {
 
     public void createFile(String path) {
         try {
-            File file = new File(path + "/data.json");
-            if (file.createNewFile()) {
-                System.out.println("File created: " + file.getName());
+            FileHandle file = Gdx.files.local(path + "/data.json");
+            if (!file.exists()) {
+                System.out.println("File created: " + file.file().getName());
             } else {
                 System.out.println("File already exists.");
             }
-            FileWriter writer = new FileWriter(path + "/data.json");
-            writer.write(toString());
-            writer.close();
+            file.writeString(toString(), false);
 
-        } catch (IOException e) {
+        } catch (GdxRuntimeException e) {
             e.printStackTrace();
         }
     }

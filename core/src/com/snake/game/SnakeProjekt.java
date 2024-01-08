@@ -1,5 +1,6 @@
 package com.snake.game;
 
+import java.nio.file.FileSystems;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -106,13 +107,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	// handlers
 
 	WallHandler wallHandler = new WallHandler(true);
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, 2);
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(true, 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 0);
-	CherryHandler cherryHandler = new CherryHandler(false, 100);
+	CherryHandler cherryHandler = new CherryHandler(false, 20);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
 	BorderHandler borderHandler = new BorderHandler(false);
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 40, 6);
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 30, 6);
 
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
 			borderHandler, snakeReverseHandler };
@@ -193,8 +194,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 		JSON json = new JSON(new Data("Test", 10, formatter.format(new Date())));
+		String path = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
 		json.createFile("data");
-		json = new JSON("data/data.json");
+		json = new JSON("/data.json");
 		System.out.println(json);
 
 		// Fruits
@@ -584,7 +586,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				if (validSpawn) {
 
-				/*	if (cherry1Spawned && !cherry2Spawned){
+				if (cherry1Spawned && !cherry2Spawned){
 						createFruit(cherry2, spawningPosition, rectangle);
 						cherry2Spawned = true;
 						continue;
@@ -592,19 +594,24 @@ public class SnakeProjekt extends ApplicationAdapter {
 					int spawnEffect = (random.nextInt(0, 100) + 1);
 					if (goldenFruitHandler.isEnabled() && spawnEffect <= goldenFruitHandler.getChance()) {
 						createFruit(goldenApple, spawningPosition, rectangle);
-					} else if (cherryHandler.isEnabled() && spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
+					}  else if (cherryHandler.isEnabled() && spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
 							 spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
 							!cherry1Spawned &&
 							!snakeReverseHandler.isEnabled()){
 						createFruit(cherry1, spawningPosition, rectangle);
 						cherry1Spawned = true;
 						k--;
-                    } else {
+                    } else if (dragonFruitHandler.isEnabled() && spawnEffect <= dragonFruitHandler.getChance() + goldenFruitHandler.getChance() &&
+							 spawnEffect <= dragonFruitHandler.getChance() + goldenFruitHandler.getChance() + cherryHandler.getChance()) {
+						createFruit(dragonFruit, spawningPosition, rectangle);
+						k--;
+					}
+					 else {
                         createFruit(apple, spawningPosition, rectangle);
                     }
 
-				 */
-					createFruit(dragonFruit, spawningPosition, rectangle);
+			
+					//createFruit(dragonFruit, spawningPosition, rectangle);
 
 				} else {
 					k--;
