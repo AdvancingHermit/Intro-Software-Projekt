@@ -9,8 +9,8 @@ public class DragonFruitHandler extends GameFeature
 
 
 
-    public DragonFruitHandler (boolean enabled, int chance, int fireTime) {
-        super(enabled);
+    public DragonFruitHandler (boolean enabled, String featureName, int chance, int fireTime) {
+        super(enabled, featureName);
         this.chance = chance;
         this.fireTime = fireTime;
         if (!enabled) chance = 0;

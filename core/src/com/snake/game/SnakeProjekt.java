@@ -102,6 +102,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
 	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true, "Reverse");
+	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(false, "Coffee", 0);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(false, "Dragon Fruit", 0, 0);
 
 
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
@@ -115,6 +117,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitType cherry2;
 	FruitType dragonFruit;
 	FruitType coffeeBean;
+	FruitPicker FruitPicker = new FruitPicker();
 
 	final int coffeeSpeed = 3;
 	final int coffeeDuration = 10;
