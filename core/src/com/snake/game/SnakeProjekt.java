@@ -95,17 +95,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontParameter parameter;
 
 	// handlers
+
 	WallHandler wallHandler = new WallHandler(false, "Wall");
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "Multiplayer", 2);
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(true, "2 Player", 2);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries",  100);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
 	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true, "Reverse");
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 200, 6);
 
-	
+
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
 			borderHandler, snakeReverseHandler , coffeeBeanHandler};
 	Button[] features = new Button[handlers.length];
@@ -186,7 +187,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		System.out.println(json);
 
 		// Fruits
-		apple = new FruitType(appleSprite, 1, 5, 0);
+		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
 		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance());
 		cherry2 = new FruitType(cherry2Sprite, 0, 0, 0);
@@ -310,11 +311,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
 					}
-					for (int i = 0; i < features.length; i++) {
-						if (features[i].clickedButton()) {
-							features[i].toggleisEnabled();
-						}
-					}
+                    for (Button feature : features) {
+                        if (feature.clickedButton()) {
+                            feature.toggleisEnabled();
+                        }
+                    }
 				}
 				shape.end();
 				break;
@@ -474,6 +475,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					sprY.setFlip(false, vel.y == 1);
 					sprX.setFlip(vel.x == -1, false);
 					Sprite spr = vel.x == 0 ? sprY : sprX;
+
 					batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2),
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 					if (snake.fireActive) {
@@ -530,8 +532,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 			}
+			batch.setColor(Color.GREEN);
 
 		}
+		batch.setColor(Color.WHITE);
 	}
 
 	private void spawnFruit(Rectangle[][] shower) {
