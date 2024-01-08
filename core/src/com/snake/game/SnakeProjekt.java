@@ -94,10 +94,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
 
+	
+
 	// handlers
 
 	WallHandler wallHandler = new WallHandler(false, "Wall");
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(true, "2 Player", 2);
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "1 Player", 1);
+	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(true, "2 Player", 2);
+	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(true, "3 Player", 3);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries",  100);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
@@ -107,8 +111,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 200, 6);
 
 
-	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
-			borderHandler, snakeReverseHandler , coffeeBeanHandler};
+	GameFeature[] handlers = { wallHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
+			borderHandler, snakeReverseHandler , coffeeBeanHandler, multiplayerHandler2, multiplayerHandler3};
 	Button[] features = new Button[handlers.length];
 	// fruits
 
@@ -184,7 +188,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		JSON json = new JSON(new Data("Test", 10, formatter.format(new Date())));
 		json.createFile("data");
 		json = new JSON("data/data.json");
-		System.out.println(json);
+
 
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
@@ -261,6 +265,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				color = Color.RED;
 				showButton(featureButton, color);
 
+
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					if (startButton.clickedButton()) {
 						gridsize = new Vector(n, m);
@@ -292,9 +297,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 				showButton(backButton);
-				System.out.println(features[0].getState());
 				for (Button x : features) {
-					System.out.println(x.getState());
 					if (x.gethandler().isEnabled()) {
 						color = Color.GREEN;
 						showButton(x, color);
@@ -304,6 +307,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 
 				}
+
 
 				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && canClick) {
@@ -316,6 +320,8 @@ public class SnakeProjekt extends ApplicationAdapter {
                             feature.toggleisEnabled();
                         }
                     }
+					multiplayerHandler = (multiplayerHandler2.isEnabled() ) ? multiplayerHandler2 : (multiplayerHandler3.isEnabled() ? multiplayerHandler3 : multiplayerHandler);
+
 				}
 				shape.end();
 				break;
@@ -394,7 +400,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 					}
 					if (fruit.getSprite().equals(coffeeBeanSprite)) {
-						System.out.println("Coffee");
 						snake.setMaxcounter(coffeeSpeed);
 						snake.setSpeedCounter(coffeeDuration);
 					}
@@ -408,7 +413,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	private void teleportSnake(Snake snake, Fruit eatenFruit) {
 		for (Fruit fruit : fruits) {
-			System.out.println("Cherries");
 			if (((fruit.getSprite().equals(cherry1Sprite) && eatenFruit.getSprite().equals(cherry2Sprite))
 					|| ((fruit.getSprite().equals(cherry2Sprite) && eatenFruit.getSprite().equals(cherry1Sprite))))) {
 
