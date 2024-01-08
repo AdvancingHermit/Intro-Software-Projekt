@@ -1,12 +1,12 @@
 package com.snake.game;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.snake.game.util.Vector;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Snake {
 
@@ -17,17 +17,10 @@ public class Snake {
     private char key;
     private int[] keys;
 
-    public int getMaxcounter() {
-        return maxcounter;
-    }
-
-    public void setMaxcounter(int maxcounter) {
-        this.maxcounter = maxcounter;
-    }
 
     public boolean isDead;
     private int counter = 0;
-    private final int startMaxCounter = 7;
+    private final int startMaxCounter = 8;
     private int maxcounter = startMaxCounter;
 
 
@@ -265,6 +258,14 @@ public class Snake {
     public void setQuickTimeCounter(int quickTimeCounter) {
         this.quickTimeCounter = quickTimeCounter;
     }
+    public int getMaxcounter() {
+        return maxcounter;
+    }
+
+    public void setMaxcounter(int maxcounter) {
+        this.maxcounter = maxcounter;
+    }
+
 
 
 }

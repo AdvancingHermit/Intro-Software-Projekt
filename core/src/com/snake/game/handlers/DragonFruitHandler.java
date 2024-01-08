@@ -13,6 +13,7 @@ public class DragonFruitHandler extends GameFeature
         super(enabled);
         this.chance = chance;
         this.fireTime = fireTime;
+        if (!enabled) chance = 0;
     }
     public int getChance() {
         return chance;

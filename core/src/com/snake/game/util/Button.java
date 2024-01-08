@@ -12,7 +12,6 @@ public class Button {
     private int screenHeight = Gdx.graphics.getHeight();
     private int screenWidth = Gdx.graphics.getWidth();
     private GameFeature handler;
-    private boolean isEnabled;
 
     public Button(Vector pos, Vector Size) {
         this.Size = Size;
@@ -52,6 +51,9 @@ public class Button {
     }
     public boolean getState(){
         return handler.isEnabled();
+    }
+    public String getfeatureName(){
+        return handler.getfeatureName();
     }
     public boolean clickedButton() {
         if (backArrow == null) {

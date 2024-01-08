@@ -1,17 +1,5 @@
 package com.snake.game;
 
-import java.nio.file.FileSystems;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -21,25 +9,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter.Particle;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Size;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.snake.game.handlers.CherryHandler;
-import com.snake.game.util.InputBox;
-import com.snake.game.util.JSON;
-import com.snake.game.util.Vector;
 import com.snake.game.handlers.BorderHandler;
+import com.snake.game.handlers.CherryHandler;
+import com.snake.game.handlers.CoffeeBeanHandler;
 import com.snake.game.handlers.DragonFruitHandler;
 import com.snake.game.handlers.GoldenFruitHandler;
 import com.snake.game.handlers.MultiplayerHandler;
@@ -48,7 +29,17 @@ import com.snake.game.handlers.SnakeReverseHandler;
 import com.snake.game.handlers.WallHandler;
 import com.snake.game.util.Button;
 import com.snake.game.util.Data;
-import com.badlogic.gdx.math.Rectangle;
+import com.snake.game.util.InputBox;
+import com.snake.game.util.JSON;
+import com.snake.game.util.Vector;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class SnakeProjekt extends ApplicationAdapter {
 
@@ -91,12 +82,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout scoreText;
 	int screenHeight;
 	int screenWidth;
-	int startButtonX;
-	int startButtonY;
+
 	boolean canClick = true;
 	int frameCounter = 0;
 	InputBox inputBox;
-	int backButtonHeight, backButtonWidth, backButtonX, backButtonY, startButtonWidth, startButtonHeight, boxesHeight,
+	int boxesHeight,
 			boxesWidth;
 	Button backButton, startButton, featureButton;
 	Color color;
@@ -105,18 +95,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontParameter parameter;
 
 	// handlers
+	WallHandler wallHandler = new WallHandler(false, "Wall");
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "Multiplayer", 2);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
+	CherryHandler cherryHandler = new CherryHandler(false, "Cherries",  100);
+	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
+	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true, "Reverse");
 
-	WallHandler wallHandler = new WallHandler(true);
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(true, 2);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, 0);
-	CherryHandler cherryHandler = new CherryHandler(false, 20);
-	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, 2);
-	BorderHandler borderHandler = new BorderHandler(false);
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, 30, 6);
 
 	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
-			borderHandler, snakeReverseHandler };
+			borderHandler, snakeReverseHandler , coffeeBeanHandler};
 	Button[] features = new Button[handlers.length];
 	// fruits
 
@@ -186,26 +175,20 @@ public class SnakeProjekt extends ApplicationAdapter {
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
-		backButtonX = -screenWidth / 2 + 150;
-		backButtonY = screenHeight / 2 - 200;
-		backButtonWidth = 300;
-		backButtonHeight = 100;
-
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 		JSON json = new JSON(new Data("Test", 10, formatter.format(new Date())));
-		String path = FileSystems.getDefault().getPath("").toAbsolutePath().toString();
 		json.createFile("data");
-		json = new JSON("/data.json");
+		json = new JSON("data/data.json");
 		System.out.println(json);
 
 		// Fruits
-		apple = new FruitType(appleSprite, 1, 1);
-		goldenApple = new FruitType(goldenAppleSprite, 10, 1);
-		cherry1 = new FruitType(cherry1Sprite, 10, 1);
-		cherry2 = new FruitType(cherry2Sprite, 0, 0);
-		coffeeBean = new FruitType(coffeeBeanSprite, 100, 0);
-		dragonFruit = new FruitType(dragonFruitSprite, 5, 0);
+		apple = new FruitType(appleSprite, 1, 5, 0);
+		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
+		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance());
+		cherry2 = new FruitType(cherry2Sprite, 0, 0, 0);
+		coffeeBean = new FruitType(coffeeBeanSprite, 100, 0, coffeeBeanHandler.getChance());
+		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance());
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
@@ -222,6 +205,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector((screenWidth - screenWidth * 2 / 3) - boxesWidth / 2,
 								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 8)),
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
+				
 			} else {
 				features[i] = new Button(
 						new Vector((screenWidth - screenWidth / 3) - boxesWidth / 2,
@@ -240,7 +224,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public void showButton(Button temp, Color color) {
 		shape.setColor(color);
 		shape.rect(temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
-
+		if (temp.gethandler() != null) {
+			batch.begin();
+			font.draw(batch, temp.getfeatureName(), temp.getpos().x - screenWidth / 2, temp.getpos().y - screenHeight / 2 + Math.round(1.75 * temp.getSize().y));
+			batch.end();
+		}
+		
 	}
 
 	@Override
@@ -276,6 +265,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 								screenHeight);
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
+						}
+						if (snakeReverseHandler.isEnabled()){
+							cherry1.setChance(0);
 						}
 						currentScene = Scene.Main_Game;
 					} else if (featureButton.clickedButton()) {
@@ -586,7 +578,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				if (validSpawn) {
 
-				if (cherry1Spawned && !cherry2Spawned){
+				/*	if (cherry1Spawned && !cherry2Spawned){
 						createFruit(cherry2, spawningPosition, rectangle);
 						cherry2Spawned = true;
 						continue;
@@ -594,24 +586,37 @@ public class SnakeProjekt extends ApplicationAdapter {
 					int spawnEffect = (random.nextInt(0, 100) + 1);
 					if (goldenFruitHandler.isEnabled() && spawnEffect <= goldenFruitHandler.getChance()) {
 						createFruit(goldenApple, spawningPosition, rectangle);
-					}  else if (cherryHandler.isEnabled() && spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
+					} else if (cherryHandler.isEnabled() && spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
 							 spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
 							!cherry1Spawned &&
 							!snakeReverseHandler.isEnabled()){
 						createFruit(cherry1, spawningPosition, rectangle);
 						cherry1Spawned = true;
 						k--;
-                    } else if (dragonFruitHandler.isEnabled() && spawnEffect <= dragonFruitHandler.getChance() + goldenFruitHandler.getChance() &&
-							 spawnEffect <= dragonFruitHandler.getChance() + goldenFruitHandler.getChance() + cherryHandler.getChance()) {
-						createFruit(dragonFruit, spawningPosition, rectangle);
-						k--;
-					}
-					 else {
+                    } else {
                         createFruit(apple, spawningPosition, rectangle);
                     }
 
-			
-					//createFruit(dragonFruit, spawningPosition, rectangle);
+				 */
+
+					if (cherry1Spawned && !cherry2Spawned){
+						createFruit(cherry2, spawningPosition, rectangle);
+						cherry2Spawned = true;
+						continue;
+					}
+
+					FruitType spawningFruitType = FruitPicker.pickFruitType(apple, goldenApple, cherry1, dragonFruit , coffeeBean);
+					if (cherry1Spawned && spawningFruitType.equals(cherry1)){
+						k--;
+						continue;
+					}
+
+					if (spawningFruitType.equals(cherry1)){
+						cherry1Spawned = true;
+						k--;
+					}
+					createFruit(spawningFruitType, spawningPosition, rectangle);
+
 
 				} else {
 					k--;
