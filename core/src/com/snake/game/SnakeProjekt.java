@@ -111,7 +111,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
-	GameFeature[] handlers = { wallHandler, borderHandler, quickTimeHandler, snakeReverseHandler,   goldenFruitHandler,cherryHandler,  
+	GameFeature[] handlers = { wallHandler, borderHandler, quickTimeHandler, snakeReverseHandler,   goldenFruitHandler,cherryHandler,  dragonFruitHandler, 
 			  coffeeBeanHandler, multiplayerHandler2, multiplayerHandler3 };
 	Button[] features = new Button[handlers.length];
 	// fruits
@@ -219,13 +219,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 			if (i % 2 == 0) {
 				features[i] = new Button(
 						new Vector((screenWidth - screenWidth * 2 / 3) - boxesWidth / 2,
-								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 8)),
+								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 6)),
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
 
 			} else {
 				features[i] = new Button(
 						new Vector((screenWidth - screenWidth / 3) - boxesWidth / 2,
-								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 8)),
+								screenHeight + boxesHeight / 2 - screenHeight / 4 - (screenHeight * (i / 2) / 6)),
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			}
 		}
