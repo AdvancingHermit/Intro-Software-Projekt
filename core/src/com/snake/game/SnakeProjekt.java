@@ -106,7 +106,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries",  80);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
 	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true, "Reverse");
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
@@ -275,9 +275,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
-						if (snakeReverseHandler.isEnabled()){
-							cherry1.setChance(0);
-						}
 						currentScene = Scene.Main_Game;
 					} else if (featureButton.clickedButton()) {
 						currentScene = Scene.Main_Enable_Features;
@@ -390,11 +387,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			Fruit fruit = fruitIterator.next();
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
-					if (snakeReverseHandler.isEnabled()) {
 
-						reverseSnake(snake);
-
-					}
 					if (fruit.getSprite().equals(dragonFruitSprite)) {
 						snake.fireActive = true;
 						snake.setFireCounter(0);
@@ -403,7 +396,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (fruit.getSprite().equals(cherry1Sprite) || fruit.getSprite().equals(cherry2Sprite)) {
 						teleportSnake(snake, fruit);
 
+					} else if (snakeReverseHandler.isEnabled()) {
+
+						reverseSnake(snake);
+
 					}
+
 					if (fruit.getSprite().equals(coffeeBeanSprite)) {
 						snake.setMaxcounter(coffeeSpeed);
 						snake.setSpeedCounter(coffeeDuration);
