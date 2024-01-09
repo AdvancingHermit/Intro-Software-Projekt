@@ -253,6 +253,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		switch (currentScene) {
 			case Main_Scene:
+				fruits.clear();
 				ScreenUtils.clear(0, 0, 1, 1);
 
 				frameCounter++;
@@ -421,8 +422,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				List<Vector> newPositions = snake.getPositions();
 				newPositions.add((fruit.getSnakePos()));
-				newPositions.remove(0);
 				snake.setPositions((ArrayList<Vector>) newPositions);
+				snake.setLastRemoved(newPositions.get(0));
+				newPositions.remove(0);
 			}
 		}
 	}
@@ -589,27 +591,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 				}
 				if (validSpawn) {
-
-				/*	if (cherry1Spawned && !cherry2Spawned){
-						createFruit(cherry2, spawningPosition, rectangle);
-						cherry2Spawned = true;
-						continue;
-					}
-					int spawnEffect = (random.nextInt(0, 100) + 1);
-					if (goldenFruitHandler.isEnabled() && spawnEffect <= goldenFruitHandler.getChance()) {
-						createFruit(goldenApple, spawningPosition, rectangle);
-					} else if (cherryHandler.isEnabled() && spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
-							 spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
-							!cherry1Spawned &&
-							!snakeReverseHandler.isEnabled()){
-						createFruit(cherry1, spawningPosition, rectangle);
-						cherry1Spawned = true;
-						k--;
-                    } else {
-                        createFruit(apple, spawningPosition, rectangle);
-                    }
-
-				 */
 
 					if (cherry1Spawned && !cherry2Spawned){
 						createFruit(cherry2, spawningPosition, rectangle);

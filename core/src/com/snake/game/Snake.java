@@ -48,6 +48,8 @@ public class Snake {
     private int score = 0;
 
     private boolean hasDeadMoved = false;
+
+
     private Vector lastRemoved;
     private ParticleEffect effect = new ParticleEffect();
 
@@ -107,27 +109,22 @@ public class Snake {
             vel = keyVectorMap.get(key);
 
 
+            positions.add(positions.get(positions.size() - 1).add(vel));
+            if (checkCollision()) {
+                isDead = true;
+                positions.remove(positions.size() - 1);
+            }
+            handleNegativeGrowth();
 
-
-                positions.add(positions.get(positions.size() - 1).add(vel));
-                handleNegativeGrowth();
-
-                if (grow > 0) {
-                    counter++;
-                    grow--;
-                    return;
-                }
-                if (!isDead) {
-
-                    lastRemoved = positions.get(0);
-                    positions.remove(0);
-                }
-                if (checkCollision()) {
-                    isDead = true;
-                    moveBack();
-                }
-
-
+            if (grow > 0) {
+                counter++;
+                grow--;
+                return;
+            }
+            if (!isDead) {
+                lastRemoved = positions.get(0);
+                positions.remove(0);
+            }
 
         }
         counter++;
@@ -174,7 +171,7 @@ public class Snake {
 
     public boolean checkCollision() {
 
-        for (int i = 0; i < positions.size() - 1; i++) {
+        for (int i = 1; i < positions.size() - 1; i++) {
             if (positions.get(positions.size() - 1).equals(positions.get(i))) {
                 isDead = true;
                 return true;
@@ -243,6 +240,9 @@ public class Snake {
         this.maxcounter = maxcounter;
     }
 
+    public void setLastRemoved(Vector lastRemoved) {
+        this.lastRemoved = lastRemoved;
+    }
 
 
 }
