@@ -48,7 +48,7 @@ import javax.sound.midi.SysexMessage;
 public class SnakeProjekt extends ApplicationAdapter {
 
 	enum Scene {
-		Main_Scene, Main_Game, Main_Setting, Main_Enable_Features, Main_Death_Menu
+		Main_Scene, Main_Game, Main_Setting, Main_Enable_Features, Main_Restart
 	}
 
 	Scene currentScene = Scene.Main_Scene;
@@ -89,6 +89,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int screenWidth;
 
 	boolean canClick = true;
+	boolean allSnakesDead;
 	int frameCounter = 0;
 	InputBox inputBox;
 	int boxesHeight,
@@ -204,11 +205,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
-				new Vector(screenWidth / 4, screenHeight / 4), createFontSize((screenWidth* 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920))), "Start");
+				new Vector(screenWidth / 4, screenHeight / 4),
+				createFontSize((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920))), "Start");
 		featureButton = new Button(
 				new Vector(startButton.getpos().x + screenWidth / 32, startButton.getpos().y - screenHeight / 8),
 				new Vector(screenWidth / 4 - screenWidth / 16, screenHeight / 8),
-				createFontSize((screenWidth* 4 / 10 * ("Features").length()) / (150 * (screenWidth / 1920))), "Features");
+				createFontSize((screenWidth * 4 / 10 * ("Features").length()) / (150 * (screenWidth / 1920))),
+				"Features");
 		restartButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
 				new Vector(screenWidth / 4, screenHeight / 4),
 				createFontSize((screenWidth * 4 / 15 * ("Play Again").length()) / (102 * (screenWidth / 1920))),
@@ -385,7 +388,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 						shape.rect(rectangle.x, rectangle.y, grid.squareSize, grid.squareSize);
 					}
 				}
-
+				if (allSnakesDead && (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
+					if (restartButton.clickedButton()) {
+						System.out.println("test");
+						allSnakesDead = false;
+						currentScene = Scene.Main_Restart;
+					}
+				}
 				spawnFruit(shower);
 				shape.end();
 
@@ -403,7 +413,23 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				checkFruitCollsions();
 				break;
-			case Main_Death_Menu:
+			case Main_Restart:
+				ScreenUtils.clear(0, 0, 1, 1);
+				camera.update();
+				batch.setProjectionMatrix(camera.combined);
+				shape.begin(ShapeType.Filled);
+				shape.end();
+				gridsize = new Vector(n, m);
+				grid = new Grid(gridsize,
+						multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
+						screenHeight);
+				if (wallHandler.isEnabled()) {
+					grid.walls = grid.wallGenerator(gridsize);
+				}
+				if (snakeReverseHandler.isEnabled()) {
+					cherry1.setChance(0);
+				}
+				currentScene = Scene.Main_Game;
 				break;
 
 		}
@@ -577,6 +603,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			shape.begin(ShapeType.Filled);
 			showButton(restartButton, color);
 			shape.end();
+			allSnakesDead = true;
 		}
 		batch.begin();
 		batch.setColor(Color.WHITE);
