@@ -108,11 +108,8 @@ public class Snake {
 
 
 
-            if (checkCollision()) {
-                isDead = true;
-                moveBack();
-                positions.remove(0);
-            } else {
+
+
                 positions.add(positions.get(positions.size() - 1).add(vel));
 
                 handleNegativeGrowth();
@@ -125,8 +122,13 @@ public class Snake {
 
                 lastRemoved = positions.get(0);
                 positions.remove(0);
+                if (checkCollision()) {
+                    isDead = true;
+                    moveBack();
+                    positions.remove(0);
+                }
 
-            }
+
 
         }
         counter++;
