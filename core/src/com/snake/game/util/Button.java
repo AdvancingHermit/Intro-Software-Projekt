@@ -2,6 +2,8 @@ package com.snake.game.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.snake.game.GameFeature;
 
 public class Button {
@@ -12,11 +14,15 @@ public class Button {
     private int screenHeight = Gdx.graphics.getHeight();
     private int screenWidth = Gdx.graphics.getWidth();
     private GameFeature handler;
+    private String text; 
+    private BitmapFont font;
 
-    public Button(Vector pos, Vector Size) {
+    public Button(Vector pos, Vector Size, BitmapFont font, String text) {
         this.Size = Size;
         this.pos = pos;
-
+        this.text = text;
+        this.font = font;
+    
     }
       public Button(Vector pos, Vector Size, GameFeature handler) {
         this.Size = Size;
@@ -54,6 +60,12 @@ public class Button {
     }
     public String getfeatureName(){
         return handler.getfeatureName();
+    }
+    public String gettext(){
+        return text;
+    }
+    public BitmapFont getfont(){
+        return font;
     }
     public boolean clickedButton() {
         if (backArrow == null) {
