@@ -171,7 +171,7 @@ public class Snake {
 
     public boolean checkCollision() {
 
-        for (int i = 1; i < positions.size() - 1; i++) {
+        for (int i = 0; i < positions.size() - 1; i++) {
             if (positions.get(positions.size() - 1).equals(positions.get(i))) {
                 isDead = true;
                 return true;
