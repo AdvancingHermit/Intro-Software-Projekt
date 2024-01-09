@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -35,10 +34,8 @@ import com.snake.game.util.InputBox;
 import com.snake.game.util.JSON;
 import com.snake.game.util.Leaderboard;
 import com.snake.game.util.Vector;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -106,7 +103,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries", 80);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
-	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
+	BorderHandler borderHandler = new BorderHandler(false, "Borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
@@ -271,6 +268,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		switch (currentScene) {
 			case Main_Scene:
+				fruits.clear();
 				ScreenUtils.clear(0, 0, 1, 1);
 
 				frameCounter++;
@@ -292,9 +290,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
-						if (snakeReverseHandler.isEnabled()) {
-							cherry1.setChance(0);
-						}
+
 						currentScene = Scene.Main_Game;
 					} else if (featureButton.clickedButton()) {
 						currentScene = Scene.Main_Enable_Features;
@@ -411,11 +407,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			Fruit fruit = fruitIterator.next();
 			for (Snake snake : grid.snakes) {
 				if (snake.checkCollision(fruit.getSnakePos())) {
-					if (snakeReverseHandler.isEnabled()) {
 
-						reverseSnake(snake);
-
-					}
 					if (fruit.getSprite().equals(dragonFruitSprite)) {
 						snake.fireActive = true;
 						snake.setFireCounter(0);
@@ -424,7 +416,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (fruit.getSprite().equals(cherry1Sprite) || fruit.getSprite().equals(cherry2Sprite)) {
 						teleportSnake(snake, fruit);
 
+					} else if (snakeReverseHandler.isEnabled()) {
+
+						reverseSnake(snake);
+
 					}
+
 					if (fruit.getSprite().equals(coffeeBeanSprite)) {
 						snake.setMaxcounter(coffeeSpeed);
 						snake.setSpeedCounter(coffeeDuration);
@@ -444,8 +441,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				List<Vector> newPositions = snake.getPositions();
 				newPositions.add((fruit.getSnakePos()));
-				newPositions.remove(0);
 				snake.setPositions((ArrayList<Vector>) newPositions);
+				snake.setLastRemoved(newPositions.get(0));
+				newPositions.remove(0);
 			}
 		}
 	}
@@ -481,19 +479,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 					} else {
 						// Skiftes til i, når vi looper over slanger.
 						cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
-						snake.move();
 					}
 				}
 				if (cy == grid.gridSize.y || cy == -1) {
 					if (borderHandler.isEnabled()) {
 						snake.isDead = true;
-						snake.moveBack();
+					 	snake.moveBack();
 						cx = positions.get(k).x;
 						cy = positions.get(k).y;
 					} else {
 						// Skiftes til i, når vi looper over slanger.
 						cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
-						snake.move();
 					}
 				}
 
@@ -614,31 +610,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				if (validSpawn) {
 
-					/*
-					 * if (cherry1Spawned && !cherry2Spawned){
-					 * createFruit(cherry2, spawningPosition, rectangle);
-					 * cherry2Spawned = true;
-					 * continue;
-					 * }
-					 * int spawnEffect = (random.nextInt(0, 100) + 1);
-					 * if (goldenFruitHandler.isEnabled() && spawnEffect <=
-					 * goldenFruitHandler.getChance()) {
-					 * createFruit(goldenApple, spawningPosition, rectangle);
-					 * } else if (cherryHandler.isEnabled() && spawnEffect <=
-					 * cherryHandler.getChance() + goldenFruitHandler.getChance() &&
-					 * spawnEffect <= cherryHandler.getChance() + goldenFruitHandler.getChance() &&
-					 * !cherry1Spawned &&
-					 * !snakeReverseHandler.isEnabled()){
-					 * createFruit(cherry1, spawningPosition, rectangle);
-					 * cherry1Spawned = true;
-					 * k--;
-					 * } else {
-					 * createFruit(apple, spawningPosition, rectangle);
-					 * }
-					 * 
-					 */
 
 					if (cherry1Spawned && !cherry2Spawned) {
+
 						createFruit(cherry2, spawningPosition, rectangle);
 						cherry2Spawned = true;
 						continue;
