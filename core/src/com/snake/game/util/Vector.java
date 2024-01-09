@@ -39,4 +39,8 @@ public class Vector{
     public double angle() {
         return Math.toDegrees(Math.atan2(y, x));
     }
+
+    public double mag() {
+        return Math.sqrt(x * x + y * y);
+    }
 }

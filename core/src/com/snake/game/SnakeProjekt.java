@@ -60,6 +60,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Texture wallSprite;
 	Texture snakeBodySprite;
+	Texture snakeBodySidewaysSprite;
+	Texture snakeBodyCornerSprite;
 	Texture snakeHeadSprite;
 	Texture snakeHeadSidewaysSprite;
 
@@ -136,6 +138,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		coffeeBeanSprite = new Texture((Gdx.files.internal("CoffeeBean.png")));
 
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
+		snakeBodySidewaysSprite = new Texture((Gdx.files.internal("snakebodysideways.png")));
+		snakeBodyCornerSprite = new Texture((Gdx.files.internal("snakebodycorner.png")));
 		snakeHeadSprite = new Texture((Gdx.files.internal("snakehead.png")));
 		snakeHeadSidewaysSprite = new Texture((Gdx.files.internal("snakeheadsideways.png")));
 
@@ -434,32 +438,31 @@ public class SnakeProjekt extends ApplicationAdapter {
 				int cx = positions.get(k).x;
 				int cy = positions.get(k).y;
 
-				if (cx == grid.gridSize.x || cx == -1) {
-					if (borderHandler.isEnabled()) {
-						snake.isDead = true;
-						snake.moveBack();
-						cx = positions.get(k).x;
-						cy = positions.get(k).y;
-					} else {
-						// Skiftes til i, når vi looper over slanger.
-						cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
-						snake.move();
-					}
-				}
-				if (cy == grid.gridSize.y || cy == -1) {
-					if (borderHandler.isEnabled()) {
-						snake.isDead = true;
-						snake.moveBack();
-						cx = positions.get(k).x;
-						cy = positions.get(k).y;
-					} else {
-						// Skiftes til i, når vi looper over slanger.
-						cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
-						snake.move();
-					}
-				}
-
 				if (k == positions.size() - 1) {
+					if (cx == grid.gridSize.x || cx == -1) {
+						if (borderHandler.isEnabled()) {
+							snake.isDead = true;
+							snake.moveBack();
+							cx = positions.get(k).x;
+							cy = positions.get(k).y;
+						} else {
+							// Skiftes til i, når vi looper over slanger.
+							cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
+							snake.move();
+						}
+					}
+					if (cy == grid.gridSize.y || cy == -1) {
+						if (borderHandler.isEnabled()) {
+							snake.isDead = true;
+							snake.moveBack();
+							cx = positions.get(k).x;
+							cy = positions.get(k).y;
+						} else {
+							// Skiftes til i, når vi looper over slanger.
+							cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
+							snake.move();
+						}
+					}
 					shape.setColor(Color.BLACK);
 					Sprite sprY = new Sprite(snakeHeadSprite);
 					Sprite sprX = new Sprite(snakeHeadSidewaysSprite);
@@ -504,12 +507,61 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 
 				} else {
+					//Make snake body sprite in the right direction
 					Vector lastPos = (k > 0) ? positions.get(k-1) : null;
-					Vector nextPos = (k < positions.size()-1) ? positions.get(k+1) : null;
+					Vector nextPos = positions.get(k+1);
 					Vector currPos = positions.get(k);
+					Vector vel = new Vector(0, 0);
+					boolean snakeTeleportLast = false;
+					boolean snakeTeleportNext = false;
+					if (lastPos != null) {
+						vel = currPos.add(lastPos.mult(-1));
+						snakeTeleportLast = vel.mag() > 1;
+					}
+					if (lastPos == null) {
+						vel = nextPos.add(currPos.mult(-1));
+					}
+					if (snakeTeleportLast) {
+						vel =  new Vector(Math.max(Math.min(vel.x, 1), -1), Math.max(Math.min(vel.y, 1), -1));
+						vel = vel.mult(-1);
+					}
 
-					batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
+					Vector vel2 =  nextPos.add(currPos.mult(-1));
+					Sprite sprY = new Sprite(snakeBodySprite);
+					Sprite sprX = new Sprite(snakeBodySidewaysSprite);
+
+					snakeTeleportNext = vel2.mag() > 1;
+
+					if (snakeTeleportNext && lastPos == null) {
+						vel = new Vector(Math.max(Math.min(vel.x, 1), -1), Math.max(Math.min(vel.y, 1), -1));
+						vel = vel.mult(-1);
+					}
+					if (snakeTeleportNext) {
+						vel2 = new Vector(Math.max(Math.min(vel2.x, 1), -1), Math.max(Math.min(vel2.y, 1), -1));
+						vel2 = vel2.mult(-1);
+					}
+					boolean isBorderTeleport = false;
+
+					if (snakeTeleportLast && !isBorderTeleport) {
+						System.out.println("Last: " + vel + " Next: " + vel2);
+						System.out.println("Cherry");
+					}
+					
+
+
+
+					sprY.setFlip(false, vel.y == -1);
+					sprX.setFlip(vel.x == 1, false);
+					Sprite spr = vel.x == 0 ? sprY : sprX;
+					if (!vel2.equals(vel)) {
+						spr = new Sprite(snakeBodyCornerSprite);
+						spr.setFlip(vel.x == 1 || vel2.x == -1, vel.y == -1 || vel2.y == 1);
+					}
+					batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2),
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
+
+					//batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
+					//		(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 				}
 			}
 			if (quickTimeHandler.isEnabled()) {
