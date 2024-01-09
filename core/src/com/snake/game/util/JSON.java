@@ -76,7 +76,9 @@ public class JSON {
     public String toString() {
         String s = "{";
         for (Object i : data.keySet()) {
-            if(i.getClass() == HashMap.class){
+            System.out.println(data.get(i).getClass());
+            if(data.get(i).getClass() == HashMap.class){
+                System.out.println("HELLO");
                 s += "\"" + i + "\": [";
                 for(Object j : ((HashMap)i).keySet()){
                     s += "\"" + j + "\": \"" + ((HashMap)i).get(j).toString() + "\", ";
