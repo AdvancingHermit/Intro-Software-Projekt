@@ -33,10 +33,10 @@ public class Grid {
     }
 
     public Rectangle[][] show(float game_width, float game_height) {
-        for (int i = 0; i < snakes.length; i++) {
-            if (!snakes[i].isDead) {
-                snakes[i].move();
-                checkSnakeCollision(snakes, snakes[i]);
+        for (Snake snake : snakes) {
+            if (!snake.isDead) {
+                snake.move();
+                checkSnakeCollision(snakes, snake);
             }
         }
 
@@ -81,14 +81,14 @@ public class Grid {
 			if (otherSnake != currSnake) {
 				ArrayList<Vector> positions = otherSnake.getPositions();
                 Vector head = currSnake.getPositions().get(currSnake.getPositions().size() - 1);
-				for (int i = 0; i < positions.size(); i++) {
-					if (head.equals(positions.get(i))) {
-						currSnake.isDead = true;
-						return true;
-					}
-                    
+                for (Vector position : positions) {
+                    if (head.equals(position)) {
+                        currSnake.isDead = true;
+                        return true;
+                    }
 
-				}
+
+                }
                 if (otherSnake.fireActive) {
                         Vector otherHead = otherSnake.getPositions().get(otherSnake.getPositions().size() - 1);
                         Vector otherVel = otherSnake.getVel();

@@ -100,13 +100,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	WallHandler wallHandler = new WallHandler(false, "Wall");
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "1 Player", 1);
-	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(true, "2 Player", 2);
-	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(true, "3 Player", 3);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
+	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(false, "2 Player", 2);
+	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(false, "3 Player", 3);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(false, "Golden Apple", 0);
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries",  80);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
-	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true, "Reverse");
+	BorderHandler borderHandler = new BorderHandler(false, "Borders");
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
@@ -458,21 +458,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 					} else {
 						// Skiftes til i, når vi looper over slanger.
 						cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
-						snake.checkCollision();
-						snake.move();
 					}
 				}
 				if (cy == grid.gridSize.y || cy == -1) {
 					if (borderHandler.isEnabled()) {
 						snake.isDead = true;
-						snake.moveBack();
+					 	snake.moveBack();
 						cx = positions.get(k).x;
 						cy = positions.get(k).y;
 					} else {
 						// Skiftes til i, når vi looper over slanger.
 						cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
-						snake.checkCollision();
-						snake.move();
 					}
 				}
 
