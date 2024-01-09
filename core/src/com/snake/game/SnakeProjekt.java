@@ -111,14 +111,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
-	GameFeature[] handlers = { wallHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
-			borderHandler, snakeReverseHandler, coffeeBeanHandler, multiplayerHandler2, multiplayerHandler3 };
+	GameFeature[] handlers = { wallHandler, borderHandler, quickTimeHandler, snakeReverseHandler,   goldenFruitHandler,cherryHandler,  
+			  coffeeBeanHandler, multiplayerHandler2, multiplayerHandler3 };
 	Button[] features = new Button[handlers.length];
 	// fruits
 
 	FruitType apple;
 	FruitType goldenApple;
-	FruitType cherry1;
+	FruitType cherry1; 
 	FruitType cherry2;
 	FruitType dragonFruit;
 	FruitType coffeeBean;
