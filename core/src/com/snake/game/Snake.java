@@ -109,9 +109,7 @@ public class Snake {
 
 
 
-
                 positions.add(positions.get(positions.size() - 1).add(vel));
-
                 handleNegativeGrowth();
 
                 if (grow > 0) {
@@ -125,7 +123,6 @@ public class Snake {
                 if (checkCollision()) {
                     isDead = true;
                     moveBack();
-                    positions.remove(0);
                 }
 
 
