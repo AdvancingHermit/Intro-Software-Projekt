@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -29,10 +30,11 @@ import com.snake.game.handlers.SnakeReverseHandler;
 import com.snake.game.handlers.WallHandler;
 import com.snake.game.util.Button;
 import com.snake.game.util.Data;
+import com.snake.game.util.Highscore;
 import com.snake.game.util.InputBox;
 import com.snake.game.util.JSON;
+import com.snake.game.util.Leaderboard;
 import com.snake.game.util.Vector;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -183,12 +185,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-
-		JSON json = new JSON(new Data("Test", 10, formatter.format(new Date())));
-		json.createFile("data");
-		json = new JSON("data/data.json");
-
+		JSON json;
+		json = new JSON("data/leaderboard.json");
+		System.out.println(json);
+		Leaderboard leaderboard = new Leaderboard(json);
+		json = new JSON(leaderboard.forJSON());
+		System.out.println(json);
+		leaderboard.updateLeaderboard(new Highscore("Test", 150));
+		json = new JSON(leaderboard.forJSON());
+		System.out.println(json);
 
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
