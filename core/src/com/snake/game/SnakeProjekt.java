@@ -34,6 +34,7 @@ import com.snake.game.util.InputBox;
 import com.snake.game.util.JSON;
 import com.snake.game.util.Leaderboard;
 import com.snake.game.util.User;
+import com.snake.game.util.Users;
 import com.snake.game.util.Vector;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -183,8 +184,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
+		User user = new User("Niav", 100);
+
 		JSON json;
 		json = new JSON("data/data.json");
+		Users users = new Users(json);
+		System.out.println(users.forJSON()[0]);
+		users.addUser(user);
+		json.addStringData(users.forJSON());
+		users = new Users(json);
+		System.out.println(users.forJSON()[0]);
 		System.out.println(json);
 		
 

@@ -2,7 +2,6 @@ package com.snake.game.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import java.util.Scanner;
 import java.util.HashMap;
@@ -37,16 +36,11 @@ public class JSON {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Substring removes these { }
-        // data = dataFromString(info.substring(1, info.length() - 1).replace("\"",
-        // "").split(","));
         String[] iwannasee = info.substring(1, info.length() - 1).replace("\"", "").split("],");
-        String[] idontWantToSee = {"{", "}", "[", "]"};
         for (int i = 0; i < iwannasee.length; i++) {
             if(i < iwannasee.length - 1){
                 iwannasee[i] += "]";
             }           
-            System.out.println(iwannasee[i]);
         }
         data = dataFromString(iwannasee);
     }
@@ -70,31 +64,19 @@ public class JSON {
                 String arrName = stringData[i].split(":")[0].trim();
                 String[] s = stringData[i].split(",");
                 s[0] = s[0].substring(s[0].indexOf("[") + 1);
+                getData.put(arrName, stringData[i].substring(stringData[i].indexOf("[")).replace("[", "").replace("]", "").trim());
 
-                HashMap<Object, Object> arrGetter = new HashMap<Object, Object>();
-                
-                for(int j = 0; j < s.length; j++){
-                    arrGetter.put(stringData[i].split(":")[0].trim().replace("\"", ""), stringData[i].split(":")[1].trim());
-                }
-                getData.put(arrName, arrGetter);
             }else{
                 getData.put(stringData[i].split(":")[0].trim().replace("\"", ""), stringData[i].substring(stringData[i].indexOf(":") + 1).replace("{", "").replace("}", "").trim());
             }
         }
-
-        for(Object i : getData.keySet()){
-            System.out.println(i + " " + getData.get(i));
-        }
-
         return getData;
     }
 
     public String toString() {
         String s = "{";
         for (Object i : data.keySet()) {
-            System.out.println(i.getClass());
             if(i.getClass() == HashMap.class){
-                System.out.println("HashMap");
                 s += "\"" + i + "\": [";
                 for(Object j : ((HashMap)i).keySet()){
                     s += "\"" + j + "\": \"" + ((HashMap)i).get(j).toString() + "\", ";

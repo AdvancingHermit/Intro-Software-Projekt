@@ -15,10 +15,12 @@ public class Leaderboard{
     }
 
     public Leaderboard(JSON json){
-        board = new Highscore[json.getData().keySet().size()];
+        board = new Highscore[json.getData().get("leaderboard").toString().replace("{", "").replace("}", "").split(",").length];
         int i = 1;
-        for(Object placement : json.getData().keySet()){
-            board[Integer.parseInt(placement.toString()) - 1] = new Highscore(json.getData().get(placement).toString().split(" ")[0], Integer.parseInt(json.getData().get(placement).toString().split(" ")[1]));
+        for(Object leaderboard : json.getData().get("leaderboard").toString().replace("{", "").replace("}", "").split(",")){
+            String[] strArr = leaderboard.toString().split(":");
+            String[] hScore = strArr[1].substring(strArr[1].indexOf(":") + 1).trim().split(" ");
+            board[Integer.parseInt(strArr[0].trim()) - 1] = new Highscore(hScore[0].trim(), Integer.parseInt(hScore[1].trim()));
         }
         Arrays.sort(board, Collections.reverseOrder());
     }
@@ -39,6 +41,14 @@ public class Leaderboard{
 
         for(int i = 0; i < board.length; i++){
             s[i] = (i + 1) + ": " + board[i];
+        }
+        return s;
+    }
+
+    public String toString(){
+        String s = "";
+        for(int i = 0; i < board.length; i++){
+            s += (i + 1) + ": " + board[i] + "\n";
         }
         return s;
     }
