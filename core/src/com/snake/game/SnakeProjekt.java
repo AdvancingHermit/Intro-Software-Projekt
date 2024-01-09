@@ -458,6 +458,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					} else {
 						// Skiftes til i, når vi looper over slanger.
 						cx = positions.get(k).x = grid.gridSize.x - Math.abs(cx);
+						snake.checkCollision();
 						snake.move();
 					}
 				}
@@ -470,6 +471,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					} else {
 						// Skiftes til i, når vi looper over slanger.
 						cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
+						snake.checkCollision();
 						snake.move();
 					}
 				}
