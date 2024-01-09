@@ -197,10 +197,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
-				new Vector(screenWidth / 4, screenHeight / 4), createFontSize(102), "Start");
+				new Vector(screenWidth / 4, screenHeight / 4), createFontSize(102*(screenHeight /1080)), "Start");
 		featureButton = new Button(
 				new Vector(startButton.getpos().x + screenWidth / 32, startButton.getpos().y - screenHeight / 8),
-				new Vector(screenWidth / 4 - screenWidth / 16, screenHeight / 8), createFontSize(48), "Features");
+				new Vector(screenWidth / 4 - screenWidth / 16, screenHeight / 8), createFontSize((48*(screenHeight/1080))), "Features");
 		boxesWidth = screenWidth / 6;
 		boxesHeight = screenHeight / 16;
 		for (int i = 0; i < features.length; i++) {
@@ -224,7 +224,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		parameter.size = size;
 		font3 = generator.generateFont(parameter);
 		font3.setColor(Color.ORANGE);
-		generator.dispose();
 		return font3;
 	}
 
@@ -246,7 +245,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		} else if (temp.gettext() != null) {
 			batch.begin();
 			temp.getfont().draw(batch, temp.gettext(),
-					temp.getpos().x - screenWidth / 2 + temp.getSize().x / 12,
+					temp.getpos().x - screenWidth / 2 + temp.getSize().x / 6,
 					temp.getpos().y - screenHeight / 2 + temp.getSize().y*  3/ 5);
 			batch.end();
 		}
