@@ -6,6 +6,8 @@ import java.util.Collections;
 public class Leaderboard{
 
     Highscore[] board; // int er placement mellem 1 - 10, hvor 10 er bedst, og Highscore er data om scoren.
+    int maxScores = 10;
+    int numScores = 0;
     
     public Leaderboard(Highscore[] board){
         this.board = board;

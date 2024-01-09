@@ -29,11 +29,11 @@ import com.snake.game.handlers.QuickTimeHandler;
 import com.snake.game.handlers.SnakeReverseHandler;
 import com.snake.game.handlers.WallHandler;
 import com.snake.game.util.Button;
-import com.snake.game.util.Data;
 import com.snake.game.util.Highscore;
 import com.snake.game.util.InputBox;
 import com.snake.game.util.JSON;
 import com.snake.game.util.Leaderboard;
+import com.snake.game.util.User;
 import com.snake.game.util.Vector;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -134,8 +134,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 	private int n = 15;
 	private int m = 15;
 
-	Data data;
-
 	@Override
 	public void create() {
 
@@ -186,14 +184,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
 		JSON json;
-		json = new JSON("data/leaderboard.json");
+		json = new JSON("data/data.json");
 		System.out.println(json);
-		Leaderboard leaderboard = new Leaderboard(json);
-		json = new JSON(leaderboard.forJSON());
-		System.out.println(json);
-		leaderboard.updateLeaderboard(new Highscore("Test", 150));
-		json = new JSON(leaderboard.forJSON());
-		System.out.println(json);
+		
 
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
