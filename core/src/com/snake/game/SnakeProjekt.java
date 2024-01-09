@@ -30,6 +30,7 @@ import com.snake.game.handlers.SnakeReverseHandler;
 import com.snake.game.handlers.WallHandler;
 import com.snake.game.util.Button;
 import com.snake.game.util.Data;
+import com.snake.game.util.Highscore;
 import com.snake.game.util.InputBox;
 import com.snake.game.util.JSON;
 import com.snake.game.util.Leaderboard;
@@ -183,6 +184,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		json = new JSON("data/leaderboard.json");
 		System.out.println(json);
 		Leaderboard leaderboard = new Leaderboard(json);
+		json = new JSON(leaderboard.forJSON());
+		System.out.println(json);
+		leaderboard.updateLeaderboard(new Highscore("Test", 150));
 		json = new JSON(leaderboard.forJSON());
 		System.out.println(json);
 

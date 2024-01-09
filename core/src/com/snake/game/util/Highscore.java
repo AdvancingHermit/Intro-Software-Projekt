@@ -1,6 +1,6 @@
 package com.snake.game.util;
 
-public class Highscore {
+public class Highscore implements Comparable<Highscore> {
 
     String username;
     int score;
@@ -25,5 +25,10 @@ public class Highscore {
     }
     public String getUsername(){
         return username;
+    }
+
+    @Override
+    public int compareTo(Highscore other){
+        return score - other.getScore();
     }
 }
