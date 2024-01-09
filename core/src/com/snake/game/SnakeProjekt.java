@@ -96,20 +96,25 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FreeTypeFontGenerator generator;
 	FreeTypeFontParameter parameter;
 
+	
+
 	// handlers
+
 	WallHandler wallHandler = new WallHandler(false, "Wall");
-	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "Multiplayer", 2);
+	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "1 Player", 1);
+	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(true, "2 Player", 2);
+	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(true, "3 Player", 3);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
-	CherryHandler cherryHandler = new CherryHandler(false, "Cherries",  100);
+	CherryHandler cherryHandler = new CherryHandler(true, "Cherries",  80);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
 	BorderHandler borderHandler = new BorderHandler(false, "Enable borders");
-	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(true, "Reverse");
-	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(false, "Coffee", 0);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(false, "Dragon Fruit", 0, 0);
+	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
+	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
 
-	GameFeature[] handlers = { wallHandler, multiplayerHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
-			borderHandler, snakeReverseHandler , coffeeBeanHandler};
+	GameFeature[] handlers = { wallHandler, goldenFruitHandler, cherryHandler, quickTimeHandler,
+			borderHandler, snakeReverseHandler , coffeeBeanHandler, multiplayerHandler2, multiplayerHandler3};
 	Button[] features = new Button[handlers.length];
 	// fruits
 
@@ -190,14 +195,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 		json = new JSON(leaderboard.forJSON());
 		System.out.println(json);
 
-		
-
 		// Fruits
-		apple = new FruitType(appleSprite, 1, 5, 0);
+		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
 		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance());
 		cherry2 = new FruitType(cherry2Sprite, 0, 0, 0);
-		coffeeBean = new FruitType(coffeeBeanSprite, 100, 0, coffeeBeanHandler.getChance());
+		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance());
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance());
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
@@ -267,6 +270,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				color = Color.RED;
 				showButton(featureButton, color);
 
+
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					if (startButton.clickedButton()) {
 						gridsize = new Vector(n, m);
@@ -298,9 +302,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 				showButton(backButton);
-				System.out.println(features[0].getState());
 				for (Button x : features) {
-					System.out.println(x.getState());
 					if (x.gethandler().isEnabled()) {
 						color = Color.GREEN;
 						showButton(x, color);
@@ -311,17 +313,20 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				}
 
+
 				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && canClick) {
 					canClick = false;
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
 					}
-					for (int i = 0; i < features.length; i++) {
-						if (features[i].clickedButton()) {
-							features[i].toggleisEnabled();
-						}
-					}
+                    for (Button feature : features) {
+                        if (feature.clickedButton()) {
+                            feature.toggleisEnabled();
+                        }
+                    }
+					multiplayerHandler = (multiplayerHandler2.isEnabled() ) ? multiplayerHandler2 : (multiplayerHandler3.isEnabled() ? multiplayerHandler3 : multiplayerHandler);
+
 				}
 				shape.end();
 				break;
@@ -334,7 +339,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 
 				shape.end();
+				showButton(backButton);
 				batch.begin();
+				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) &&  backButton.clickedButton()){
+					currentScene = Scene.Main_Scene;
+				}
 				for (int i = 0; i < grid.snakes.length; i++) {
 
 					scoreNumText.setText(font2, "22");
@@ -400,7 +410,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 					}
 					if (fruit.getSprite().equals(coffeeBeanSprite)) {
-						System.out.println("Coffee");
 						snake.setMaxcounter(coffeeSpeed);
 						snake.setSpeedCounter(coffeeDuration);
 					}
@@ -414,7 +423,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	private void teleportSnake(Snake snake, Fruit eatenFruit) {
 		for (Fruit fruit : fruits) {
-			System.out.println("Cherries");
 			if (((fruit.getSprite().equals(cherry1Sprite) && eatenFruit.getSprite().equals(cherry2Sprite))
 					|| ((fruit.getSprite().equals(cherry2Sprite) && eatenFruit.getSprite().equals(cherry1Sprite))))) {
 
@@ -481,6 +489,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					sprY.setFlip(false, vel.y == 1);
 					sprX.setFlip(vel.x == -1, false);
 					Sprite spr = vel.x == 0 ? sprY : sprX;
+
 					batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2),
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 					if (snake.fireActive) {
@@ -537,8 +546,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 			}
+			batch.setColor(Color.CHARTREUSE);
 
 		}
+		batch.setColor(Color.WHITE);
 	}
 
 	private void spawnFruit(Rectangle[][] shower) {
