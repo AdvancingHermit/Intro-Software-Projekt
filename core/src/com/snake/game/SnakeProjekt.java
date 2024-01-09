@@ -543,8 +543,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					boolean isBorderTeleport = false;
 
 					if (snakeTeleportLast && !isBorderTeleport) {
-						System.out.println("Last: " + vel + " Next: " + vel2);
-						System.out.println("Cherry");
+						vel.mult(-1);
 					}
 					
 
