@@ -84,6 +84,7 @@ public class Grid {
                 for (Vector position : positions) {
                     if (head.equals(position)) {
                         currSnake.isDead = true;
+                        currSnake.moveBack();
                         return true;
                     }
 

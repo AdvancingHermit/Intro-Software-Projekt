@@ -117,9 +117,11 @@ public class Snake {
                     grow--;
                     return;
                 }
+                if (!isDead) {
 
-                lastRemoved = positions.get(0);
-                positions.remove(0);
+                    lastRemoved = positions.get(0);
+                    positions.remove(0);
+                }
                 if (checkCollision()) {
                     isDead = true;
                     moveBack();
