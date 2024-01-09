@@ -101,8 +101,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	WallHandler wallHandler = new WallHandler(false, "Wall");
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "1 Player", 1);
-	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(true, "2 Player", 2);
-	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(true, "3 Player", 3);
+	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(false, "2 Player", 2);
+	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(false, "3 Player", 3);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries", 80);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
@@ -425,6 +425,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (snakeReverseHandler.isEnabled()) {
 					cherry1.setChance(0);
 				}
+				fruits.clear();
 				currentScene = Scene.Main_Game;
 				break;
 
