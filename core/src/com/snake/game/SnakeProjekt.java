@@ -99,7 +99,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
 	BorderHandler borderHandler = new BorderHandler(false, "Borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
-	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100);
+	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100, 3 ,10);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
 	GameFeature[] handlers = { wallHandler, borderHandler, quickTimeHandler, snakeReverseHandler, goldenFruitHandler,
@@ -116,8 +116,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitType coffeeBean;
 	FruitPicker FruitPicker = new FruitPicker();
 
-	final int coffeeSpeed = 3;
-	final int coffeeDuration = 10;
+
 
 	int fruitAmount = 4;
 
@@ -447,14 +446,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 						teleportSnake(snake, fruit);
 
 					} else if (snakeReverseHandler.isEnabled()) {
-
 						reverseSnake(snake);
 
 					}
 
 					if (fruit.getSprite().equals(coffeeBeanSprite)) {
-						snake.setMaxcounter(coffeeSpeed);
-						snake.setSpeedCounter(coffeeDuration);
+						snake.setMaxcounter(coffeeBeanHandler.getCoffeeSpeed());
+						snake.setSpeedCounter(coffeeBeanHandler.getCoffeDuration());
 					}
 					snake.setHasEaten(fruit);
 					fruitIterator.remove();
