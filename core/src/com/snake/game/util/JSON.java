@@ -26,7 +26,6 @@ public class JSON {
     public JSON(String path) {
         String info = "";
         try {
-            System.out.println(path);
             FileHandle file = Gdx.files.internal(path);
             Scanner fileReader = new Scanner(file.read());
             while (fileReader.hasNextLine()) {
@@ -36,9 +35,19 @@ public class JSON {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String[] iwannasee = info.substring(1, info.length() - 1).replace("\"", "").split("],");
+        System.out.println(info);
+        String[] iwannasee;
+        if(info.contains("],")){
+            iwannasee = info.substring(1, info.length() - 1).replace("\"", "").split("],");
+        } else {
+            iwannasee = info.substring(1, info.length() - 1).split("},\"");
+            for(int i = 0; i < iwannasee.length; i++){
+                iwannasee[i] = iwannasee[i].replace("\"", "");
+            }
+        }
+        
         for (int i = 0; i < iwannasee.length; i++) {
-            if (i < iwannasee.length - 1) {
+            if (iwannasee[i].contains("[")) {
                 iwannasee[i] += "]";
             }
         }
@@ -47,6 +56,7 @@ public class JSON {
 
     public JSON(String[] stringData) {
         data = dataFromString(stringData);
+        rightOrder();
     }
 
     public void addStringData(String[] stringData) {
@@ -61,8 +71,9 @@ public class JSON {
         for (int i = 0; i < stringData.length; i++) {
 
             if (stringData[i].contains("[")) {
-                System.out.println("HELLO");
+                System.out.println(stringData[i]);
                 String arrName = stringData[i].split(":")[0].trim();
+                System.out.println(arrName);
                 String[] s = stringData[i].split(",");
                 s[0] = s[0].substring(s[0].indexOf("[") + 1);
                 getData.put(arrName,
@@ -161,18 +172,24 @@ public class JSON {
         return data.get(key).toString();
     }
 
-    public void createFile(String path, String fileName) {
+    public void createFile(String path) {
         try {
-            FileHandle file = Gdx.files.local(path + fileName);
+            FileHandle file = Gdx.files.local(path + "data.json");
             if (!file.exists()) {
-                System.out.println("File created: " + file.file().getName());
             } else {
-                System.out.println("File already exists.");
             }
             file.writeString(toString(), false);
 
         } catch (GdxRuntimeException e) {
             e.printStackTrace();
         }
+    }
+
+    private void rightOrder(){
+        HashMap<Object, Object> temp = new HashMap<Object, Object>();
+        for(Object i : data.keySet()){
+            temp.put(i, data.get(i));
+        }
+        data = temp;
     }
 }

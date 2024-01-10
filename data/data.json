@@ -1,6 +1,12 @@
 {
+    "leaderboard": {
+        "1": "Test 100",
+        "2": "Test2 300",
+        "3": "Test3 300"
+    },
     "users": [
-        {"date": "08/01/2024",
+        {
+            "date": "08/01/2024",
             "highScore": "10",
             "username": "Test"
         },
@@ -14,10 +20,5 @@
             "highScore": "10",
             "username": "Test3"
         }
-    ],
-    "leaderboard": {
-        "1": "Test 100",
-        "2": "Test2 300",
-        "3": "Test3 300"
-    }
+    ]
 }

@@ -177,7 +177,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		JSON json;
 		json = new JSON("data/data.json");
-		System.out.println(json);
+		json.createFile("data/");
 		
 
 		// Fruits

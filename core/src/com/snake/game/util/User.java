@@ -44,7 +44,7 @@ public class User {
 
     public void saveUser(){
         JSON json = new JSON(forJSON());
-        json.createFile("data/", username + ".json");
+        json.createFile("data/data.json");
     }
     
     public String toString(){
