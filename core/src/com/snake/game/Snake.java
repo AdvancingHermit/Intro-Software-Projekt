@@ -48,16 +48,15 @@ public class Snake {
     private int score = 0;
 
     private boolean hasDeadMoved = false;
+
+
     private Vector lastRemoved;
     private ParticleEffect effect = new ParticleEffect();
 
-    public int getHighscore() {
-        return highscore;
-    }
 
     public Snake(int x, int y) {
         Vector pos = new Vector(x, y);
-        positions = new ArrayList<Vector>();
+        positions = new ArrayList<>();
         for (int i = snakeSize; i >= 0; i--) {
             Vector position = new Vector(pos.x, pos.y - i);
             this.positions.add(position);
@@ -109,7 +108,7 @@ public class Snake {
 
             vel = keyVectorMap.get(key);
 
-            
+
             positions.add(positions.get(positions.size() - 1).add(vel));
             if (checkCollision()) {
                 isDead = true;
@@ -198,14 +197,6 @@ public class Snake {
         this.positions = positions;
     }
 
-    public int getGrow() {
-        return grow;
-    }
-
-    public void setGrow(int grow) {
-        this.grow = grow;
-    }
-
     public int getScore() {
         if (isDead){
             return highscore;
@@ -220,29 +211,16 @@ public class Snake {
         this.vel = vel;
     }
 
-    public int getCounter() {
-        return counter;
-    }
-
-    public void setCounter(int counter) {
-        this.counter = counter;
-    }
 
     public void setKey(char key) {
         this.key = key;
     }
-    public int getMaxCounter() {
-        return maxcounter;
-    }
+
     public ParticleEffect getEffect() {
         effect.getEmitters().first().getAngle().setHigh((int) vel.angle() -10, (int) vel.angle() + 10);
         effect.getEmitters().first().getAngle().setLow((int) vel.angle() -10, (int) vel.angle() + 10);
         return effect;
    }
-    public int getSpeedCounter() {
-        return speedCounter;
-    }
-
     public void setSpeedCounter(int speedCounter) {
         this.speedCounter = speedCounter;
     }
@@ -258,14 +236,13 @@ public class Snake {
     public void setQuickTimeCounter(int quickTimeCounter) {
         this.quickTimeCounter = quickTimeCounter;
     }
-    public int getMaxcounter() {
-        return maxcounter;
-    }
-
     public void setMaxcounter(int maxcounter) {
         this.maxcounter = maxcounter;
     }
 
+    public void setLastRemoved(Vector lastRemoved) {
+        this.lastRemoved = lastRemoved;
+    }
 
 
 }

@@ -33,10 +33,10 @@ public class Grid {
     }
 
     public Rectangle[][] show(float game_width, float game_height) {
-        for (int i = 0; i < snakes.length; i++) {
-            if (!snakes[i].isDead) {
-                snakes[i].move();
-                checkSnakeCollision(snakes, snakes[i]);
+        for (Snake snake : snakes) {
+            if (!snake.isDead) {
+                snake.move();
+                checkSnakeCollision(snakes, snake);
             }
         }
 
@@ -76,21 +76,25 @@ public class Grid {
         return walls;
     }
 
-    public boolean checkSnakeCollision(Snake[] snakes, Snake currSnake) {
+    public void checkSnakeCollision(Snake[] snakes, Snake currSnake) {
 		for (Snake otherSnake : snakes) {
 			if (otherSnake != currSnake) {
 				ArrayList<Vector> positions = otherSnake.getPositions();
                 Vector head = currSnake.getPositions().get(currSnake.getPositions().size() - 1);
-				for (int i = 0; i < positions.size(); i++) {
-					if (head.equals(positions.get(i))) {
-						currSnake.isDead = true;
-						return true;
-					}
-                    
+                Vector otherHead = otherSnake.getPositions().get(otherSnake.getPositions().size() - 1);
+                for (Vector position : positions) {
+                    if (head.equals(position)) {
+                        currSnake.isDead = true;
+                        if (head.equals(otherHead)){
+                            otherSnake.isDead = true;
+                        }
+                        return;
+                    }
 
-				}
+
+                }
                 if (otherSnake.fireActive) {
-                        Vector otherHead = otherSnake.getPositions().get(otherSnake.getPositions().size() - 1);
+                        otherHead = otherSnake.getPositions().get(otherSnake.getPositions().size() - 1);
                         Vector otherVel = otherSnake.getVel();
                         if (currSnake.checkCollision(new Vector(otherHead.x + otherVel.x, otherHead.y + otherVel.y)) ||
 							currSnake.checkCollision(new Vector(otherHead.x + otherVel.x * 2, otherHead.y + otherVel.y * 2))) {
@@ -98,8 +102,7 @@ public class Grid {
                         }
 			}   }
 		}
-		return false;
-		
-	}
+
+    }
 
 }
