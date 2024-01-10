@@ -18,21 +18,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.snake.game.handlers.BorderHandler;
-import com.snake.game.handlers.CherryHandler;
-import com.snake.game.handlers.CoffeeBeanHandler;
-import com.snake.game.handlers.DragonFruitHandler;
-import com.snake.game.handlers.GoldenFruitHandler;
-import com.snake.game.handlers.MultiplayerHandler;
-import com.snake.game.handlers.QuickTimeHandler;
-import com.snake.game.handlers.SnakeReverseHandler;
-import com.snake.game.handlers.WallHandler;
-import com.snake.game.util.Button;
-import com.snake.game.util.Data;
-import com.snake.game.util.Highscore;
-import com.snake.game.util.InputBox;
-import com.snake.game.util.JSON;
-import com.snake.game.util.Leaderboard;
+import com.snake.game.handlers.*;
+import com.snake.game.util.*;
 import com.snake.game.util.Vector;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,8 +60,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	Texture wallSprite;
 	Texture snakeBodySprite;
+	Texture snakeBodySidewaysSprite;
+	Texture snakeBodyCornerSprite;
 	Texture snakeHeadSprite;
 	Texture snakeHeadSidewaysSprite;
+	Texture snakeHeadCoffeeSprite;
+	Texture snakeHeadCoffeeSidewaysSprite;
 
 	List<Fruit> fruits = new ArrayList<>();
 	Random random = new Random();
@@ -148,8 +139,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 		coffeeBeanSprite = new Texture((Gdx.files.internal("CoffeeBean.png")));
 
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
+		snakeBodySidewaysSprite = new Texture((Gdx.files.internal("snakebodysideways.png")));
+		snakeBodyCornerSprite = new Texture((Gdx.files.internal("snakebodycorner.png")));
 		snakeHeadSprite = new Texture((Gdx.files.internal("snakehead.png")));
 		snakeHeadSidewaysSprite = new Texture((Gdx.files.internal("snakeheadsideways.png")));
+		snakeHeadCoffeeSprite = new Texture((Gdx.files.internal("snakeheadcoffee.png")));
+		snakeHeadCoffeeSidewaysSprite = new Texture((Gdx.files.internal("snakeheadcoffeesideways.png")));
 
 		img = new Texture("badlogic.jpg");
 		shape = new ShapeRenderer();
@@ -525,14 +520,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 						// Skiftes til i, når vi looper over slanger.
 						cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
 						snake.checkCollision();
-
 					}
-				}
-
-				if (k == positions.size() - 1) {
 					shape.setColor(Color.BLACK);
-					Sprite sprY = new Sprite(snakeHeadSprite);
-					Sprite sprX = new Sprite(snakeHeadSidewaysSprite);
+					Sprite sprY;
+					Sprite sprX;
+					if (snake.getSpeedCounter() > 0) { // Is coffee effect active
+						sprY = new Sprite(snakeHeadCoffeeSprite);
+						sprX = new Sprite(snakeHeadCoffeeSidewaysSprite);
+
+					} else {
+						sprY = new Sprite(snakeHeadSprite);
+						sprX = new Sprite(snakeHeadSidewaysSprite);
+					}
 					Vector vel = snake.getVel();
 					sprY.setFlip(false, vel.y == 1);
 					sprX.setFlip(vel.x == -1, false);
@@ -573,8 +572,56 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 
 				} else {
-					batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
+					//Make snake body sprite in the right direction
+					Vector lastPos = (k > 0) ? positions.get(k-1) : null;
+					Vector nextPos = positions.get(k+1);
+					Vector currPos = positions.get(k);
+					Vector vel = new Vector(0, 0);
+					boolean snakeTeleportLast = false;
+					boolean snakeTeleportNext = false;
+					if (lastPos != null) {
+						vel = currPos.add(lastPos.mult(-1));
+						snakeTeleportLast = vel.mag() > 1;
+					}
+					if (lastPos == null) {
+						vel = nextPos.add(currPos.mult(-1));
+					}
+					boolean isBorderTeleportLast = vel.mag() == 14;
+					if (snakeTeleportLast) {
+						vel = isBorderTeleportLast ? vel : nextPos.add(currPos.mult(-1));
+						vel =  new Vector(Math.max(Math.min(vel.x, 1), -1), Math.max(Math.min(vel.y, 1), -1));
+						vel = isBorderTeleportLast ? vel.mult(-1) : vel;
+					}
+
+					Vector vel2 =  nextPos.add(currPos.mult(-1));
+					Sprite sprY = new Sprite(snakeBodySprite);
+					Sprite sprX = new Sprite(snakeBodySidewaysSprite);
+
+					snakeTeleportNext = vel2.mag() > 1;
+					boolean isBorderTeleportNext = vel2.mag() == 14;
+
+					if (snakeTeleportNext && lastPos == null) {
+						vel = new Vector(Math.max(Math.min(vel.x, 1), -1), Math.max(Math.min(vel.y, 1), -1));
+						vel = isBorderTeleportNext ? vel.mult(-1) : vel;
+					}
+					if (snakeTeleportNext) {
+						vel2 = new Vector(Math.max(Math.min(vel2.x, 1), -1), Math.max(Math.min(vel2.y, 1), -1));
+						vel2 = isBorderTeleportNext ? vel2.mult(-1) : vel;
+					}
+					
+
+					sprY.setFlip(false, vel.y == -1);
+					sprX.setFlip(vel.x == 1, false);
+					Sprite spr = vel.x == 0 ? sprY : sprX;
+					if (!vel2.equals(vel)) {
+						spr = new Sprite(snakeBodyCornerSprite);
+						spr.setFlip(vel.x == 1 || vel2.x == -1, vel.y == -1 || vel2.y == 1);
+					}
+					batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2),
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
+
+					//batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
+					//		(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 				}
 			}
 			if (quickTimeHandler.isEnabled()) {
