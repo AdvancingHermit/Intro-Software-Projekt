@@ -38,9 +38,9 @@ public class JSON {
         }
         String[] iwannasee = info.substring(1, info.length() - 1).replace("\"", "").split("],");
         for (int i = 0; i < iwannasee.length; i++) {
-            if(i < iwannasee.length - 1){
+            if (i < iwannasee.length - 1) {
                 iwannasee[i] += "]";
-            }           
+            }
         }
         data = dataFromString(iwannasee);
     }
@@ -60,14 +60,17 @@ public class JSON {
 
         for (int i = 0; i < stringData.length; i++) {
 
-            if(stringData[i].contains("[")){
+            if (stringData[i].contains("[")) {
+                System.out.println("HELLO");
                 String arrName = stringData[i].split(":")[0].trim();
                 String[] s = stringData[i].split(",");
                 s[0] = s[0].substring(s[0].indexOf("[") + 1);
-                getData.put(arrName, stringData[i].substring(stringData[i].indexOf("[")).replace("[", "").replace("]", "").trim());
+                getData.put(arrName,
+                        stringData[i].substring(stringData[i].indexOf("[")).replace("[", "").replace("]", "").trim());
 
-            }else{
-                getData.put(stringData[i].split(":")[0].trim().replace("\"", ""), stringData[i].substring(stringData[i].indexOf(":") + 1).replace("{", "").replace("}", "").trim());
+            } else {
+                getData.put(stringData[i].split(":")[0].trim().replace("\"", ""), stringData[i]
+                        .substring(stringData[i].indexOf(":") + 1).replace("{", "").replace("}", "").trim());
             }
         }
         return getData;
@@ -75,22 +78,75 @@ public class JSON {
 
     public String toString() {
         String s = "{";
+        String firstWord = "";
         for (Object i : data.keySet()) {
-            System.out.println(data.get(i).getClass());
-            if(data.get(i).getClass() == HashMap.class){
-                System.out.println("HELLO");
-                s += "\"" + i + "\": [";
-                for(Object j : ((HashMap)i).keySet()){
-                    s += "\"" + j + "\": \"" + ((HashMap)i).get(j).toString() + "\", ";
-                }
-                s += "], ";
+            String tempObj = data.get(i).toString();
+            int index = tempObj.indexOf(":");
+            int index1;
+            int index2;
+            String temp = "";
+            s += "\"" + i.toString() + "\": ";
+
+            boolean isArr = false;
+            if (tempObj.contains("},")) {
+                isArr = true;
+                s += "[";
             }
-            else{
-                s += "\"" + i + "\": \"" + data.get(i).toString() + "\", ";
-            }
+            s += "{";
             
+            while (index >= 0) {
+                index1 = findEmptyIndex(tempObj, index);
+                index2 = findWordEndIndex(tempObj, index);
+
+                String word1 = tempObj.substring(index1, index).trim();
+                String word2 = tempObj.substring(index + 1, index2).trim();
+
+                if(word1.equals(firstWord)){
+                    s = s.substring(0, s.length() - 2) + "}, ";
+                    s += "{";
+                }
+
+                if(isArr && index == tempObj.indexOf(":")){
+                    firstWord = tempObj.substring(index1, index).trim();
+                }
+
+                s += "\"" + word1 + "\": ";
+                s += "\"" + word2 + "\", ";
+                index = tempObj.indexOf(":", index + 1);
+            }
+            if (isArr) {
+                s = s.substring(0, s.length() - 2) + "}], ";
+            } else {
+                s = s.substring(0, s.length() - 2) + "}, ";
+            }
         }
         return s.substring(0, s.length() - 2) + "}";
+    }
+
+    private int findEmptyIndex(String s, int index) {
+        int i;
+        for (i = index - 1; i > 0; i--) {
+            if (s.charAt(i) == ' ' || s.charAt(i) == ':' || s.charAt(i) == ',' || s.charAt(i) == '{') {
+                if (s.substring(i, index).contains(",") || s.substring(i, index).contains("{")) {
+                    return i + 1;
+                }
+                return i;
+            }
+        }
+        if (s.substring(0, index).contains(",") || s.substring(0, index).contains("{")) {
+            return i + 1;
+        }
+        return i;
+    }
+
+    private int findWordEndIndex(String s, int index) {
+        int i;
+        for (i = index + 2; i < s.length(); i++) {
+            if (s.charAt(i) == ',' || s.charAt(i) == '}' || s.charAt(i) == ':') {
+                return i;
+            }
+        }
+        return i;
     }
 
     public HashMap<Object, Object> getData() {
