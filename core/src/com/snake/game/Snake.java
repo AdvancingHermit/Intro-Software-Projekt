@@ -224,8 +224,9 @@ public class Snake {
     public void setSpeedCounter(int speedCounter) {
         this.speedCounter = speedCounter;
     }
-
-
+    public int getSpeedCounter() {
+        return speedCounter;
+    }
 
     public int getQuickTimeCounter() {
         return this.quickTimeCounter;
