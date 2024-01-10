@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class FruitPicker {
     //20% chance for default
-    static double defaultFruitTypeChance = 1.2;
+    static double defaultFruitTypeChance = 0.2;
 
     public static FruitType pickFruitType(FruitType defaultFruitType, FruitType... fruitTypes
     ) {
