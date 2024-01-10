@@ -40,7 +40,14 @@ public class JSON {
         if(info.contains("],")){
             iwannasee = info.substring(1, info.length() - 1).replace("\"", "").split("],");
         } else {
-            iwannasee = info.substring(1, info.length() - 1).split("},\"");
+
+            if(info.substring(1, info.length() - 1).contains("},\"")){
+                iwannasee = info.substring(1, info.length() - 1).split("},\"");
+            } else{
+                iwannasee = info.substring(1, info.length() - 1).split("}, \"");
+
+            }
+
             for(int i = 0; i < iwannasee.length; i++){
                 iwannasee[i] = iwannasee[i].replace("\"", "");
             }
