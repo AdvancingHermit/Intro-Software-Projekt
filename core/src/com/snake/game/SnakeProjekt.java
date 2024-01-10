@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.handlers.*;
 import com.snake.game.util.*;
-import com.snake.game.util.Vector;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,6 +64,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Texture snakeBodyCornerSprite;
 	Texture snakeHeadSprite;
 	Texture snakeHeadSidewaysSprite;
+	Texture snakeHeadCoffeeSprite;
+	Texture snakeHeadCoffeeSidewaysSprite;
 
 	List<Fruit> fruits = new ArrayList<>();
 	Random random = new Random();
@@ -142,6 +144,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		snakeBodyCornerSprite = new Texture((Gdx.files.internal("snakebodycorner.png")));
 		snakeHeadSprite = new Texture((Gdx.files.internal("snakehead.png")));
 		snakeHeadSidewaysSprite = new Texture((Gdx.files.internal("snakeheadsideways.png")));
+		snakeHeadCoffeeSprite = new Texture((Gdx.files.internal("snakeheadcoffee.png")));
+		snakeHeadCoffeeSidewaysSprite = new Texture((Gdx.files.internal("snakeheadcoffeesideways.png")));
 
 		img = new Texture("badlogic.jpg");
 		shape = new ShapeRenderer();
@@ -464,8 +468,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 						}
 					}
 					shape.setColor(Color.BLACK);
-					Sprite sprY = new Sprite(snakeHeadSprite);
-					Sprite sprX = new Sprite(snakeHeadSidewaysSprite);
+					Sprite sprY;
+					Sprite sprX;
+					if (snake.getSpeedCounter() > 0) { // Is coffee effect active
+						sprY = new Sprite(snakeHeadCoffeeSprite);
+						sprX = new Sprite(snakeHeadCoffeeSidewaysSprite);
+
+					} else {
+						sprY = new Sprite(snakeHeadSprite);
+						sprX = new Sprite(snakeHeadSidewaysSprite);
+					}
 					Vector vel = snake.getVel();
 					sprY.setFlip(false, vel.y == 1);
 					sprX.setFlip(vel.x == -1, false);
@@ -521,9 +533,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 					if (lastPos == null) {
 						vel = nextPos.add(currPos.mult(-1));
 					}
+					boolean isBorderTeleportLast = vel.mag() == 14;
 					if (snakeTeleportLast) {
+						vel = isBorderTeleportLast ? vel : nextPos.add(currPos.mult(-1));
 						vel =  new Vector(Math.max(Math.min(vel.x, 1), -1), Math.max(Math.min(vel.y, 1), -1));
-						vel = vel.mult(-1);
+						vel = isBorderTeleportLast ? vel.mult(-1) : vel;
 					}
 
 					Vector vel2 =  nextPos.add(currPos.mult(-1));
@@ -531,23 +545,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 					Sprite sprX = new Sprite(snakeBodySidewaysSprite);
 
 					snakeTeleportNext = vel2.mag() > 1;
+					boolean isBorderTeleportNext = vel2.mag() == 14;
 
 					if (snakeTeleportNext && lastPos == null) {
 						vel = new Vector(Math.max(Math.min(vel.x, 1), -1), Math.max(Math.min(vel.y, 1), -1));
-						vel = vel.mult(-1);
+						vel = isBorderTeleportNext ? vel.mult(-1) : vel;
 					}
 					if (snakeTeleportNext) {
 						vel2 = new Vector(Math.max(Math.min(vel2.x, 1), -1), Math.max(Math.min(vel2.y, 1), -1));
-						vel2 = vel2.mult(-1);
-					}
-					boolean isBorderTeleport = false;
-
-					if (snakeTeleportLast && !isBorderTeleport) {
-						vel.mult(-1);
+						vel2 = isBorderTeleportNext ? vel2.mult(-1) : vel;
 					}
 					
-
-
 
 					sprY.setFlip(false, vel.y == -1);
 					sprX.setFlip(vel.x == 1, false);
