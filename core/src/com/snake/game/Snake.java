@@ -20,7 +20,7 @@ public class Snake {
 
     public boolean isDead;
     private int counter = 0;
-    private final int startMaxCounter = 8;
+    private final int startMaxCounter = 5;
     private int maxcounter = startMaxCounter;
 
 
@@ -37,6 +37,7 @@ public class Snake {
     //Dragon Fruit Variables
     private int fireCounter = 0;
     boolean fireActive = false;
+    private Vector dragonOldVel;
 
     private Vector oldVel;
 
@@ -141,13 +142,16 @@ public class Snake {
     }
 
     public void quickTime(){
-        updateOldVel();
+        oldVel = vel;
         quickTimeCounter++;
     }
 
     public void dragonFruit(){
-        updateOldVel();
+        dragonOldVel = vel;
         fireCounter++;
+    }
+    public Vector getDragonOldVel(){
+        return dragonOldVel;
     }
 
     public int getFireCounter() {
@@ -155,9 +159,6 @@ public class Snake {
     }
     public void setFireCounter(int fireCounter) {
         this.fireCounter = fireCounter;
-    }
-    public void updateOldVel(){
-        oldVel = vel;
     }
 
     public void moveBack(){

@@ -22,12 +22,21 @@ public class Grid {
         int max = Math.max(gridSize.x, gridSize.y);
         squareSize = (screenHeight * 70) / 100 / max;
         this.gridSize = gridSize;
-        snakes[0] = new Snake(gridSize.x / 2, gridSize.y / 2);
-
-        int[] keys = { Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT };
-        for (int i = 1; i < snakeAmount; i++) {
-
-            snakes[i] = new Snake(i * 3 + gridSize.x / 2, gridSize.y / 2, keys);
+        
+        
+        int[] keys = new int[] { Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D };
+        if (snakeAmount == 1) {
+            snakes[0] = new Snake(gridSize.x / 2, gridSize.y / 2, keys);
+            return;
+        } 
+        for (int i = 0; i < snakeAmount; i++) {
+            snakes[i] = new Snake(gridSize.x / 2, -1 + i + gridSize.y / 2, keys);
+            if (i == 0) {
+                keys = new int[] { Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT};
+            } 
+            else if (i == 1) {
+                keys = new int[] { Input.Keys.I, Input.Keys.J, Input.Keys.K, Input.Keys.L };
+            }
         }
 
     }
