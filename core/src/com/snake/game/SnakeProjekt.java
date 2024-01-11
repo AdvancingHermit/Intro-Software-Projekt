@@ -56,6 +56,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont font3;
 	BitmapFont featureFont;
 
+	BitmapFont mainScreenFont;
+
 	Texture backArrow;
 
 	Texture appleSprite;
@@ -82,6 +84,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout colonText;
 	GlyphLayout scoreText;
 	GlyphLayout quickTimerText;
+	GlyphLayout snakeText;
 
 	int screenHeight;
 	int screenWidth;
@@ -177,6 +180,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		font2.setColor(Color.ORANGE);
 		generator.dispose();
 		featureFont = createFont((screenWidth * 4 / 5 * 4) / (102 * (screenWidth / 1920)));
+		mainScreenFont = createFont(200, Color.BLACK);
 
 		scoreText = new GlyphLayout();
 		scoreText.setText(font2, "Player 1 SCORE");
@@ -185,6 +189,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
+		snakeText = new GlyphLayout();
+
 
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
@@ -246,7 +252,85 @@ public class SnakeProjekt extends ApplicationAdapter {
 		switch (currentScene) {
 			case Main_Scene:
 				fruits.clear();
+			//	ScreenUtils.clear(0, 0, 1, 1);
 				ScreenUtils.clear(0, 0, 1, 1);
+				batch.begin();
+				batch.flush();
+				snakeText.setText(mainScreenFont, "SNAKE");
+				mainScreenFont.draw(batch, snakeText, -1 * snakeText.width/2,560);
+				Sprite snakeCorner1 = new Sprite(snakeBodyCornerSprite);
+				snakeCorner1.flip(true,true);
+				Sprite snakeCorner2 = new Sprite(snakeBodyCornerSprite);
+				snakeCorner2.flip(false,true);
+				Sprite snakeCorner3 = new Sprite(snakeBodyCornerSprite);
+				snakeCorner3.flip(true,false);
+				Sprite snakeCorner4 = new Sprite(snakeBodyCornerSprite);
+				Sprite snakeHead = new Sprite(snakeHeadSidewaysSprite);
+				snakeHead.flip(true,false);
+
+
+
+
+
+				if (coffeeBeanHandler.isEnabled() && !dragonFruitHandler.isEnabled()) {
+					batch.draw(snakeHeadCoffeeSidewaysSprite, -60, 200, 60,60);
+					batch.draw(coffeeBeanSprite, 0, 200, 60, 60);
+				}
+				 else if (dragonFruitHandler.isEnabled()) {
+					//spit fire Oscar
+					batch.draw(snakeHeadSidewaysSprite, -60, 200, 60,60);
+					batch.draw(appleSprite, 0, 200, 60, 60);
+				}
+				else if (snakeReverseHandler.isEnabled()) {
+					batch.draw(snakeHead, 0, 200, 60,60);
+					batch.draw(appleSprite, -60, 200, 60, 60);
+				}
+				else {
+					batch.draw(snakeHeadSidewaysSprite, -60, 200, 60,60);
+					batch.draw(appleSprite, 0, 200, 60, 60);
+			}
+
+                //top snake
+				for (int i = 0; i< 12; i++) {
+					//head and apple
+					if (i == 6 || i == 5){
+						continue;
+					}
+					if (i < 11) {
+						batch.draw(snakeBodySidewaysSprite, 300 - i * 60, 200, 60, 60);
+					} else {
+						batch.draw(snakeCorner4, 300 - i * 60, 200, 60, 60);
+					}
+				}
+				//left snake
+				for (int i = 0; i< 10; i++) {
+					if (i < 9) {
+
+						batch.draw(snakeBodySprite, -360, 140 - i * 60, 60, 60);
+					} else {
+						batch.draw(snakeCorner2, -360, 140 - i * 60, 60, 60);
+					}
+				}
+				//bottom snake
+				for (int i = 0; i< 11; i++) {
+				if (i < 10) {
+
+					batch.draw(snakeBodySidewaysSprite, -300 + 60 * i, -400, 60, 60);
+				} else {
+					batch.draw(snakeCorner1, -300 + 60 * i, -400, 60, 60);
+				}
+			}
+				//right snake
+				for (int i = 0; i< 10; i++) {
+					if (i < 9) {
+
+						batch.draw(snakeBodySprite, 300, -340 + i * 60, 60, 60);
+					} else {
+						batch.draw(snakeCorner3, 300, -340 + i * 60, 60, 60);
+					}
+				}
+
+				batch.end();
 
 				frameCounter++;
 
@@ -557,6 +641,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 										+ snake.getVel().x * (grid.squareSize / 2),
 								shower[cx][cy].y - screenHeight / 2 + grid.squareSize / 2
 										+ snake.getVel().y * (grid.squareSize / 2));
+						System.out.println("x:" + (shower[cx][cy].x - screenWidth / 2 + grid.squareSize / 2
+								+ snake.getVel().x * (grid.squareSize / 2) + " y " + (shower[cx][cy].y - screenHeight / 2 + grid.squareSize / 2
+								+ snake.getVel().y * (grid.squareSize / 2))));
 
 						effect.getEmitters().first().getAngle().setHigh((int) snake.getVel().angle() - 10,
 								(int) snake.getVel().angle() + 10);
