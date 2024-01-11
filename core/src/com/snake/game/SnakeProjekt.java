@@ -82,7 +82,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	InputBox inputBox;
 	int boxesHeight,
 			boxesWidth;
-	Button backButton, startButton, featureButton, restartButton, settingsButton;
+	Button backButton, startButton, featureButton, restartButton, settingsButton, settingsRect, nTextRect, mTextRect,
+			snakeSpeedRect;
 	Color color;
 
 	FreeTypeFontGenerator generator;
@@ -184,6 +185,22 @@ public class SnakeProjekt extends ApplicationAdapter {
 		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance());
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance());
 
+		settingsRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2 + screenHeight / 8),
+				new Vector(screenWidth / 2, screenHeight / 8),
+				createFontSize((screenWidth * 4 / 10 * ("Gridsize").length()) / (102 * (screenWidth / 1920))),
+				"Gridsize");
+		nTextRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2),
+				new Vector(screenWidth / 8, screenHeight / 8),
+				createFontSize(((76 * screenWidth) / 1920)),
+				"n");
+		mTextRect = new Button(new Vector(screenWidth / 2, screenHeight / 2),
+				new Vector(screenWidth / 8, screenHeight / 8),
+				createFontSize((76 * screenWidth) / 1920),
+				"m");
+		snakeSpeedRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight /2 - screenHeight / 4),
+				new Vector(screenWidth / 3, screenHeight / 8),
+				createFontSize((screenWidth * 4 / 15 * ("Snake Speed").length()) / (150 * (screenWidth / 1920))),
+				"Snake Speed");
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 250), new Vector(300, 100),
 				backArrow);
 		settingsButton = new Button(new Vector(screenWidth / 2 - 300, screenHeight / 2 - 300), new Vector(200, 200),
@@ -303,10 +320,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
 				showButton(backButton);
+				showButton(settingsRect, Color.YELLOW);
+				showButton(nTextRect, Color.YELLOW);
+				showButton(mTextRect, Color.YELLOW);
+				color = Color.GREEN;
+				showButton(snakeSpeedRect, color);
+				inputBox.show();
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
-					} 
+					}
 				}
 				shape.end();
 
@@ -338,7 +361,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					canClick = false;
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
-					} else if (settingsButton.clickedButton()){
+					} else if (settingsButton.clickedButton()) {
 						currentScene = Scene.Main_Setting;
 					}
 					for (Button feature : features) {
