@@ -32,6 +32,7 @@ import com.snake.game.util.*;
 import com.snake.game.util.Button;
 import com.snake.game.util.InputBox;
 import com.snake.game.util.Leaderboard;
+import com.snake.game.util.JSON;
 import com.snake.game.util.Vector;
 
 public class SnakeProjekt extends ApplicationAdapter {
@@ -126,6 +127,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitPicker FruitPicker = new FruitPicker();
 
 	int fruitAmount = 4;
+	InputBox input;
 
 	private int n = 15;
 	private int m = 15;
@@ -185,6 +187,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
+
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
@@ -226,6 +229,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		JSON json = new JSON("data/data.json");
 		Leaderboard leaderboard = new Leaderboard(json);
 		getFeatureHash(features);
+
 		
 		
 	}
@@ -245,6 +249,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			case Main_Scene:
 				fruits.clear();
 				ScreenUtils.clear(0, 0, 1, 1);
+				InputBoxShower(input);
 
 				frameCounter++;
 
@@ -324,8 +329,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.end();
 				batch.begin();
 				for (int i = 0; i < grid.snakes.length; i++) {
-
+					font2.setColor(Color.ORANGE);
+					font.setColor(Color.ORANGE);
 					scoreNumText.setText(font2, "22");
+					colonText.setText(font, " : ");
 					scoreText.setText(font2, "PLAYER " + (i + 1) + " SCORE");
 					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 20;
 					scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
@@ -335,14 +342,20 @@ public class SnakeProjekt extends ApplicationAdapter {
 					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
 							(0.41f + 0.075f * -i) * viewport.getScreenHeight());
 					if (quickTimeHandler.isEnabled()){
-						quickTimerText.setText(font2, "PLAYER"  + (i + 1) + " TIME");
+						font2.setColor(Color.RED);
+						font.setColor(Color.RED);
+						colonText.setText(font, " : ");
+						quickTimerText.setText(font2, "PLAYER "  + (i + 1) + " TIME");
 						scoreNumText.setText(font2, "" + (10 - grid.snakes[i].getQuickTimeCounter() / 30)); // 30 fps
-						font2.draw(batch, quickTimerText, (offset + 20), (0.49f + 0.075f * -1) * viewport.getScreenHeight());
-						font.draw(batch, colonText, offset + 20 + quickTimerText.width, (0.49f + 0.075f * -1) * viewport.getScreenHeight());
-						font2.draw(batch, scoreNumText, offset  + quickTimerText.width + colonText.width,
-								(0.49f + 0.075f * -1) * viewport.getScreenHeight());
+						font2.draw(batch, quickTimerText, i == 2 ? offset + 20 + 250 : offset + 20 + (450 * i),
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
+						font.draw(batch, colonText, i == 2 ? offset + 20 + 250 + quickTimerText.width : offset + 20 + quickTimerText.width + (450 * i),
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
+						font2.draw(batch, scoreNumText, i == 2 ? offset + 20 + 250 + quickTimerText.width + colonText.width : offset  + quickTimerText.width + colonText.width + (450 * i),
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
 					}
-
+					font2.setColor(Color.ORANGE);
+					font.setColor(Color.ORANGE);
 				}
 				batch.end();
 

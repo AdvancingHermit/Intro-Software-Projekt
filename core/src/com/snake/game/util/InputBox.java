@@ -63,9 +63,11 @@ public class InputBox {
                 if (Gdx.input.getX() > position.x && Gdx.input.getX() < position.x + size.x && y > position.y
                         && y < position.y + size.y) {
                     isEnabled = !isEnabled;
+                } else {
+                    isEnabled = false;
                 }
             }
-        } else if(!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+        } else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             mouseUp = true;
         }
     }
@@ -73,7 +75,7 @@ public class InputBox {
     public void update() {
         char pressedKey = getPressedKey();
         if (isEnabled) {
-            if (pressedKey != '\0' && keyUp && isNumber(pressedKey) && type == 1) {
+            if (pressedKey != '\0' && pressedKey != '\b' && keyUp && isNumber(pressedKey) && type == 1) {
                 inputs.add(pressedKey);
                 keyUp = false;
             } else if (pressedKey != '\0' && keyUp && type == 0) {
@@ -81,6 +83,11 @@ public class InputBox {
                     inputs.add((pressedKey + "").toLowerCase().charAt(0));
                 } else {
                     inputs.add(pressedKey);
+                }
+                keyUp = false;
+            } else if (pressedKey == '\b' && keyUp) {
+                if (inputs.size() > 0) {
+                    inputs.remove(inputs.size() - 1);
                 }
                 keyUp = false;
             } else if (pressedKey == '\0') {
@@ -247,6 +254,9 @@ public class InputBox {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_9)) {
             return '9';
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+            return '\b';
         }
         return '\0'; // Return a null character if no key is pressed
     }

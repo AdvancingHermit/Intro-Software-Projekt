@@ -36,20 +36,34 @@ public class JSON {
             e.printStackTrace();
         }
         String[] iwannasee;
+        String[] temp1 = new String[0];
+        String[] temp2 = new String[0];
+        String[] temp3 = new String[0];
+
         if(info.contains("],")){
-            iwannasee = info.substring(1, info.length() - 1).replace("\"", "").split("],");
-        } else {
+            temp1 = info.substring(1, info.length() - 1).split("],");
+        }if(info.contains("},\"")){
+            temp2 = info.substring(1, info.length() - 1).split("},\"");
+        }if(info.contains("}, \"")){
+            temp3 = info.substring(1, info.length() - 1).split("}, \"");
+        }
 
-            if(info.substring(1, info.length() - 1).contains("},\"")){
-                iwannasee = info.substring(1, info.length() - 1).split("},\"");
-            } else{
-                iwannasee = info.substring(1, info.length() - 1).split("}, \"");
+        System.out.println(temp1.length + " " + temp2.length + " " + temp3.length);
 
-            }
+        iwannasee = new String[temp1.length + temp2.length + temp3.length];
 
-            for(int i = 0; i < iwannasee.length; i++){
+        for (int i = 0; i < temp1.length; i++) {
+            iwannasee[i] = temp1[i];
+        }
+        for (int i = 0; i < temp2.length; i++) {
+            iwannasee[i + temp1.length] = temp2[i];
+        }
+        for (int i = 0; i < temp3.length; i++) {
+            iwannasee[i + temp1.length + temp2.length] = temp3[i];
+        }
+
+        for(int i = 0; i < iwannasee.length; i++){
                 iwannasee[i] = iwannasee[i].replace("\"", "");
-            }
         }
         
         for (int i = 0; i < iwannasee.length; i++) {
