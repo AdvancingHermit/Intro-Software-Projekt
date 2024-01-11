@@ -1,16 +1,18 @@
 {
-    "leaderboard": {
-        "1": {
+    "leaderboard": [
+        {
+            "placement": "1",
             "user": "Test1",
             "score": "10",
             "features": "1"
         },
-        "2": {
+        {
+            "placement": "2",
             "user": "Test2",
             "score": "10",
             "features": "1"
         }
-    },
+    ],
     "users": [
         {
             "date": "08/01/2024",

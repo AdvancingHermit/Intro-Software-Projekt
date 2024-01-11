@@ -15,6 +15,11 @@ public class Leaderboard{
     }
 
     public Leaderboard(JSON json){
+        System.out.println(json.getData().get("leaderboard"));
+
+        
+
+        /* 
         board = new Highscore[json.getData().get("leaderboard").toString().replace("{", "").replace("}", "").split(",").length];
         int i = 1;
         for(Object leaderboard : json.getData().get("leaderboard").toString().replace("{", "").replace("}", "").split(",")){
@@ -23,6 +28,7 @@ public class Leaderboard{
             board[Integer.parseInt(strArr[0].trim()) - 1] = new Highscore(hScore[0].trim(), Integer.parseInt(hScore[1].trim()), Integer.parseInt(hScore[2].trim()));
         }
         Arrays.sort(board, Collections.reverseOrder());
+        */
     }
 
     public void updateLeaderboard(Highscore newScore){

@@ -35,7 +35,6 @@ public class JSON {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(info);
         String[] iwannasee;
         if(info.contains("],")){
             iwannasee = info.substring(1, info.length() - 1).replace("\"", "").split("],");
@@ -78,9 +77,7 @@ public class JSON {
         for (int i = 0; i < stringData.length; i++) {
 
             if (stringData[i].contains("[")) {
-                System.out.println(stringData[i]);
                 String arrName = stringData[i].split(":")[0].trim();
-                System.out.println(arrName);
                 String[] s = stringData[i].split(",");
                 s[0] = s[0].substring(s[0].indexOf("[") + 1);
                 getData.put(arrName,
