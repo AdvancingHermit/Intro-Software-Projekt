@@ -20,14 +20,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.handlers.*;
 import com.snake.game.util.*;
-
+import com.snake.game.util.Vector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import javax.sound.midi.SysexMessage;
 
 public class SnakeProjekt extends ApplicationAdapter {
 
@@ -72,6 +70,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout scoreNumText;
 	GlyphLayout colonText;
 	GlyphLayout scoreText;
+	GlyphLayout quickTimerText;
 
 	int screenHeight;
 	int screenWidth;
@@ -96,7 +95,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(false, "3 Player", 3);
 	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries", 80);
-	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
+	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(true, "Quicktime", 10);
 	BorderHandler borderHandler = new BorderHandler(false, "Borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
 	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100, 3 ,10);
@@ -166,6 +165,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		scoreText = new GlyphLayout();
 		scoreText.setText(font2, "Player 1 SCORE");
+		quickTimerText = new GlyphLayout();
+		quickTimerText.setText(font2, "Player 1 Time");
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
@@ -359,6 +360,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 							(float) (0.41f + 0.075f * -i) * viewport.getScreenHeight());
 					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
 							(0.41f + 0.075f * -i) * viewport.getScreenHeight());
+					if (quickTimeHandler.isEnabled()){
+						quickTimerText.setText(font2, "PLAYER"  + (i + 1) + " TIME");
+						scoreNumText.setText(font2, "" + (10 - grid.snakes[i].getQuickTimeCounter() / 30)); // 30 fps
+						font2.draw(batch, quickTimerText, (offset + 20), (0.49f + 0.075f * -1) * viewport.getScreenHeight());
+						font.draw(batch, colonText, offset + 20 + quickTimerText.width, (0.49f + 0.075f * -1) * viewport.getScreenHeight());
+						font2.draw(batch, scoreNumText, offset  + quickTimerText.width + colonText.width,
+								(0.49f + 0.075f * -1) * viewport.getScreenHeight());
+					}
 
 				}
 				batch.end();
