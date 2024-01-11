@@ -132,6 +132,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitPicker FruitPicker = new FruitPicker();
 
 	int fruitAmount = 4;
+	InputBox input;
 
 	private int n = 15;
 	private int m = 15;
@@ -191,6 +192,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
+
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
@@ -229,9 +231,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			}
 		}
-
-		JSON json = new JSON("data/data.json");
-		json.createFile("data/");
+		input = new InputBox(1, new Vector(0, 0), new Vector(30, 30));
+		
+		
 	}
 
 	@Override
@@ -249,6 +251,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			case Main_Scene:
 				fruits.clear();
 				ScreenUtils.clear(0, 0, 1, 1);
+				InputBoxShower(input);
 
 				frameCounter++;
 
@@ -843,7 +846,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		img.dispose();
 		shape.dispose();
 		appleSprite.dispose();
-		pixmap.dispose();
 		generator.dispose();
 	}
 }
