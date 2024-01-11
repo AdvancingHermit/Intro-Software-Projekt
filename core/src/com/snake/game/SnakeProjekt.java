@@ -526,6 +526,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.draw(snakeCorner3, 300, -340 + i * 60, 60, 60);
 			}
 		}
+		if (wallHandler.isEnabled()){
+			for (int i = 0; i<2; i++){
+				for (int j = 0; j < 9; j++) {
+					batch.draw(wallSprite, -300 + 540 * i, 140 - j * 60, 60, 60);
+				}
+			}
+		}
 		if (multiplayerHandler2.isEnabled()){
 			batch.setColor(Color.CHARTREUSE);
 			batch.draw(snakeHeadSprite, fruitX, 260, 60,60 );
