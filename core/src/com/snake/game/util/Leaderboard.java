@@ -109,6 +109,10 @@ public class Leaderboard {
         }
         return i;
     }
+    
+    public void setMaxScore(int maxScore){
+        this.maxScores = maxScore;
+    }
 
     public String toString() {
         String s = "";
