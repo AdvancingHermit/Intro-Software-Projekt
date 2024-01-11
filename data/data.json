@@ -1,9 +1,18 @@
 {
-    "leaderboard": {
-        "1": "Test 100",
-        "2": "Test2 300",
-        "3": "Test3 300"
-    },
+    "leaderboard": [
+        {
+            "placement": "1",
+            "username": "Test1",
+            "score": "10",
+            "features": "1"
+        },
+        {
+            "placement": "2",
+            "username": "Test2",
+            "score": "10",
+            "features": "1"
+        }
+    ],
     "users": [
         {
             "date": "08/01/2024",
@@ -14,11 +23,6 @@
             "date": "08/01/2024",
             "highScore": "10",
             "username": "Test2"
-        },
-        {
-            "date": "08/01/2024",
-            "highScore": "10",
-            "username": "Test3"
         }
     ]
 }

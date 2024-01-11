@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -26,17 +27,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.snake.game.handlers.BorderHandler;
-import com.snake.game.handlers.CherryHandler;
-import com.snake.game.handlers.CoffeeBeanHandler;
-import com.snake.game.handlers.DragonFruitHandler;
-import com.snake.game.handlers.GoldenFruitHandler;
-import com.snake.game.handlers.MultiplayerHandler;
-import com.snake.game.handlers.QuickTimeHandler;
-import com.snake.game.handlers.SnakeReverseHandler;
-import com.snake.game.handlers.WallHandler;
+import com.snake.game.handlers.*;
+import com.snake.game.util.*;
 import com.snake.game.util.Button;
 import com.snake.game.util.InputBox;
+import com.snake.game.util.Leaderboard;
 import com.snake.game.util.JSON;
 import com.snake.game.util.Vector;
 
@@ -231,7 +226,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			}
 		}
-		input = new InputBox(1, new Vector(0, 0), new Vector(30, 30));
+		JSON json = new JSON("data/data.json");
+		Leaderboard leaderboard = new Leaderboard(json);
+		getFeatureHash(features);
+
 		
 		
 	}
@@ -838,6 +836,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 			batch.end();
 		}
 		shape.begin(ShapeType.Filled);
+	}
+	public int getFeatureHash(Button[] features) {
+		String vals = "";
+		for (Button button : features) {
+			vals += "" + button.gethandler().isEnabled();
+		}
+		return Objects.hashCode(vals);
 	}
 
 	@Override
