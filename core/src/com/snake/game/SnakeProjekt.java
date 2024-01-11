@@ -50,7 +50,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont font3;
 
 	Texture backArrow;
-
+	Texture settings;
 	Texture appleSprite;
 	Texture goldenAppleSprite;
 	Texture coffeeBeanSprite;
@@ -82,7 +82,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	InputBox inputBox;
 	int boxesHeight,
 			boxesWidth;
-	Button backButton, startButton, featureButton, restartButton;
+	Button backButton, startButton, featureButton, restartButton, settingsButton;
 	Color color;
 
 	FreeTypeFontGenerator generator;
@@ -99,7 +99,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 2);
 	BorderHandler borderHandler = new BorderHandler(false, "Borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
-	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100, 3 ,10);
+	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100, 3, 10);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
 	GameFeature[] handlers = { wallHandler, borderHandler, quickTimeHandler, snakeReverseHandler, goldenFruitHandler,
@@ -115,8 +115,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitType dragonFruit;
 	FruitType coffeeBean;
 	FruitPicker FruitPicker = new FruitPicker();
-
-
 
 	int fruitAmount = 4;
 
@@ -135,7 +133,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		cherry1Sprite = new Texture((Gdx.files.internal("Cherry1.png")));
 		cherry2Sprite = new Texture((Gdx.files.internal("Cherry2.png")));
 		coffeeBeanSprite = new Texture((Gdx.files.internal("CoffeeBean.png")));
-
+		settings = new Texture((Gdx.files.internal("settings.png")));
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
 		snakeBodySidewaysSprite = new Texture((Gdx.files.internal("snakebodysideways.png")));
 		snakeBodyCornerSprite = new Texture((Gdx.files.internal("snakebodycorner.png")));
@@ -177,7 +175,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		JSON json;
 		json = new JSON("data/data.json");
 		json.createFile("data/");
-		
 
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
@@ -187,8 +184,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance());
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance());
 
-		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
+		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 250), new Vector(300, 100),
 				backArrow);
+		settingsButton = new Button(new Vector(screenWidth / 2 - 300, screenHeight / 2 - 300), new Vector(200, 200),
+				settings);
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
 				new Vector(screenWidth / 4, screenHeight / 4),
 				createFontSize((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920))), "Start");
@@ -229,7 +228,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	public void showButton(Button temp) {
 		batch.begin();
-		batch.draw(temp.getbackArrow(), temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
+		batch.draw(temp.getTexture(), temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
 		batch.end();
 	}
 
@@ -266,7 +265,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		switch (currentScene) {
 			case Main_Scene:
 				fruits.clear();
-				ScreenUtils.clear(0, 0, 1, 1);
+				ScreenUtils.clear(0, 1, 0.5f, 1);
 
 				frameCounter++;
 
@@ -277,6 +276,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				showButton(startButton, color);
 				color = Color.RED;
 				showButton(featureButton, color);
+				showButton(settingsButton);
 
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					if (startButton.clickedButton()) {
@@ -291,11 +291,25 @@ public class SnakeProjekt extends ApplicationAdapter {
 						currentScene = Scene.Main_Game;
 					} else if (featureButton.clickedButton()) {
 						currentScene = Scene.Main_Enable_Features;
+					} else if (settingsButton.clickedButton()) {
+						currentScene = Scene.Main_Setting;
 					}
 				}
 				shape.end();
 				break;
 			case Main_Setting:
+				ScreenUtils.clear(0, 0, 1, 1);
+				camera.update();
+				batch.setProjectionMatrix(camera.combined);
+				shape.begin(ShapeType.Filled);
+				showButton(backButton);
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					if (backButton.clickedButton()) {
+						currentScene = Scene.Main_Scene;
+					} 
+				}
+				shape.end();
+
 				break;
 			case Main_Enable_Features:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -307,6 +321,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 				showButton(backButton);
+				showButton(settingsButton);
 				for (Button x : features) {
 					if (x.gethandler().isEnabled()) {
 						color = Color.GREEN;
@@ -323,6 +338,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 					canClick = false;
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
+					} else if (settingsButton.clickedButton()){
+						currentScene = Scene.Main_Setting;
 					}
 					for (Button feature : features) {
 						if (feature.clickedButton()) {
@@ -400,7 +417,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 				}
 
-				
 				if (wallHandler.isEnabled()) {
 					drawWalls();
 				}

@@ -9,11 +9,11 @@ public class Button {
 
     private Vector Size;
     private Vector pos;
-    private Texture backArrow;
+    private Texture texture;
     private int screenHeight = Gdx.graphics.getHeight();
     private int screenWidth = Gdx.graphics.getWidth();
     private GameFeature handler;
-    private String text; 
+    private String text;
     private BitmapFont font;
 
     public Button(Vector pos, Vector Size, BitmapFont font, String text) {
@@ -21,22 +21,24 @@ public class Button {
         this.pos = pos;
         this.text = text;
         this.font = font;
-    
+
     }
-      public Button(Vector pos, Vector Size, GameFeature handler) {
+
+    public Button(Vector pos, Vector Size, GameFeature handler) {
         this.Size = Size;
         this.pos = pos;
         this.handler = handler;
 
     }
 
-    public Button(Vector pos, Vector Size, Texture backArrow) {
+    public Button(Vector pos, Vector Size, Texture texture) {
         this.Size = Size;
         this.pos = pos;
-        this.backArrow = backArrow;
+        this.texture = texture;
 
     }
-    public GameFeature gethandler(){
+
+    public GameFeature gethandler() {
         return handler;
     }
 
@@ -48,39 +50,43 @@ public class Button {
         return Size;
     }
 
-    public Texture getbackArrow() {
-        return backArrow;
+    public Texture getTexture() {
+        return texture;
     }
-    public void toggleisEnabled(){
+
+    public void toggleisEnabled() {
         handler.toggle();
     }
-    public boolean getState(){
+
+    public boolean getState() {
         return handler.isEnabled();
     }
-    public String getfeatureName(){
+
+    public String getfeatureName() {
         return handler.getfeatureName();
     }
-    public String gettext(){
+
+    public String gettext() {
         return text;
     }
-    public BitmapFont getfont(){
+
+    public BitmapFont getfont() {
         return font;
     }
+
     public boolean clickedButton() {
-        if (backArrow == null) {
+        if (texture == null) {
             if (Gdx.input.getX() >= pos.x // Hitbox, if create by shape
                     && Gdx.input.getX() <= pos.x + Size.x
                     && Gdx.input.getY() <= screenHeight - pos.y
                     && Gdx.input.getY() >= screenHeight - pos.y - Size.y) {
                 return true;
             }
-        } else {
-            if (Gdx.input.getX() >= pos.x + screenWidth / 2 // Hitbox, if create by Batch
-                    && Gdx.input.getX() <= pos.x + screenWidth / 2 + Size.x
-                    && Gdx.input.getY() <= pos.y - screenHeight / 2 + 4 * Size.y
-                    && Gdx.input.getY() >= pos.y - screenHeight / 2 + 3 * Size.y) {
-                return true;
-            }
+        } else if (Gdx.input.getX() >= pos.x + screenWidth / 2 // Hitbox, if create by Batch
+                && Gdx.input.getX() <= pos.x + screenWidth / 2 + Size.x
+                && Gdx.input.getY() >= -(pos.y - screenHeight / 2) - Size.y
+                && Gdx.input.getY() <= -(pos.y - screenHeight / 2)) {
+            return true;
         }
         return false;
     }
