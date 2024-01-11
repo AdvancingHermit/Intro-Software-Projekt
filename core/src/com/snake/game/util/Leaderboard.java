@@ -27,22 +27,13 @@ public class Leaderboard {
             int index1 = temp2[0].toString().indexOf(":");
 
             int placement = Integer.parseInt(temp2[0].toString().substring(index1 + 1, findWordEndIndex(temp2[0].toString(), index1)).trim());
-
-            System.out.println(placement);
-
             String username = temp2[1].toString().substring(temp2[1].toString().indexOf(":") + 1).trim();
-            System.out.println(username);
 
             int score = Integer.parseInt(temp2[2].toString().substring(temp2[2].toString().indexOf(":") + 1).trim());
-            System.out.println(score);
 
             int features = Integer.parseInt(temp2[3].toString().substring(temp2[3].toString().indexOf(":") + 1).trim());
-            System.out.println(features);
 
             board[placement - 1] = new Highscore(username, score, features);
-        }
-        for (int i = 0; i < board.length; i++) {
-            System.out.println(board[i]);
         }
         forJSON();
     }
@@ -59,14 +50,6 @@ public class Leaderboard {
     }
 
     public String[] forJSON() {
-        /* 
-        String[] s = new String[board.length];
-
-        for (int i = 0; i < board.length; i++) {
-            s[i] = (i + 1) + ": " + board[i];
-            System.out.println(s[i]);
-        }
-        */
         String[] sArr = new String[1];
         sArr[0] = "leaderboard: [";
 
@@ -85,15 +68,6 @@ public class Leaderboard {
 
         sArr[0] = sArr[0].substring(0, sArr[0].length() - 2);
         sArr[0] += "]";
-
-        System.out.println(sArr[0]);
-
-        JSON json = new JSON("data/data.json");
-        json.addStringData(sArr);
-        System.out.println("json: ");
-        System.out.println(json);
-
-        json.createFile("data/");
         
         return sArr;
     }
