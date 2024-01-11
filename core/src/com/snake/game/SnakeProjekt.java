@@ -228,6 +228,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			}
 		}
+
+		JSON json = new JSON("data/data.json");
+		json.createFile("data/");
 	}
 
 	@Override
