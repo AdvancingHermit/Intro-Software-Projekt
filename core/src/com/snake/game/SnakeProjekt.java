@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -315,6 +314,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 					for (Button feature : features) {
 						if (feature.clickedButton()) {
+							if (feature.gethandler().equals(multiplayerHandler2)) {
+								multiplayerHandler3.disable();
+							}
+							if (feature.gethandler().equals(multiplayerHandler3)) {
+								multiplayerHandler2.disable();
+							}
 							feature.toggleisEnabled();
 						}
 					}
@@ -460,11 +465,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 		if (snakeReverseHandler.isEnabled()) {
 			headspawnX = 0;
 			fruitX = -60;
-			snakeHead.flip(true,false);
 			snakeCoffeeHead.flip(true,false);
+			snakeHead.flip(true,false);
 		} else {
 			headspawnX = -60;
 			fruitX = 0;
+		;
 
 		}
 		if (coffeeBeanHandler.isEnabled() && !dragonFruitHandler.isEnabled()) {
@@ -520,7 +526,33 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.draw(snakeCorner3, 300, -340 + i * 60, 60, 60);
 			}
 		}
+		if (multiplayerHandler2.isEnabled()){
+			batch.setColor(Color.CHARTREUSE);
+			batch.draw(snakeHeadSprite, fruitX, 260, 60,60 );
+			batch.draw(snakeBodySprite, fruitX, 320, 60,60 );
+		}
+		if (multiplayerHandler3.isEnabled()){
+			if (!snakeReverseHandler.isEnabled()) {
+				batch.setColor(Color.CHARTREUSE);
+				batch.draw(snakeHeadSidewaysSprite, -60, 260, 60, 60);
+				batch.draw(snakeBodySidewaysSprite, -120, 260, 60, 60);
+				batch.setColor(Color.RED);
+				snakeHead.flip(true, false);
+				batch.draw(snakeHead, 0, 260, 60, 60);
+				batch.draw(snakeBodySidewaysSprite, 60, 260, 60, 60);
+			} else {
+				batch.setColor(Color.CHARTREUSE);
+				batch.draw(snakeBodySidewaysSprite, -60, 260, 60, 60);
+				batch.draw(snakeHead, -120, 260, 60, 60);
+				batch.setColor(Color.RED);
+				batch.draw(snakeBodySidewaysSprite, 0, 260, 60, 60);
+				batch.draw(snakeHeadSidewaysSprite, 60, 260, 60, 60);
+			}
 
+
+		}
+
+        batch.setColor(Color.WHITE);
 		batch.end();
 	}
 
