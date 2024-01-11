@@ -29,16 +29,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.handlers.*;
 import com.snake.game.util.*;
-import com.snake.game.util.Button;
-import com.snake.game.util.InputBox;
-import com.snake.game.util.Leaderboard;
-import com.snake.game.util.JSON;
-import com.snake.game.util.Vector;
 
 public class SnakeProjekt extends ApplicationAdapter {
 
 	enum Scene {
-		Main_Scene, Main_Game, Main_Setting, Main_Enable_Features, Main_Restart
+		Main_Scene, Login, Main_Game, Main_Setting, Main_Enable_Features, Main_Restart
 	}
 
 	Scene currentScene = Scene.Main_Scene;
@@ -55,6 +50,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont font2;
 	BitmapFont font3;
 	BitmapFont featureFont;
+	BitmapFont loginFont;
+	BitmapFont loginContinueFont;
 
 	Texture backArrow;
 
@@ -92,7 +89,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	InputBox inputBox;
 	int boxesHeight,
 			boxesWidth;
-	Button backButton, startButton, featureButton, restartButton;
+	Button backButton, startButton, featureButton, restartButton, loginButton;
 	Color color;
 
 	FreeTypeFontGenerator generator;
@@ -109,7 +106,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(true, "Quicktime", 10);
 	BorderHandler borderHandler = new BorderHandler(false, "Borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
-	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100, 3 ,10);
+	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100, 3, 10);
 	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
 
 	GameFeature[] handlers = { wallHandler, borderHandler, quickTimeHandler, snakeReverseHandler, goldenFruitHandler,
@@ -128,11 +125,20 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	int fruitAmount = 4;
 	InputBox input;
+	InputBox loginInput;
 
 	private int n = 15;
 	private int m = 15;
 
 	Leaderboard leaderboard;
+
+	String username;
+
+	Vector loginBoxSize;
+	Vector loginBoxPos;
+
+	Users users;
+	JSON json;
 
 	@Override
 	public void create() {
@@ -189,7 +195,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
-
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
 		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
@@ -202,7 +207,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 				backArrow);
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
 				new Vector(screenWidth / 4, screenHeight / 4),
-				createFont((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920)), normColor(0, 0, 0, 255)), "START");
+				createFont((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920)),
+						normColor(0, 0, 0, 255)),
+				"START");
 		featureButton = new Button(
 				new Vector(startButton.getpos().x + screenWidth / 32, startButton.getpos().y - screenHeight / 8),
 				new Vector(screenWidth / 4 - screenWidth / 16, screenHeight / 8),
@@ -228,8 +235,28 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			}
 		}
-		JSON json = new JSON("data/data.json");
-		leaderboard = new Leaderboard(json);		
+		json = new JSON("data/data.json");
+		leaderboard = new Leaderboard(json);
+		leaderboard.setMaxScore(10 * features.length);
+
+		// Login Screen Definitions
+		loginFont = createFont((screenWidth * 4) / (102 * (screenWidth / 1920)), Color.BLACK);
+		loginContinueFont = createFont((screenWidth * 2) / (102 * (screenWidth / 1920)), Color.BLACK);
+		loginBoxSize = new Vector(screenWidth / 2, screenHeight / 2);
+		loginBoxPos = new Vector(screenWidth / 2 - loginBoxSize.x / 2, screenHeight / 2 - loginBoxSize.y / 2);
+		Vector loginInputSize = new Vector(loginBoxSize.x / 2, loginBoxSize.y / 8);
+		Vector loginInputPos = new Vector(loginBoxPos.x + loginBoxSize.x / 2 - loginInputSize.x / 2,
+				loginBoxPos.y + loginBoxSize.y / 2 - loginInputSize.y);
+		loginInput = new InputBox(0, new Vector(loginInputPos.x, loginInputPos.y),
+				new Vector(loginInputSize.x, loginInputSize.y));
+		Vector loginButtonSize = new Vector(loginInputSize.x / 2, loginInputSize.y);
+		loginButton = new Button(
+				new Vector(loginInputPos.x + (loginButtonSize.x / 2),
+						(loginInputPos.y - loginButtonSize.y - (loginButtonSize.y / 2))),
+				loginButtonSize, loginContinueFont, "Continue");
+
+		users = new Users(json);
+
 	}
 
 	@Override
@@ -241,6 +268,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public void render() {
 
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			saveScore();
+			json.addStringData(leaderboard.forJSON());
+			json.addStringData(users.forJSON());
+			json.createFile("data/");
 			Gdx.app.exit();
 		}
 		switch (currentScene) {
@@ -260,6 +291,35 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					if (startButton.clickedButton()) {
+						currentScene = Scene.Login;
+
+					} else if (featureButton.clickedButton()) {
+						currentScene = Scene.Main_Enable_Features;
+					}
+				}
+				shape.end();
+				break;
+			case Login:
+				ScreenUtils.clear(0, 0, 1, 1);
+				camera.update();
+				batch.setProjectionMatrix(camera.combined);
+				shape.begin(ShapeType.Filled);
+
+				shape.setColor(Color.YELLOW);
+				shape.rect(loginBoxPos.x, loginBoxPos.y, loginBoxSize.x, loginBoxSize.y);
+				shape.end();
+				batch.begin();
+				Vector loginOffset = getTextSize(loginFont, "Username:");
+				loginFont.draw(batch, "Username:", -loginOffset.x / 2, loginOffset.y * 2);
+				batch.end();
+				shape.begin(ShapeType.Filled);
+				showButton(loginButton, normColor(0, 118, 242, 255));
+				shape.end();
+				inputBoxShower(loginInput);
+				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					if (loginButton.clickedButton()) {
+						username = loginInput.getString();
+						currentScene = Scene.Main_Game;
 						gridsize = new Vector(n, m);
 						grid = new Grid(gridsize,
 								multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
@@ -267,13 +327,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
-
-						currentScene = Scene.Main_Game;
-					} else if (featureButton.clickedButton()) {
-						currentScene = Scene.Main_Enable_Features;
 					}
 				}
-				shape.end();
+
 				break;
 			case Main_Setting:
 				break;
@@ -319,7 +375,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				ScreenUtils.clear(normColor(29, 32, 219, 255));
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
-
 				shape.begin(ShapeType.Filled);
 				Rectangle[][] shower = grid.show(viewport.getScreenWidth(), viewport.getScreenHeight());
 
@@ -338,18 +393,25 @@ public class SnakeProjekt extends ApplicationAdapter {
 							(float) (0.41f + 0.075f * -i) * viewport.getScreenHeight());
 					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
 							(0.41f + 0.075f * -i) * viewport.getScreenHeight());
-					if (quickTimeHandler.isEnabled()){
+					if (quickTimeHandler.isEnabled()) {
 						font2.setColor(Color.RED);
 						font.setColor(Color.RED);
 						colonText.setText(font, " : ");
-						quickTimerText.setText(font2, "PLAYER "  + (i + 1) + " TIME");
+						quickTimerText.setText(font2, "PLAYER " + (i + 1) + " TIME");
 						scoreNumText.setText(font2, "" + (10 - grid.snakes[i].getQuickTimeCounter() / 30)); // 30 fps
 						font2.draw(batch, quickTimerText, i == 2 ? offset + 20 + 250 : offset + 20 + (450 * i),
-								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
-						font.draw(batch, colonText, i == 2 ? offset + 20 + 250 + quickTimerText.width : offset + 20 + quickTimerText.width + (450 * i),
-								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
-						font2.draw(batch, scoreNumText, i == 2 ? offset + 20 + 250 + quickTimerText.width + colonText.width : offset  + quickTimerText.width + colonText.width + (450 * i),
-								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight()
+										: (0.55f + 0.075f * -1) * viewport.getScreenHeight());
+						font.draw(batch, colonText,
+								i == 2 ? offset + 20 + 250 + quickTimerText.width
+										: offset + 20 + quickTimerText.width + (450 * i),
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight()
+										: (0.55f + 0.075f * -1) * viewport.getScreenHeight());
+						font2.draw(batch, scoreNumText,
+								i == 2 ? offset + 20 + 250 + quickTimerText.width + colonText.width
+										: offset + quickTimerText.width + colonText.width + (450 * i),
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight()
+										: (0.55f + 0.075f * -1) * viewport.getScreenHeight());
 					}
 					font2.setColor(Color.ORANGE);
 					font.setColor(Color.ORANGE);
@@ -395,10 +457,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && backButton.clickedButton()) {
 					currentScene = Scene.Main_Scene;
+					if (allSnakesDead) {
+						saveScore();
+					}
 				}
 				batch.end();
 
-				
 				if (wallHandler.isEnabled()) {
 					drawWalls();
 				}
@@ -410,6 +474,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
 				shape.end();
+				saveScore();
+
 				gridsize = new Vector(n, m);
 				grid = new Grid(gridsize,
 						multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
@@ -427,10 +493,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 
 	}
+
 	public Color normColor(float r, float g, float b, float a) {
 		return new Color(r / 255, g / 255, b / 255, a / 255);
-	
+
 	}
+
+	public void saveScore() {
+		users.updateUser(new User(username, grid.snakes[0].getScore()) );
+		leaderboard.updateLeaderboard(new Highscore(username, grid.snakes[0].getScore(), getFeatureHash(features)));
+	}
+
 	private void checkFruitCollsions() {
 		Iterator<Fruit> fruitIterator = fruits.iterator();
 		while (fruitIterator.hasNext()) {
@@ -741,7 +814,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				fruitType.getScore(), fruitType.getGrowth()));
 	}
 
-	private void InputBoxShower(InputBox inputBox) {
+	private void inputBoxShower(InputBox inputBox) {
 		inputBox.enable(screenHeight);
 		inputBox.update();
 		Rectangle[] rects = inputBox.show();
@@ -798,18 +871,21 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch.end();
 
 	}
-		public BitmapFont createFont(int size) {
+
+	public BitmapFont createFont(int size) {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		parameter.size = size;
 		font3 = generator.generateFont(parameter);
 		font3.setColor(Color.ORANGE);
 		return font3;
 	}
+
 	public BitmapFont createFont(int size, Color color) {
 		font3 = createFont(size);
 		font3.setColor(color);
 		return font3;
 	}
+
 	public void showButton(Button temp) {
 		batch.begin();
 		batch.draw(temp.getbackArrow(), temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
@@ -828,12 +904,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 		} else if (temp.gettext() != null) {
 			batch.begin();
 			temp.getfont().draw(batch, temp.gettext(),
-					temp.getpos().x - screenWidth / 2 + temp.getSize().x / 6,
-					temp.getpos().y - screenHeight / 2 + temp.getSize().y * 3 / 5);
+					temp.getpos().x - (screenWidth / 2) - (getTextSize(temp.getfont(), temp.gettext()).x / 2)
+							+ (temp.getSize().x / 2),
+					temp.getpos().y - (screenHeight / 2) + (getTextSize(temp.getfont(), temp.gettext()).y / 2)
+							+ (temp.getSize().y / 2));
 			batch.end();
 		}
 		shape.begin(ShapeType.Filled);
 	}
+
 	public int getFeatureHash(Button[] features) {
 		String vals = "";
 		for (Button button : features) {
@@ -842,11 +921,17 @@ public class SnakeProjekt extends ApplicationAdapter {
 		return Objects.hashCode(vals);
 	}
 
-	private void leaderboardShower(){
+	public Vector getTextSize(BitmapFont font, String text) {
+		GlyphLayout glyph = new GlyphLayout();
+		glyph.setText(font, text);
+		return new Vector((int) glyph.width, (int) glyph.height);
+	}
+
+	private void leaderboardShower() {
 		BitmapFont score;
 
-		for(int i = 0; i < leaderboard.getLeaderboard().length; i++){
-			
+		for (int i = 0; i < leaderboard.getLeaderboard().length; i++) {
+
 		}
 	}
 
@@ -857,5 +942,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.dispose();
 		appleSprite.dispose();
 		generator.dispose();
+		font.dispose();
+		font2.dispose();
+		font3.dispose();
+		featureFont.dispose();
+		loginFont.dispose();
 	}
 }

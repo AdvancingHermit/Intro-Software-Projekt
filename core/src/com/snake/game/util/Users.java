@@ -42,10 +42,15 @@ public class Users {
         }
     
         public void updateUser(User newUser){
+            boolean isUser = false;
             for(int i = 0; i < users.length; i++){
                 if(users[i].getUsername().equals(newUser.getUsername())){
                     users[i] = newUser;
+                    isUser = true;
                 }
+            }
+            if(!isUser){
+                addUser(newUser);
             }
         }
     
