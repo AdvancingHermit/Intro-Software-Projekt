@@ -228,8 +228,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		JSON json = new JSON("data/data.json");
 		Leaderboard leaderboard = new Leaderboard(json);
-		getFeatureHash(features);
-
+		leaderboard.updateLeaderboard(new Highscore("test", 100, getFeatureHash(features)));
+		leaderboard.updateLeaderboard(new Highscore("test2", 150, getFeatureHash(features)));
+		leaderboard.updateLeaderboard(new Highscore("test", 200, getFeatureHash(features)));
 		
 		
 	}
@@ -249,7 +250,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 			case Main_Scene:
 				fruits.clear();
 				ScreenUtils.clear(0, 0, 1, 1);
-				InputBoxShower(input);
 
 				frameCounter++;
 
