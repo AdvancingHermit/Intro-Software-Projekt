@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.handlers.*;
 import com.snake.game.util.*;
-import com.snake.game.util.Vector;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -84,6 +84,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			boxesWidth;
 	Button backButton, startButton, featureButton, restartButton, settingsButton, settingsRect, nTextRect, mTextRect,
 			snakeSpeedRect;
+	InputBox updateSnakeSpeed, updateM, updateN;
 	Color color;
 
 	FreeTypeFontGenerator generator;
@@ -185,23 +186,35 @@ public class SnakeProjekt extends ApplicationAdapter {
 		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance());
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance());
 
+		// making setting scene
 		settingsRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2 + screenHeight / 8),
 				new Vector(screenWidth / 2, screenHeight / 8),
 				createFontSize((screenWidth * 4 / 10 * ("Gridsize").length()) / (102 * (screenWidth / 1920))),
 				"Gridsize");
 		nTextRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2),
-				new Vector(screenWidth / 8, screenHeight / 8),
-				createFontSize(((76 * screenWidth) / 1920)),
-				"n");
+				new Vector(screenWidth / 4, screenHeight / 8),
+				createFontSize(((102 * screenWidth) / 1920)),
+				"n:");
 		mTextRect = new Button(new Vector(screenWidth / 2, screenHeight / 2),
-				new Vector(screenWidth / 8, screenHeight / 8),
-				createFontSize((76 * screenWidth) / 1920),
-				"m");
-		snakeSpeedRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight /2 - screenHeight / 4),
-				new Vector(screenWidth / 3, screenHeight / 8),
-				createFontSize((screenWidth * 4 / 15 * ("Snake Speed").length()) / (150 * (screenWidth / 1920))),
-				"Snake Speed");
-		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 250), new Vector(300, 100),
+				new Vector(screenWidth / 4, screenHeight / 8),
+				createFontSize((102 * screenWidth) / 1920),
+				"m:");
+
+		snakeSpeedRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2 - screenHeight / 4),
+				new Vector(screenWidth / 2, screenHeight / 6),
+				createFontSize((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920))),
+				"Snake Speed:");
+		updateN = new InputBox(1, new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2),
+				new Vector(screenWidth / 8, screenHeight / 16));
+		updateM = new InputBox(1, new Vector(screenWidth / 2 + screenWidth / 8, screenHeight / 2),
+				new Vector(screenWidth / 8, screenHeight / 16));
+		updateSnakeSpeed = new InputBox(1,
+				new Vector(screenWidth / 2 + screenWidth / 24, screenHeight / 2 - screenHeight / 5),
+				new Vector(screenWidth / 5, screenHeight / 12));
+
+		// Making Buttons
+		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 250),
+				new Vector(300, 100),
 				backArrow);
 		settingsButton = new Button(new Vector(screenWidth / 2 - 300, screenHeight / 2 - 300), new Vector(200, 200),
 				settings);
@@ -325,7 +338,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				showButton(mTextRect, Color.YELLOW);
 				color = Color.GREEN;
 				showButton(snakeSpeedRect, color);
-				inputBox.show();
+				shape.end();
+				InputBoxShower(updateM);
+				InputBoxShower(updateN);
+				InputBoxShower(updateSnakeSpeed);
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
