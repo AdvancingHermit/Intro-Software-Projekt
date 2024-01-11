@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.handlers.*;
 import com.snake.game.util.*;
-import com.snake.game.util.Vector;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -116,7 +116,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	FruitType coffeeBean;
 	FruitPicker FruitPicker = new FruitPicker();
 
-	final int coffeeSpeed = 3;
+	final int coffeeSpeed = 2;
 	final int coffeeDuration = 10;
 
 	int fruitAmount = 4;
@@ -175,10 +175,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
-		JSON json;
-		json = new JSON("data/data.json");
-		json.createFile("data/");
-		
 
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
@@ -192,15 +188,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 				backArrow);
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
 				new Vector(screenWidth / 4, screenHeight / 4),
-				createFontSize((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920))), "Start");
+				createFont((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920)), normColor(0, 0, 0, 1)), "START");
 		featureButton = new Button(
 				new Vector(startButton.getpos().x + screenWidth / 32, startButton.getpos().y - screenHeight / 8),
 				new Vector(screenWidth / 4 - screenWidth / 16, screenHeight / 8),
-				createFontSize((screenWidth * 4 / 10 * ("Features").length()) / (150 * (screenWidth / 1920))),
+				createFont((screenWidth * 4 / 10 * ("Features").length()) / (150 * (screenWidth / 1920))),
 				"Features");
 		restartButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
 				new Vector(screenWidth / 4, screenHeight / 4),
-				createFontSize((screenWidth * 4 / 15 * ("Play Again").length()) / (102 * (screenWidth / 1920))),
+				createFont((screenWidth * 4 / 15 * ("Play Again").length()) / (102 * (screenWidth / 1920))),
 				"Play Again");
 		boxesWidth = screenWidth / 6;
 		boxesHeight = screenHeight / 16;
@@ -220,14 +216,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 	}
 
-	public BitmapFont createFontSize(int size) {
+	public BitmapFont createFont(int size) {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		parameter.size = size;
 		font3 = generator.generateFont(parameter);
 		font3.setColor(Color.ORANGE);
 		return font3;
 	}
-
+	public BitmapFont createFont(int size, Color color) {
+		font3 = createFont(size);
+		font3.setColor(color);
+		return font3;
+	}
 	public void showButton(Button temp) {
 		batch.begin();
 		batch.draw(temp.getbackArrow(), temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
@@ -337,7 +337,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.end();
 				break;
 			case Main_Game:
-				ScreenUtils.clear(0, 0, 1, 1);
+				ScreenUtils.clear(normColor(29, 32, 219, 1));
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 
@@ -430,7 +430,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 
 	}
-
+	public Color normColor(float r, float g, float b, float a) {
+		return new Color(r / 255, g / 255, b / 255, a);
+	
+	}
 	private void checkFruitCollsions() {
 		Iterator<Fruit> fruitIterator = fruits.iterator();
 		while (fruitIterator.hasNext()) {
@@ -562,7 +565,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 								(int) snake.getVel().angle() + 10);
 						effect.getEmitters().first().getAngle().setLow((int) snake.getVel().angle() - 10,
 								(int) snake.getVel().angle() + 10);
-						if (!snake.getVel().equals(snake.getOldVel())) {
+						if (!snake.getVel().equals(snake.getDragonOldVel())) {
 							effect.reset();
 							effect = scaleEffect(effect);
 							effect.start();
