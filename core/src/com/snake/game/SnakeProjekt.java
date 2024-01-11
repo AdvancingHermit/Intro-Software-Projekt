@@ -58,6 +58,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont font;
 	BitmapFont font2;
 	BitmapFont font3;
+	BitmapFont featureFont;
 
 	Texture backArrow;
 
@@ -176,6 +177,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		font2 = generator.generateFont(parameter);
 		font2.setColor(Color.ORANGE);
 		generator.dispose();
+		featureFont = createFont((screenWidth * 4 / 5 * 4) / (102 * (screenWidth / 1920)));
 
 		scoreText = new GlyphLayout();
 		scoreText.setText(font2, "Player 1 SCORE");
@@ -810,7 +812,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.end();
 		if (temp.gethandler() != null) {
 			batch.begin();
-			createFont((screenWidth * 4 / 5 * 4) / (102 * (screenWidth / 1920))).draw(batch, temp.getfeatureName(), temp.getpos().x - screenWidth / 2,
+			featureFont.draw(batch, temp.getfeatureName(), temp.getpos().x - screenWidth / 2,
 					temp.getpos().y - screenHeight / 2 + Math.round(1.75 * temp.getSize().y));
 			batch.end();
 		} else if (temp.gettext() != null) {
