@@ -328,8 +328,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.end();
 				batch.begin();
 				for (int i = 0; i < grid.snakes.length; i++) {
-
+					font2.setColor(Color.ORANGE);
+					font.setColor(Color.ORANGE);
 					scoreNumText.setText(font2, "22");
+					colonText.setText(font, " : ");
 					scoreText.setText(font2, "PLAYER " + (i + 1) + " SCORE");
 					float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 20;
 					scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
@@ -339,14 +341,20 @@ public class SnakeProjekt extends ApplicationAdapter {
 					font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
 							(0.41f + 0.075f * -i) * viewport.getScreenHeight());
 					if (quickTimeHandler.isEnabled()){
-						quickTimerText.setText(font2, "PLAYER"  + (i + 1) + " TIME");
+						font2.setColor(Color.RED);
+						font.setColor(Color.RED);
+						colonText.setText(font, " : ");
+						quickTimerText.setText(font2, "PLAYER "  + (i + 1) + " TIME");
 						scoreNumText.setText(font2, "" + (10 - grid.snakes[i].getQuickTimeCounter() / 30)); // 30 fps
-						font2.draw(batch, quickTimerText, (offset + 20), (0.49f + 0.075f * -1) * viewport.getScreenHeight());
-						font.draw(batch, colonText, offset + 20 + quickTimerText.width, (0.49f + 0.075f * -1) * viewport.getScreenHeight());
-						font2.draw(batch, scoreNumText, offset  + quickTimerText.width + colonText.width,
-								(0.49f + 0.075f * -1) * viewport.getScreenHeight());
+						font2.draw(batch, quickTimerText, i == 2 ? offset + 20 + 250 : offset + 20 + (450 * i),
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
+						font.draw(batch, colonText, i == 2 ? offset + 20 + 250 + quickTimerText.width : offset + 20 + quickTimerText.width + (450 * i),
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
+						font2.draw(batch, scoreNumText, i == 2 ? offset + 20 + 250 + quickTimerText.width + colonText.width : offset  + quickTimerText.width + colonText.width + (450 * i),
+								i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight() : (0.55f + 0.075f * -1) * viewport.getScreenHeight());
 					}
-
+					font2.setColor(Color.ORANGE);
+					font.setColor(Color.ORANGE);
 				}
 				batch.end();
 

@@ -20,13 +20,13 @@ public class Snake {
 
     public boolean isDead;
     private int counter = 0;
-    private final int startMaxCounter = 5;
+    private final int startMaxCounter = 8;
     private int maxcounter = startMaxCounter;
 
 
 
-    private HashMap<Character, Vector> keyVectorMap = new HashMap<Character, Vector>();
-    public HashMap<Vector, Character> keyVectorMapReversed = new HashMap<Vector, Character>();
+    private HashMap<Character, Vector> keyVectorMap = new HashMap<>();
+    public HashMap<Vector, Character> keyVectorMapReversed = new HashMap<>();
 
     //Quick Time Event Variables
     private int quickTimeCounter = 0;
