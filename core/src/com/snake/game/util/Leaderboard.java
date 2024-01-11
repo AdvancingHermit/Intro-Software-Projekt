@@ -20,7 +20,7 @@ public class Leaderboard{
         for(Object leaderboard : json.getData().get("leaderboard").toString().replace("{", "").replace("}", "").split(",")){
             String[] strArr = leaderboard.toString().split(":");
             String[] hScore = strArr[1].substring(strArr[1].indexOf(":") + 1).trim().split(" ");
-            board[Integer.parseInt(strArr[0].trim()) - 1] = new Highscore(hScore[0].trim(), Integer.parseInt(hScore[1].trim()));
+            board[Integer.parseInt(strArr[0].trim()) - 1] = new Highscore(hScore[0].trim(), Integer.parseInt(hScore[1].trim()), Integer.parseInt(hScore[2].trim()));
         }
         Arrays.sort(board, Collections.reverseOrder());
     }

@@ -4,11 +4,13 @@ public class Highscore implements Comparable<Highscore> {
 
     String username;
     int score;
+    int features;
     
 
-    public Highscore(String username, int score){
+    public Highscore(String username, int score, int features){
         this.username = username;
         this.score = score;
+        this.features = features;
     }    
 
     public Highscore(String hString){
@@ -25,6 +27,9 @@ public class Highscore implements Comparable<Highscore> {
     }
     public String getUsername(){
         return username;
+    }
+    public int getFeatures(){
+        return features;
     }
 
     @Override
