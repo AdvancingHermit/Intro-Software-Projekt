@@ -78,11 +78,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	boolean canClick = true;
 	boolean allSnakesDead;
+	boolean showControlls;
 	int frameCounter = 0;
 	InputBox inputBox;
 	int boxesHeight,
 			boxesWidth;
-	Button backButton, startButton, featureButton, restartButton, settingsButton, settingsRect, nTextRect, mTextRect,
+	Button backButton, startButton, featureButton, controlsSettingsButton, restartButton, settingsButton, settingsRect,
+			nTextRect, mTextRect, setSizesSettingsButton,
 			snakeSpeedRect;
 	InputBox updateSnakeSpeed, updateM, updateN;
 	Color color;
@@ -218,6 +220,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 				backArrow);
 		settingsButton = new Button(new Vector(screenWidth / 2 - 300, screenHeight / 2 - 300), new Vector(200, 200),
 				settings);
+		controlsSettingsButton = new Button(
+				new Vector(screenWidth / 2 - screenWidth / 4, screenHeight - screenHeight / 5),
+				new Vector(screenWidth / 2, screenHeight / 10),
+				createFontSize((screenWidth * 4 / 5 * ("Controls").length()) / (172 * (screenWidth / 1920))),
+				"Controls");
+		setSizesSettingsButton = new Button(
+				new Vector(screenWidth / 2 - screenWidth / 4, screenHeight - screenHeight / 5),
+				new Vector(screenWidth / 2, screenHeight / 10),
+				createFontSize((screenWidth * 4 / 5 * ("Gameplay").length()) / (172 * (screenWidth / 1920))),
+				"Gameplay");
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
 				new Vector(screenWidth / 4, screenHeight / 4),
 				createFontSize((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920))), "Start");
@@ -297,8 +309,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				fruits.clear();
 				ScreenUtils.clear(0, 1, 0.5f, 1);
 
-				frameCounter++;
-
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
@@ -328,27 +338,63 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.end();
 				break;
 			case Main_Setting:
-				ScreenUtils.clear(0, 0, 1, 1);
-				camera.update();
-				batch.setProjectionMatrix(camera.combined);
-				shape.begin(ShapeType.Filled);
-				showButton(backButton);
-				showButton(settingsRect, Color.YELLOW);
-				showButton(nTextRect, Color.YELLOW);
-				showButton(mTextRect, Color.YELLOW);
-				color = Color.GREEN;
-				showButton(snakeSpeedRect, color);
-				shape.end();
-				InputBoxShower(updateM);
-				InputBoxShower(updateN);
-				InputBoxShower(updateSnakeSpeed);
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-					if (backButton.clickedButton()) {
-						currentScene = Scene.Main_Scene;
-					}
-				}
-				shape.end();
+				if (!showControlls) {
+					ScreenUtils.clear(0, 0, 1, 1);
+					camera.update();
+					batch.setProjectionMatrix(camera.combined);
+					shape.begin(ShapeType.Filled);
+					showButton(backButton);
+					showButton(settingsRect, Color.YELLOW);
+					showButton(nTextRect, Color.YELLOW);
+					showButton(mTextRect, Color.YELLOW);
+					showButton(snakeSpeedRect, Color.GREEN);
+					showButton(controlsSettingsButton, color);
 
+					System.out.println(canClick);
+					if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+							&& !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+						canClick = true;
+					}
+					if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+							|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && canClick) {
+						canClick = false;
+						if (backButton.clickedButton()) {
+							currentScene = Scene.Main_Scene;
+						} else if (controlsSettingsButton.clickedButton()) {
+							canClick = false;
+							showControlls = true;
+						}
+					}
+					shape.end();
+					InputBoxShower(updateM);
+					InputBoxShower(updateN);
+					InputBoxShower(updateSnakeSpeed);
+
+				} else {
+					ScreenUtils.clear(0, 0, 1, 1);
+					camera.update();
+					batch.setProjectionMatrix(camera.combined);
+					shape.begin(ShapeType.Filled);
+					showButton(backButton);
+					showButton(setSizesSettingsButton, color);
+					System.out.println(canClick);
+					if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+							&& !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+						canClick = true;
+					}
+					if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+							|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT) && canClick) {
+						canClick = false;
+						if (backButton.clickedButton()) {
+							currentScene = Scene.Main_Scene;
+						} else if (setSizesSettingsButton.clickedButton()) {
+							canClick = false;
+							showControlls = false;
+						}
+					}
+					shape.end();
+
+				}
 				break;
 			case Main_Enable_Features:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -358,7 +404,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					canClick = true;
 				}
-
 				showButton(backButton);
 				showButton(settingsButton);
 				for (Button x : features) {
@@ -482,7 +527,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				break;
 
 		}
-
 	}
 
 	private void checkFruitCollsions() {
