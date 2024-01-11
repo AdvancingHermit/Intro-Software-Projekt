@@ -467,7 +467,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			fruitX = 0;
 
 		}
-		if (coffeeBeanHandler.isEnabled()) {
+		if (coffeeBeanHandler.isEnabled() && !dragonFruitHandler.isEnabled()) {
 			batch.draw(snakeCoffeeHead, headspawnX, 200, 60,60);
 			batch.draw(coffeeBeanSprite, fruitX, 200, 60, 60);
 		}
