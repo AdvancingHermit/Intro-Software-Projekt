@@ -37,6 +37,7 @@ import com.snake.game.handlers.SnakeReverseHandler;
 import com.snake.game.handlers.WallHandler;
 import com.snake.game.util.Button;
 import com.snake.game.util.InputBox;
+import com.snake.game.util.JSON;
 import com.snake.game.util.Vector;
 
 public class SnakeProjekt extends ApplicationAdapter {
