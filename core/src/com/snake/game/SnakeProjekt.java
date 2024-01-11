@@ -117,8 +117,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	int fruitAmount = 4;
 
-	private int n = 15;
-	private int m = 15;
+	private int n = 5;
+	private int m = 5;
 
 	@Override
 	public void create() {
@@ -503,7 +503,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	private void snakeUpdater(Rectangle[][] shower) {
 		int deadSnakeCounter = 0;
-		for (Snake snake : grid.snakes) {
+		for (int i = 0; i < grid.snakes.length; i++) {
+			Snake snake = grid.snakes[i];
 			ArrayList<Vector> positions = snake.getPositions();
 			for (int k = 0; k < positions.size(); k++) {
 				int cx = positions.get(k).x;
@@ -633,9 +634,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 					batch.draw(spr, (int) (shower[cx][cy].x - screenWidth / 2),
 							(int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize, grid.squareSize);
 
-					// batch.draw(snakeBodySprite, (int) (shower[cx][cy].x - screenWidth / 2),
-					// (int) (shower[cx][cy].y - screenHeight / 2), grid.squareSize,
-					// grid.squareSize);
 				}
 			}
 			if (quickTimeHandler.isEnabled()) {
@@ -654,7 +652,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 			}
-			batch.setColor(Color.CHARTREUSE);
+			batch.setColor(i == 0 ? Color.CHARTREUSE : Color.PINK);
 			if (snake.isDead) {
 				deadSnakeCounter++;
 			}

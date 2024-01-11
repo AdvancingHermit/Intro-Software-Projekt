@@ -30,7 +30,7 @@ public class Grid {
             return;
         } 
         for (int i = 0; i < snakeAmount; i++) {
-            snakes[i] = new Snake(gridSize.x / 2, -1 + i + gridSize.y / 2, keys);
+            snakes[i] = new Snake(gridSize.x / 2, -2 + i*2 + gridSize.y / 2, keys);
             if (i == 0) {
                 keys = new int[] { Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT};
             } 
