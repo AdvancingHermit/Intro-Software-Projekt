@@ -254,83 +254,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				fruits.clear();
 			//	ScreenUtils.clear(0, 0, 1, 1);
 				ScreenUtils.clear(0, 0, 1, 1);
-				batch.begin();
-				batch.flush();
-				snakeText.setText(mainScreenFont, "SNAKE");
-				mainScreenFont.draw(batch, snakeText, -1 * snakeText.width/2,560);
-				Sprite snakeCorner1 = new Sprite(snakeBodyCornerSprite);
-				snakeCorner1.flip(true,true);
-				Sprite snakeCorner2 = new Sprite(snakeBodyCornerSprite);
-				snakeCorner2.flip(false,true);
-				Sprite snakeCorner3 = new Sprite(snakeBodyCornerSprite);
-				snakeCorner3.flip(true,false);
-				Sprite snakeCorner4 = new Sprite(snakeBodyCornerSprite);
-				Sprite snakeHead = new Sprite(snakeHeadSidewaysSprite);
-				snakeHead.flip(true,false);
+				drawMainScreen();
 
-
-
-
-
-				if (coffeeBeanHandler.isEnabled() && !dragonFruitHandler.isEnabled()) {
-					batch.draw(snakeHeadCoffeeSidewaysSprite, -60, 200, 60,60);
-					batch.draw(coffeeBeanSprite, 0, 200, 60, 60);
-				}
-				 else if (dragonFruitHandler.isEnabled()) {
-					//spit fire Oscar
-					batch.draw(snakeHeadSidewaysSprite, -60, 200, 60,60);
-					batch.draw(appleSprite, 0, 200, 60, 60);
-				}
-				else if (snakeReverseHandler.isEnabled()) {
-					batch.draw(snakeHead, 0, 200, 60,60);
-					batch.draw(appleSprite, -60, 200, 60, 60);
-				}
-				else {
-					batch.draw(snakeHeadSidewaysSprite, -60, 200, 60,60);
-					batch.draw(appleSprite, 0, 200, 60, 60);
-			}
-
-                //top snake
-				for (int i = 0; i< 12; i++) {
-					//head and apple
-					if (i == 6 || i == 5){
-						continue;
-					}
-					if (i < 11) {
-						batch.draw(snakeBodySidewaysSprite, 300 - i * 60, 200, 60, 60);
-					} else {
-						batch.draw(snakeCorner4, 300 - i * 60, 200, 60, 60);
-					}
-				}
-				//left snake
-				for (int i = 0; i< 10; i++) {
-					if (i < 9) {
-
-						batch.draw(snakeBodySprite, -360, 140 - i * 60, 60, 60);
-					} else {
-						batch.draw(snakeCorner2, -360, 140 - i * 60, 60, 60);
-					}
-				}
-				//bottom snake
-				for (int i = 0; i< 11; i++) {
-				if (i < 10) {
-
-					batch.draw(snakeBodySidewaysSprite, -300 + 60 * i, -400, 60, 60);
-				} else {
-					batch.draw(snakeCorner1, -300 + 60 * i, -400, 60, 60);
-				}
-			}
-				//right snake
-				for (int i = 0; i< 10; i++) {
-					if (i < 9) {
-
-						batch.draw(snakeBodySprite, 300, -340 + i * 60, 60, 60);
-					} else {
-						batch.draw(snakeCorner3, 300, -340 + i * 60, 60, 60);
-					}
-				}
-
-				batch.end();
 
 				frameCounter++;
 
@@ -511,6 +436,94 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 
 	}
+
+	private void drawMainScreen() {
+		batch.begin();
+		batch.flush();
+		snakeText.setText(mainScreenFont, "SNAKE");
+		mainScreenFont.draw(batch, snakeText, -1 * snakeText.width/2,560);
+		Sprite snakeCorner1 = new Sprite(snakeBodyCornerSprite);
+		snakeCorner1.flip(true,true);
+		Sprite snakeCorner2 = new Sprite(snakeBodyCornerSprite);
+		snakeCorner2.flip(false,true);
+		Sprite snakeCorner3 = new Sprite(snakeBodyCornerSprite);
+		snakeCorner3.flip(true,false);
+		Sprite snakeCorner4 = new Sprite(snakeBodyCornerSprite);
+
+		Sprite snakeHead = new Sprite(snakeHeadSidewaysSprite);
+
+		Sprite snakeCoffeeHead = new Sprite(snakeHeadCoffeeSidewaysSprite);
+
+
+		int headspawnX;
+		int fruitX;
+		if (snakeReverseHandler.isEnabled()) {
+			headspawnX = 0;
+			fruitX = -60;
+			snakeHead.flip(true,false);
+			snakeCoffeeHead.flip(true,false);
+		} else {
+			headspawnX = -60;
+			fruitX = 0;
+
+		}
+		if (coffeeBeanHandler.isEnabled()) {
+			batch.draw(snakeCoffeeHead, headspawnX, 200, 60,60);
+			batch.draw(coffeeBeanSprite, fruitX, 200, 60, 60);
+		}
+		 else if (dragonFruitHandler.isEnabled()) {
+			//spit fire Oscar
+			batch.draw(snakeHead, headspawnX, 200, 60,60);
+			batch.draw(appleSprite, fruitX, 200, 60, 60);
+		}
+		else {
+			batch.draw(snakeHead, headspawnX, 200, 60,60);
+			batch.draw(appleSprite, fruitX, 200, 60, 60);
+	}
+
+		//top snake
+		for (int i = 0; i< 12; i++) {
+			//head and apple
+			if (i == 6 || i == 5){
+				continue;
+			}
+			if (i < 11) {
+				batch.draw(snakeBodySidewaysSprite, 300 - i * 60, 200, 60, 60);
+			} else {
+				batch.draw(snakeCorner4, 300 - i * 60, 200, 60, 60);
+			}
+		}
+		//left snake
+		for (int i = 0; i< 10; i++) {
+			if (i < 9) {
+
+				batch.draw(snakeBodySprite, -360, 140 - i * 60, 60, 60);
+			} else {
+				batch.draw(snakeCorner2, -360, 140 - i * 60, 60, 60);
+			}
+		}
+		//bottom snake
+		for (int i = 0; i< 11; i++) {
+		if (i < 10) {
+
+			batch.draw(snakeBodySidewaysSprite, -300 + 60 * i, -400, 60, 60);
+		} else {
+			batch.draw(snakeCorner1, -300 + 60 * i, -400, 60, 60);
+		}
+	}
+		//right snake
+		for (int i = 0; i< 10; i++) {
+			if (i < 9) {
+
+				batch.draw(snakeBodySprite, 300, -340 + i * 60, 60, 60);
+			} else {
+				batch.draw(snakeCorner3, 300, -340 + i * 60, 60, 60);
+			}
+		}
+
+		batch.end();
+	}
+
 	public Color normColor(float r, float g, float b, float a) {
 		return new Color(r / 255, g / 255, b / 255, a / 255);
 	
