@@ -19,7 +19,7 @@ public class Highscore implements Comparable<Highscore> {
     }
 
     public String toString(){
-        return username + " " + score;
+        return username + " " + score + " " + features;
     }
     
     public int getScore(){
