@@ -1,11 +1,19 @@
 package com.snake.game;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -18,14 +26,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.snake.game.handlers.*;
-import com.snake.game.util.*;
+import com.snake.game.handlers.BorderHandler;
+import com.snake.game.handlers.CherryHandler;
+import com.snake.game.handlers.CoffeeBeanHandler;
+import com.snake.game.handlers.DragonFruitHandler;
+import com.snake.game.handlers.GoldenFruitHandler;
+import com.snake.game.handlers.MultiplayerHandler;
+import com.snake.game.handlers.QuickTimeHandler;
+import com.snake.game.handlers.SnakeReverseHandler;
+import com.snake.game.handlers.WallHandler;
+import com.snake.game.util.Button;
+import com.snake.game.util.InputBox;
 import com.snake.game.util.Vector;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 public class SnakeProjekt extends ApplicationAdapter {
 
@@ -64,6 +76,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Texture snakeHeadSidewaysSprite;
 	Texture snakeHeadCoffeeSprite;
 	Texture snakeHeadCoffeeSidewaysSprite;
+
+	Pixmap pixmap;
 
 	List<Fruit> fruits = new ArrayList<>();
 	Random random = new Random();
@@ -117,8 +131,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	int fruitAmount = 4;
 
-	private int n = 5;
-	private int m = 5;
+	private int n = 15;
+	private int m = 15;
 
 	@Override
 	public void create() {
@@ -186,7 +200,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				backArrow);
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
 				new Vector(screenWidth / 4, screenHeight / 4),
-				createFont((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920)), normColor(0, 0, 0, 1)), "START");
+				createFont((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920)), normColor(0, 0, 0, 255)), "START");
 		featureButton = new Button(
 				new Vector(startButton.getpos().x + screenWidth / 32, startButton.getpos().y - screenHeight / 8),
 				new Vector(screenWidth / 4 - screenWidth / 16, screenHeight / 8),
@@ -335,7 +349,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.end();
 				break;
 			case Main_Game:
-				ScreenUtils.clear(normColor(29, 32, 219, 1));
+				ScreenUtils.clear(normColor(29, 32, 219, 255));
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 
@@ -437,7 +451,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	}
 	public Color normColor(float r, float g, float b, float a) {
-		return new Color(r / 255, g / 255, b / 255, a);
+		return new Color(r / 255, g / 255, b / 255, a / 255);
 	
 	}
 	private void checkFruitCollsions() {
@@ -652,7 +666,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 			}
-			batch.setColor(i == 0 ? Color.CHARTREUSE : Color.PINK);
+			batch.setColor(i == 0 ? Color.CHARTREUSE : Color.RED);
+
 			if (snake.isDead) {
 				deadSnakeCounter++;
 			}
@@ -813,6 +828,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		img.dispose();
 		shape.dispose();
 		appleSprite.dispose();
+		pixmap.dispose();
 		generator.dispose();
 	}
 }
