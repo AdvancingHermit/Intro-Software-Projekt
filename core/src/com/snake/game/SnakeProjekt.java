@@ -33,7 +33,7 @@ import com.snake.game.util.*;
 public class SnakeProjekt extends ApplicationAdapter {
 
 	enum Scene {
-		Main_Scene, Login, Main_Game, Main_Setting, Main_Enable_Features, Main_Restart
+		Main_Scene, Login, Main_Game, Main_Setting, Main_Enable_Features, Main_Restart, Leaderboard_Scene
 	}
 
 	Scene currentScene = Scene.Main_Scene;
@@ -467,6 +467,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 					drawWalls();
 				}
 				checkFruitCollsions();
+
+				
+
 				break;
 			case Main_Restart:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -491,7 +494,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				break;
 
 		}
-
+		leaderboardShower();
 	}
 
 	public Color normColor(float r, float g, float b, float a) {
@@ -871,7 +874,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch.end();
 
 	}
-
 	public BitmapFont createFont(int size) {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		parameter.size = size;
@@ -930,9 +932,21 @@ public class SnakeProjekt extends ApplicationAdapter {
 	private void leaderboardShower() {
 		BitmapFont score;
 
-		for (int i = 0; i < leaderboard.getLeaderboard().length; i++) {
 
+		int height = 150;
+		score = createFont(50);
+		score.setColor(Color.GOLD);
+		batch.begin();
+		score.draw(batch, "Leaderboard:", - screenWidth / 2 + 50, height);
+		int j = 1;
+		for(int i = 0; i < leaderboard.getLeaderboard().length; i++){
+			Highscore curr = leaderboard.getLeaderboard()[i];
+            if (getFeatureHash(features) == getFeatureHash(features)) {
+                score.draw(batch, leaderboard.getLeaderboard()[i].getScore() + " by: " + leaderboard.getLeaderboard()[i].getUsername(), - screenWidth / 2 + 50, height - j * 50);
+				j++;	
+            }	
 		}
+		batch.end();
 	}
 
 	@Override
