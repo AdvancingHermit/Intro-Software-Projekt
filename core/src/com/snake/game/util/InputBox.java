@@ -63,6 +63,8 @@ public class InputBox {
                 if (Gdx.input.getX() > position.x && Gdx.input.getX() < position.x + size.x && y > position.y
                         && y < position.y + size.y) {
                     isEnabled = !isEnabled;
+                } else {
+                    isEnabled = false;
                 }
             }
         } else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
