@@ -268,7 +268,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public void render() {
 
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-			saveScore();
+			if (this.grid != null) {
+				saveScore();
+			}
+
 			json.addStringData(leaderboard.forJSON());
 			json.addStringData(users.forJSON());
 			json.createFile("data/");
@@ -468,7 +471,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				checkFruitCollsions();
 
-				
+				leaderboardShower();
 
 				break;
 			case Main_Restart:
@@ -494,7 +497,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				break;
 
 		}
-		leaderboardShower();
+
 	}
 
 	public Color normColor(float r, float g, float b, float a) {
@@ -941,7 +944,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		int j = 1;
 		for(int i = 0; i < leaderboard.getLeaderboard().length; i++){
 			Highscore curr = leaderboard.getLeaderboard()[i];
-            if (getFeatureHash(features) == getFeatureHash(features)) {
+            if (curr.getFeatures() == getFeatureHash(features)) {
                 score.draw(batch, leaderboard.getLeaderboard()[i].getScore() + " by: " + leaderboard.getLeaderboard()[i].getUsername(), - screenWidth / 2 + 50, height - j * 50);
 				j++;	
             }	
