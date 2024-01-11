@@ -228,43 +228,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 	}
 
-	public BitmapFont createFont(int size) {
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
-		parameter.size = size;
-		font3 = generator.generateFont(parameter);
-		font3.setColor(Color.ORANGE);
-		return font3;
-	}
-	public BitmapFont createFont(int size, Color color) {
-		font3 = createFont(size);
-		font3.setColor(color);
-		return font3;
-	}
-	public void showButton(Button temp) {
-		batch.begin();
-		batch.draw(temp.getbackArrow(), temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
-		batch.end();
-	}
-
-	public void showButton(Button temp, Color color) {
-		shape.setColor(color);
-		shape.rect(temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
-		shape.end();
-		if (temp.gethandler() != null) {
-			batch.begin();
-			font.draw(batch, temp.getfeatureName(), temp.getpos().x - screenWidth / 2,
-					temp.getpos().y - screenHeight / 2 + Math.round(1.75 * temp.getSize().y));
-			batch.end();
-		} else if (temp.gettext() != null) {
-			batch.begin();
-			temp.getfont().draw(batch, temp.gettext(),
-					temp.getpos().x - screenWidth / 2 + temp.getSize().x / 6,
-					temp.getpos().y - screenHeight / 2 + temp.getSize().y * 3 / 5);
-			batch.end();
-		}
-		shape.begin(ShapeType.Filled);
-	}
-
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
@@ -822,6 +785,42 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		batch.end();
 
+	}
+		public BitmapFont createFont(int size) {
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		parameter.size = size;
+		font3 = generator.generateFont(parameter);
+		font3.setColor(Color.ORANGE);
+		return font3;
+	}
+	public BitmapFont createFont(int size, Color color) {
+		font3 = createFont(size);
+		font3.setColor(color);
+		return font3;
+	}
+	public void showButton(Button temp) {
+		batch.begin();
+		batch.draw(temp.getbackArrow(), temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
+		batch.end();
+	}
+
+	public void showButton(Button temp, Color color) {
+		shape.setColor(color);
+		shape.rect(temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
+		shape.end();
+		if (temp.gethandler() != null) {
+			batch.begin();
+			createFont((screenWidth * 4 / 5 * 4) / (102 * (screenWidth / 1920))).draw(batch, temp.getfeatureName(), temp.getpos().x - screenWidth / 2,
+					temp.getpos().y - screenHeight / 2 + Math.round(1.75 * temp.getSize().y));
+			batch.end();
+		} else if (temp.gettext() != null) {
+			batch.begin();
+			temp.getfont().draw(batch, temp.gettext(),
+					temp.getpos().x - screenWidth / 2 + temp.getSize().x / 6,
+					temp.getpos().y - screenHeight / 2 + temp.getSize().y * 3 / 5);
+			batch.end();
+		}
+		shape.begin(ShapeType.Filled);
 	}
 
 	@Override
