@@ -117,8 +117,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	int fruitAmount = 4;
 
-	private int n = 5;
-	private int m = 5;
+	private int n = 15;
+	private int m = 15;
 
 	@Override
 	public void create() {
