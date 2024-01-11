@@ -132,6 +132,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	private int n = 15;
 	private int m = 15;
 
+	Leaderboard leaderboard;
+
 	@Override
 	public void create() {
 
@@ -227,12 +229,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			}
 		}
 		JSON json = new JSON("data/data.json");
-		Leaderboard leaderboard = new Leaderboard(json);
-		leaderboard.updateLeaderboard(new Highscore("test", 100, getFeatureHash(features)));
-		leaderboard.updateLeaderboard(new Highscore("test2", 150, getFeatureHash(features)));
-		leaderboard.updateLeaderboard(new Highscore("test", 200, getFeatureHash(features)));
-		
-		
+		leaderboard = new Leaderboard(json);		
 	}
 
 	@Override
@@ -843,6 +840,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 			vals += "" + button.gethandler().isEnabled();
 		}
 		return Objects.hashCode(vals);
+	}
+
+	private void leaderboardShower(){
+		BitmapFont score;
+
+		for(int i = 0; i < leaderboard.getLeaderboard().length; i++){
+			
+		}
 	}
 
 	@Override

@@ -26,7 +26,8 @@ public class Leaderboard {
             temp2 = temp[i].split(",");
             int index1 = temp2[0].toString().indexOf(":");
 
-            int placement = Integer.parseInt(temp2[0].toString().substring(index1 + 1, findWordEndIndex(temp2[0].toString(), index1)).trim());
+            int placement = Integer.parseInt(
+                    temp2[0].toString().substring(index1 + 1, findWordEndIndex(temp2[0].toString(), index1)).trim());
             String username = temp2[1].toString().substring(temp2[1].toString().indexOf(":") + 1).trim();
 
             int score = Integer.parseInt(temp2[2].toString().substring(temp2[2].toString().indexOf(":") + 1).trim());
@@ -39,10 +40,21 @@ public class Leaderboard {
     }
 
     public void updateLeaderboard(Highscore newScore) {
-        if (newScore.getScore() > board[board.length - 1].getScore()) {
-            board[board.length - 1] = newScore;
+        if (board.length == maxScores) {
+            if (newScore.getScore() > board[board.length - 1].getScore()) {
+                board[board.length - 1] = newScore;
+                Arrays.sort(board, Collections.reverseOrder());
+            }
+        } else {
+            Highscore[] temp = new Highscore[board.length + 1];
+            for (int i = 0; i < board.length; i++) {
+                temp[i] = board[i];
+            }
+            temp[temp.length - 1] = newScore;
+            board = temp;
             Arrays.sort(board, Collections.reverseOrder());
         }
+
     }
 
     public Highscore[] getLeaderboard() {
@@ -53,9 +65,9 @@ public class Leaderboard {
         String[] sArr = new String[1];
         sArr[0] = "leaderboard: [";
 
-        for(int i = 0; i < board.length; i++){
+        for (int i = 0; i < board.length; i++) {
             sArr[0] += "{";
-            
+
             sArr[0] += "placement: " + (i + 1) + ", ";
             sArr[0] += "username: " + board[i].getUsername() + ", ";
             sArr[0] += "score: " + board[i].getScore() + ", ";
@@ -63,12 +75,12 @@ public class Leaderboard {
 
             sArr[0] = sArr[0].substring(0, sArr[0].length() - 2);
             sArr[0] += "}, ";
-            
+
         }
 
         sArr[0] = sArr[0].substring(0, sArr[0].length() - 2);
         sArr[0] += "]";
-        
+
         return sArr;
     }
 
