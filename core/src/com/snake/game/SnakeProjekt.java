@@ -346,6 +346,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 			if (this.grid != null) {
 				saveScore();
 			}
+			
+			for(int i = 0; i < leaderboard.forJSON().length; i++){
+				System.out.println(leaderboard.forJSON()[i]);
+			}
 
 			json.addStringData(leaderboard.forJSON());
 			json.addStringData(users.forJSON());

@@ -24,6 +24,7 @@ public class JSON {
      * leaderboard: {1: Test 100,2: Test2 300,3: Test3 300}
      */
     public JSON(String path) {
+
         String info = "";
         try {
             FileHandle file = Gdx.files.internal(path);
@@ -33,8 +34,21 @@ public class JSON {
             }
             fileReader.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            if(e instanceof GdxRuntimeException){
+                System.out.println("File not found");
+                String[] temp = new String[2];
+                temp[0] = "users: []";
+                temp[1] = "leaderboard: []";
+                data = dataFromString(temp);
+                return;                
+            }
+
+
+            //e.printStackTrace();
         }
+
+
+
         String[] iwannasee;
         String[] temp1 = new String[0];
         String[] temp2 = new String[0];
