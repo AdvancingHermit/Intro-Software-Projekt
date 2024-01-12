@@ -530,19 +530,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 			}
 		}
-		Sprite snakeHeadSprite = snakeHead;
+		Sprite snakeHeadSprite1 = snakeHead;
 
 		if (coffeeBeanHandler.isEnabled()) {
-			snakeHeadSprite = snakeCoffeeHead;
-			if (!dragonFruitHandler.isEnabled()) {
-				;
-				batch.draw(coffeeBeanSprite, fruitX, 200, 60, 60);
-			}
+			snakeHeadSprite1 = snakeCoffeeHead;
+			batch.draw(coffeeBeanSprite, fruitX, 200, 60, 60);
 
 		}
 		if (dragonFruitHandler.isEnabled()) {
-			// spit fire Oscar
-			batch.draw(appleSprite, fruitX, 200, 60, 60);
 			effect.start();
 			if (snakeReverseHandler.isEnabled()) {
 				effect.getEmitters().first().getAngle().setHigh((int) 180 - 10, (int) 180 + 10);
@@ -557,7 +552,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		} else if (!dragonFruitHandler.isEnabled() && !coffeeBeanHandler.isEnabled()) {
 			batch.draw(appleSprite, fruitX, 200, 60, 60);
 		}
-		batch.draw(snakeHeadSprite, headspawnX, 200, 60, 60);
+		batch.draw(snakeHeadSprite1, headspawnX, 200, 60, 60);
 
 		;
 
@@ -572,9 +567,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 					150);
 		}
 		if (multiplayerHandler2.isEnabled()) {
-
 			batch.setColor(Color.CHARTREUSE);
-			if (coffeeBeanHandler.isEnabled() && !dragonFruitHandler.isEnabled()) {
+			if (coffeeBeanHandler.isEnabled()) {
 				batch.draw(snakeHeadCoffeeSprite, fruitX, 260, 60, 60);
 			} else {
 				batch.draw(snakeHeadSprite, fruitX, 260, 60, 60);
@@ -582,22 +576,60 @@ public class SnakeProjekt extends ApplicationAdapter {
 			batch.draw(snakeBodySprite, fruitX, 320, 60, 60);
 		}
 		if (multiplayerHandler3.isEnabled()) {
-			if (!snakeReverseHandler.isEnabled()) {
-				batch.setColor(Color.CHARTREUSE);
+
+				batch.setColor(snakeReverseHandler.isEnabled() ? Color.RED: Color.CHARTREUSE);
 				batch.draw(snakeHeadSidewaysSprite, -60, 260, 60, 60);
-				batch.draw(snakeBodySidewaysSprite, -120, 260, 60, 60);
-				batch.setColor(Color.RED);
-				snakeHead.flip(true, false);
-				batch.draw(snakeHead, 0, 260, 60, 60);
-				batch.draw(snakeBodySidewaysSprite, 60, 260, 60, 60);
-			} else {
-				batch.setColor(Color.CHARTREUSE);
-				batch.draw(snakeBodySidewaysSprite, -60, 260, 60, 60);
-				batch.draw(snakeHead, -120, 260, 60, 60);
-				batch.setColor(Color.RED);
-				batch.draw(snakeBodySidewaysSprite, 0, 260, 60, 60);
-				batch.draw(snakeHeadSidewaysSprite, 60, 260, 60, 60);
+				//top left
+				for (int i = 0; i< 6; i++) {
+					if (i < 5) {
+						batch.draw(snakeBodySidewaysSprite, -120 - i * 60, 260, 60, 60);
+					} else {
+						batch.draw(snakeCorner4, -120 - i * 60, 260, 60, 60);
+					}
+				}
+				//left
+			    for (int i = 0; i< 12; i++) {
+				    if (i < 11) {
+						batch.draw(snakeBodySprite, -420, 200 - i * 60, 60, 60);
+					} else {
+						batch.draw(snakeCorner2, -420, 200 - i * 60, 60, 60);
+					}
+				}
+				//bottomleft
+			for (int i = 0; i< 6; i++) {
+					batch.draw(snakeBodySidewaysSprite, -360 + i * 60, -460, 60, 60);
 			}
+
+
+
+				batch.setColor(snakeReverseHandler.isEnabled() ? Color.CHARTREUSE: Color.RED);
+			    if (!snakeReverseHandler.isEnabled()) {
+					snakeHead.flip(true, false);
+				}
+				batch.draw(snakeHead, 0, 260, 60, 60);
+				//top right
+			for (int i = 0; i< 6; i++) {
+				if (i < 5) {
+					batch.draw(snakeBodySidewaysSprite, 60 +i * 60, 260, 60, 60);
+				} else {
+					batch.draw(snakeCorner3,   60 +i * 60, 260, 60, 60);
+				}
+			}
+			//right
+			for (int i = 0; i< 12; i++) {
+				if (i < 11) {
+					batch.draw(snakeBodySprite, 360, 200 - i * 60, 60, 60);
+				} else {
+					batch.draw(snakeCorner1, 360, 200 - i * 60, 60, 60);
+				}
+			}
+			//bottom right
+			for (int i = 0; i< 6; i++) {
+				batch.draw(snakeBodySidewaysSprite, 300 - i * 60, -460, 60, 60);
+			}
+
+
+
 
 		}
 
