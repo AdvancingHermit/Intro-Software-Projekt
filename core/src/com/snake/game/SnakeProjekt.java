@@ -14,12 +14,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter.Particle;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -53,6 +53,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont loginFont;
 	BitmapFont loginContinueFont;
 
+	BitmapFont mainScreenFont;
+
 	Texture backArrow;
 
 	Texture appleSprite;
@@ -70,6 +72,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Texture snakeHeadSidewaysSprite;
 	Texture snakeHeadCoffeeSprite;
 	Texture snakeHeadCoffeeSidewaysSprite;
+	Texture timerSprite;
 
 	Pixmap pixmap;
 
@@ -79,6 +82,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout colonText;
 	GlyphLayout scoreText;
 	GlyphLayout quickTimerText;
+	GlyphLayout snakeText;
 
 	int screenHeight;
 	int screenWidth;
@@ -101,7 +105,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "1 Player", 1);
 	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(false, "2 Player", 2);
 	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(false, "3 Player", 3);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 20);
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries", 80);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(true, "Quicktime", 10);
 	BorderHandler borderHandler = new BorderHandler(false, "Borders");
@@ -131,7 +135,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	private int m = 15;
 
 	Leaderboard leaderboard;
-
+	ParticleEffect effect = new ParticleEffect();
 	String username;
 
 	Vector loginBoxSize;
@@ -160,6 +164,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		snakeHeadSidewaysSprite = new Texture((Gdx.files.internal("snakeheadsideways.png")));
 		snakeHeadCoffeeSprite = new Texture((Gdx.files.internal("snakeheadcoffee.png")));
 		snakeHeadCoffeeSidewaysSprite = new Texture((Gdx.files.internal("snakeheadcoffeesideways.png")));
+		timerSprite = new Texture((Gdx.files.internal("Timer.png")));
 
 		img = new Texture("badlogic.jpg");
 		shape = new ShapeRenderer();
@@ -183,6 +188,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		font2.setColor(Color.ORANGE);
 		generator.dispose();
 		featureFont = createFont((screenWidth * 4 / 5 * 4) / (102 * (screenWidth / 1920)));
+		mainScreenFont = createFont(200, Color.BLACK);
 
 		scoreText = new GlyphLayout();
 		scoreText.setText(font2, "Player 1 SCORE");
@@ -191,17 +197,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 		colonText = new GlyphLayout();
 		colonText.setText(font, " : ");
 		scoreNumText = new GlyphLayout();
+		snakeText = new GlyphLayout();
 
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
 		// Fruits
-		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
-		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
-		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance());
-		cherry2 = new FruitType(cherry2Sprite, 0, 0, 0);
-		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance());
-		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance());
+		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0,cherryHandler);
+		goldenApple = new FruitType(goldenAppleSprite, 10, -1, goldenFruitHandler.getChance(), goldenFruitHandler);
+		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance(), cherryHandler);
+		cherry2 = new FruitType(cherry2Sprite, 0, 0,  0,cherryHandler);
+		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance(), coffeeBeanHandler);
+		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance(), dragonFruitHandler);
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
@@ -235,6 +242,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			}
 		}
+    
+		effect.load(Gdx.files.internal("particles/fire.p"), Gdx.files.internal("particles"));
+
 		json = new JSON("data/data.json");
 		leaderboard = new Leaderboard(json);
 
@@ -279,7 +289,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		switch (currentScene) {
 			case Main_Scene:
 				fruits.clear();
+				// ScreenUtils.clear(0, 0, 1, 1);
 				ScreenUtils.clear(0, 0, 1, 1);
+				drawMainScreen();
 
 				frameCounter++;
 
@@ -364,6 +376,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 					for (Button feature : features) {
 						if (feature.clickedButton()) {
+							if (feature.gethandler().equals(multiplayerHandler2)) {
+								multiplayerHandler3.disable();
+							}
+							if (feature.gethandler().equals(multiplayerHandler3)) {
+								multiplayerHandler2.disable();
+							}
 							feature.toggleisEnabled();
 						}
 					}
@@ -500,6 +518,190 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		}
 
+	}
+
+	private void drawMainScreen() {
+		batch.begin();
+		batch.flush();
+		snakeText.setText(mainScreenFont, "SNAKE");
+		mainScreenFont.draw(batch, snakeText, -1 * snakeText.width / 2, screenHeight / 2 - snakeText.height / 10);
+		Sprite snakeCorner1 = new Sprite(snakeBodyCornerSprite);
+		snakeCorner1.flip(true, true);
+		Sprite snakeCorner2 = new Sprite(snakeBodyCornerSprite);
+		snakeCorner2.flip(false, true);
+		Sprite snakeCorner3 = new Sprite(snakeBodyCornerSprite);
+		snakeCorner3.flip(true, false);
+		Sprite snakeCorner4 = new Sprite(snakeBodyCornerSprite);
+
+		Sprite snakeHead = new Sprite(snakeHeadSidewaysSprite);
+
+		Sprite snakeCoffeeHead = new Sprite(snakeHeadCoffeeSidewaysSprite);
+
+		int headspawnX;
+		int fruitX;
+		if (snakeReverseHandler.isEnabled()) {
+			headspawnX = 0;
+			fruitX = -60;
+			snakeCoffeeHead.flip(true, false);
+			snakeHead.flip(true, false);
+		} else {
+			headspawnX = -60;
+			fruitX = 0;
+			;
+
+		}
+
+		// top snake
+		for (int i = 0; i < 12; i++) {
+			// head and apple
+			if (i == 6 || i == 5) {
+				continue;
+			}
+			if (i < 11) {
+				batch.draw(snakeBodySidewaysSprite, 300 - i * 60, 200, 60, 60);
+			} else {
+				batch.draw(snakeCorner4, 300 - i * 60, 200, 60, 60);
+			}
+		}
+		// left snake
+		for (int i = 0; i < 10; i++) {
+			if (i < 9) {
+
+				batch.draw(snakeBodySprite, -360, 140 - i * 60, 60, 60);
+			} else {
+				batch.draw(snakeCorner2, -360, 140 - i * 60, 60, 60);
+			}
+		}
+		// bottom snake
+		for (int i = 0; i < 11; i++) {
+			if (i < 10) {
+
+				batch.draw(snakeBodySidewaysSprite, -300 + 60 * i, -400, 60, 60);
+			} else {
+				batch.draw(snakeCorner1, -300 + 60 * i, -400, 60, 60);
+			}
+		}
+		// right snake
+		for (int i = 0; i < 10; i++) {
+			if (i < 9) {
+
+				batch.draw(snakeBodySprite, 300, -340 + i * 60, 60, 60);
+			} else {
+				batch.draw(snakeCorner3, 300, -340 + i * 60, 60, 60);
+			}
+		}
+		if (wallHandler.isEnabled()) {
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 9; j++) {
+					batch.draw(wallSprite, -300 + 540 * i, 140 - j * 60, 60, 60);
+				}
+			}
+		}
+		Sprite snakeHeadSprite1 = snakeHead;
+
+		if (coffeeBeanHandler.isEnabled()) {
+			snakeHeadSprite1 = snakeCoffeeHead;
+			batch.draw(coffeeBeanSprite, fruitX, 200, 60, 60);
+
+		}
+		if (dragonFruitHandler.isEnabled()) {
+			effect.start();
+			if (snakeReverseHandler.isEnabled()) {
+				effect.getEmitters().first().getAngle().setHigh((int) 180 - 10, (int) 180 + 10);
+				effect.getEmitters().first().getAngle().setLow((int) 180 - 10, (int) 180 + 10);
+				effect.setPosition(headspawnX, 200 + 60 / 2);
+			} else {
+				effect.getEmitters().first().getAngle().setHigh((int) 0 - 10, (int) 0 + 10);
+				effect.getEmitters().first().getAngle().setLow((int) 0 - 10, (int) 0 + 10);
+				effect.setPosition(headspawnX + 60, 200 + 60 / 2);
+			}
+			effect.draw(batch, Gdx.graphics.getDeltaTime());
+		} else if (!dragonFruitHandler.isEnabled() && !coffeeBeanHandler.isEnabled()) {
+			batch.draw(appleSprite, fruitX, 200, 60, 60);
+		}
+		batch.draw(snakeHeadSprite1, headspawnX, 200, 60, 60);
+
+		;
+
+		if (effect.isComplete()) {
+			effect.reset();
+			effect.start();
+		}
+
+		// timer
+		if (quickTimeHandler.isEnabled()) {
+			batch.draw(timerSprite, snakeReverseHandler.isEnabled() ? headspawnX + 22 : headspawnX - 102, 200 - 47, 150,
+					150);
+		}
+		if (multiplayerHandler2.isEnabled()) {
+			batch.setColor(Color.CHARTREUSE);
+			if (coffeeBeanHandler.isEnabled()) {
+				batch.draw(snakeHeadCoffeeSprite, fruitX, 260, 60, 60);
+			} else {
+				batch.draw(snakeHeadSprite, fruitX, 260, 60, 60);
+			}
+			batch.draw(snakeBodySprite, fruitX, 320, 60, 60);
+		}
+		if (multiplayerHandler3.isEnabled()) {
+
+				batch.setColor(snakeReverseHandler.isEnabled() ? Color.RED: Color.CHARTREUSE);
+				batch.draw(snakeHeadSidewaysSprite, -60, 260, 60, 60);
+				//top left
+				for (int i = 0; i< 6; i++) {
+					if (i < 5) {
+						batch.draw(snakeBodySidewaysSprite, -120 - i * 60, 260, 60, 60);
+					} else {
+						batch.draw(snakeCorner4, -120 - i * 60, 260, 60, 60);
+					}
+				}
+				//left
+			    for (int i = 0; i< 12; i++) {
+				    if (i < 11) {
+						batch.draw(snakeBodySprite, -420, 200 - i * 60, 60, 60);
+					} else {
+						batch.draw(snakeCorner2, -420, 200 - i * 60, 60, 60);
+					}
+				}
+				//bottomleft
+			for (int i = 0; i< 6; i++) {
+					batch.draw(snakeBodySidewaysSprite, -360 + i * 60, -460, 60, 60);
+			}
+
+
+
+				batch.setColor(snakeReverseHandler.isEnabled() ? Color.CHARTREUSE: Color.RED);
+			    if (!snakeReverseHandler.isEnabled()) {
+					snakeHead.flip(true, false);
+				}
+				batch.draw(snakeHead, 0, 260, 60, 60);
+				//top right
+			for (int i = 0; i< 6; i++) {
+				if (i < 5) {
+					batch.draw(snakeBodySidewaysSprite, 60 +i * 60, 260, 60, 60);
+				} else {
+					batch.draw(snakeCorner3,   60 +i * 60, 260, 60, 60);
+				}
+			}
+			//right
+			for (int i = 0; i< 12; i++) {
+				if (i < 11) {
+					batch.draw(snakeBodySprite, 360, 200 - i * 60, 60, 60);
+				} else {
+					batch.draw(snakeCorner1, 360, 200 - i * 60, 60, 60);
+				}
+			}
+			//bottom right
+			for (int i = 0; i< 6; i++) {
+				batch.draw(snakeBodySidewaysSprite, 300 - i * 60, -460, 60, 60);
+			}
+
+
+
+
+		}
+
+		batch.setColor(Color.WHITE);
+		batch.end();
 	}
 
 	public Color normColor(float r, float g, float b, float a) {
@@ -788,7 +990,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (validSpawn) {
 
 					if (cherry1Spawned && !cherry2Spawned) {
-
 						createFruit(cherry2, spawningPosition, rectangle);
 						cherry2Spawned = true;
 						continue;
@@ -879,6 +1080,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch.end();
 
 	}
+
 	public BitmapFont createFont(int size) {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		parameter.size = size;
@@ -927,6 +1129,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		return Objects.hashCode(vals);
 	}
+
 
 	public Vector getTextSize(BitmapFont font, String text) {
 		GlyphLayout glyph = new GlyphLayout();
