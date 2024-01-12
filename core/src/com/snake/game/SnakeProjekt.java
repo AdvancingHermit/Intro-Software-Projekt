@@ -714,16 +714,22 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		int headspawnX;
 		int fruitX;
-
+		int funSize = (int) (startButton.getSize().x / 8);
 		if (snakeReverseHandler.isEnabled()) {
 			headspawnX = 0;
-			fruitX = -60;
+			fruitX = -funSize;
 			snakeCoffeeHead.flip(true, false);
 			snakeHead.flip(true, false);
 		} else {
-			headspawnX = -60;
+			headspawnX = -funSize;
 			fruitX = 0;
 		}
+
+		int bodPos = 5 * funSize;
+		int snakeBodOffsetYTop = (int) (startButton.getpos().y + (startButton.getSize().y) - (screenHeight / 2));
+		int snakeBodOffsetYBot = (int) (snakeBodOffsetYTop - funSize * 9);
+		int snakeBodOffsetXRight = (int) (startButton.getpos().x + (startButton.getSize().x) - (screenWidth / 2));
+		int snakeBodOffsetXLeft = (int) (startButton.getpos().x - (screenWidth / 2));
 
 		// top snake
 		for (int i = 0; i < 12; i++) {
@@ -732,42 +738,45 @@ public class SnakeProjekt extends ApplicationAdapter {
 				continue;
 			}
 			if (i < 11) {
-				batch.draw(snakeBodySidewaysSprite, 300 - i * 60, 200, 60, 60);
+				batch.draw(snakeBodySidewaysSprite, bodPos - i * funSize, snakeBodOffsetYTop + funSize, funSize,
+						funSize);
 			} else {
-				batch.draw(snakeCorner4, 300 - i * 60, 200, 60, 60);
+				batch.draw(snakeCorner4, bodPos - i * funSize, snakeBodOffsetYTop + funSize, funSize, funSize);
 			}
 		}
 		// left snake
 		for (int i = 0; i < 10; i++) {
 			if (i < 9) {
 
-				batch.draw(snakeBodySprite, -360, 140 - i * 60, 60, 60);
+				batch.draw(snakeBodySprite, bodPos - 11 * funSize, (snakeBodOffsetYTop) - i * funSize, funSize,
+						funSize);
 			} else {
-				batch.draw(snakeCorner2, -360, 140 - i * 60, 60, 60);
+				batch.draw(snakeCorner2, bodPos - 11 * funSize, (snakeBodOffsetYTop) - i * funSize, funSize, funSize);
 			}
 		}
 		// bottom snake
 		for (int i = 0; i < 11; i++) {
 			if (i < 10) {
 
-				batch.draw(snakeBodySidewaysSprite, -300 + 60 * i, -400, 60, 60);
+				batch.draw(snakeBodySidewaysSprite, -bodPos + funSize * i, snakeBodOffsetYBot, funSize, funSize);
 			} else {
-				batch.draw(snakeCorner1, -300 + 60 * i, -400, 60, 60);
+				batch.draw(snakeCorner1, -bodPos + funSize * i, snakeBodOffsetYBot, funSize, funSize);
 			}
 		}
 		// right snake
 		for (int i = 0; i < 10; i++) {
 			if (i < 9) {
 
-				batch.draw(snakeBodySprite, 300, -340 + i * 60, 60, 60);
+				batch.draw(snakeBodySprite, bodPos, (snakeBodOffsetYBot + funSize) + i * funSize, funSize, funSize);
 			} else {
-				batch.draw(snakeCorner3, 300, -340 + i * 60, 60, 60);
+				batch.draw(snakeCorner3, bodPos, (snakeBodOffsetYBot + funSize) + i * funSize, funSize, funSize);
 			}
 		}
 		if (wallHandler.isEnabled()) {
 			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 9; j++) {
-					batch.draw(wallSprite, -300 + 540 * i, 140 - j * 60, 60, 60);
+					batch.draw(wallSprite, -bodPos + 9 * funSize * i, (snakeBodOffsetYTop) - j * funSize, funSize,
+							funSize);
 				}
 			}
 		}
@@ -775,96 +784,96 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		if (coffeeBeanHandler.isEnabled()) {
 			snakeHeadSprite1 = snakeCoffeeHead;
-			batch.draw(coffeeBeanSprite, fruitX, 200, 60, 60);
+			batch.draw(coffeeBeanSprite, fruitX, snakeBodOffsetYTop + funSize, funSize, funSize);
 
 		}
 		if (dragonFruitHandler.isEnabled()) {
 			effect.start();
+			effect = scaleEffect(effect, funSize);
 			if (snakeReverseHandler.isEnabled()) {
 				effect.getEmitters().first().getAngle().setHigh((int) 180 - 10, (int) 180 + 10);
 				effect.getEmitters().first().getAngle().setLow((int) 180 - 10, (int) 180 + 10);
-				effect.setPosition(headspawnX, 200 + 60 / 2);
+				effect.setPosition(headspawnX, snakeBodOffsetYTop + funSize / 2 + funSize);
 			} else {
 				effect.getEmitters().first().getAngle().setHigh((int) 0 - 10, (int) 0 + 10);
 				effect.getEmitters().first().getAngle().setLow((int) 0 - 10, (int) 0 + 10);
-				effect.setPosition(headspawnX + 60, 200 + 60 / 2);
+				effect.setPosition(headspawnX + funSize, snakeBodOffsetYTop + funSize / 2 + funSize);
 			}
 			effect.draw(batch, Gdx.graphics.getDeltaTime());
+
+			if (effect.isComplete()) {
+				effect.reset();
+				effect.start();
+			}
 		} else if (!dragonFruitHandler.isEnabled() && !coffeeBeanHandler.isEnabled()) {
-			batch.draw(appleSprite, fruitX, 200, 60, 60);
+			batch.draw(appleSprite, fruitX, snakeBodOffsetYTop + funSize, funSize, funSize);
 		}
-		batch.draw(snakeHeadSprite1, headspawnX, 200, 60, 60);
+		batch.draw(snakeHeadSprite1, headspawnX, snakeBodOffsetYTop + funSize, funSize, funSize);
 
-		;
-
-		if (effect.isComplete()) {
-			effect.reset();
-			effect.start();
-		}
 
 		// timer
 		if (quickTimeHandler.isEnabled()) {
-			batch.draw(timerSprite, snakeReverseHandler.isEnabled() ? headspawnX + 22 : headspawnX - 102, 200 - 47, 150,
-					150);
+			batch.draw(timerSprite, snakeReverseHandler.isEnabled() ? headspawnX + funSize : headspawnX - funSize, snakeBodOffsetYTop +  funSize + (funSize - (int) (funSize * 0.8)) / 2, (int) (funSize * 0.8),
+			(int) (funSize * 0.8));
 		}
 		if (multiplayerHandler2.isEnabled()) {
 			batch.setColor(Color.CHARTREUSE);
 			if (coffeeBeanHandler.isEnabled()) {
-				batch.draw(snakeHeadCoffeeSprite, fruitX, 260, 60, 60);
+				batch.draw(snakeHeadCoffeeSprite, fruitX, 2*funSize + snakeBodOffsetYTop,funSize, funSize);
 			} else {
-				batch.draw(snakeHeadSprite, fruitX, 260, 60, 60);
+				batch.draw(snakeHeadSprite, fruitX, 2*funSize + snakeBodOffsetYTop,funSize,funSize);
 			}
-			batch.draw(snakeBodySprite, fruitX, 320, 60, 60);
+			batch.draw(snakeBodySprite, fruitX, 3*funSize + snakeBodOffsetYTop,funSize,funSize);
 		}
 		if (multiplayerHandler3.isEnabled()) {
 
 			batch.setColor(snakeReverseHandler.isEnabled() ? Color.RED : Color.CHARTREUSE);
-			batch.draw(snakeHeadSidewaysSprite, -60, 260, 60, 60);
+			batch.draw(snakeHeadSidewaysSprite, -funSize, 2*funSize + snakeBodOffsetYTop,funSize,funSize);
 			// top left
 			for (int i = 0; i < 6; i++) {
 				if (i < 5) {
-					batch.draw(snakeBodySidewaysSprite, -120 - i * 60, 260, 60, 60);
+					batch.draw(snakeBodySidewaysSprite, -2*funSize - i *funSize, snakeBodOffsetYTop  + 2*funSize,funSize,funSize);
 				} else {
-					batch.draw(snakeCorner4, -120 - i * 60, 260, 60, 60);
+					batch.draw(snakeCorner4, -2*funSize - i *funSize, snakeBodOffsetYTop + 2*funSize,funSize,funSize);
 				}
 			}
 			// left
 			for (int i = 0; i < 12; i++) {
 				if (i < 11) {
-					batch.draw(snakeBodySprite, -420, 200 - i * 60, 60, 60);
+					batch.draw(snakeBodySprite, -bodPos - 2*funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
 				} else {
-					batch.draw(snakeCorner2, -420, 200 - i * 60, 60, 60);
+					batch.draw(snakeCorner2, -bodPos -2*funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
 				}
 			}
 			// bottomleft
 			for (int i = 0; i < 6; i++) {
-				batch.draw(snakeBodySidewaysSprite, -360 + i * 60, -460, 60, 60);
+				batch.draw(snakeBodySidewaysSprite, -bodPos - funSize + i *funSize, snakeBodOffsetYBot - funSize,funSize,funSize);
 			}
 
 			batch.setColor(snakeReverseHandler.isEnabled() ? Color.CHARTREUSE : Color.RED);
 			if (!snakeReverseHandler.isEnabled()) {
 				snakeHead.flip(true, false);
 			}
-			batch.draw(snakeHead, 0, 260, 60, 60);
+			batch.draw(snakeHead, 0, snakeBodOffsetYTop + funSize*2,funSize,funSize);
 			// top right
 			for (int i = 0; i < 6; i++) {
 				if (i < 5) {
-					batch.draw(snakeBodySidewaysSprite, 60 + i * 60, 260, 60, 60);
+					batch.draw(snakeBodySidewaysSprite,funSize + i *funSize,  snakeBodOffsetYTop + funSize*2,funSize,funSize);
 				} else {
-					batch.draw(snakeCorner3, 60 + i * 60, 260, 60, 60);
+					batch.draw(snakeCorner3,funSize + i *funSize,  snakeBodOffsetYTop + funSize*2,funSize,funSize);
 				}
 			}
 			// right
 			for (int i = 0; i < 12; i++) {
 				if (i < 11) {
-					batch.draw(snakeBodySprite, 360, 200 - i * 60, 60, 60);
+					batch.draw(snakeBodySprite, bodPos + funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
 				} else {
-					batch.draw(snakeCorner1, 360, 200 - i * 60, 60, 60);
+					batch.draw(snakeCorner1, bodPos + funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
 				}
 			}
 			// bottom right
 			for (int i = 0; i < 6; i++) {
-				batch.draw(snakeBodySidewaysSprite, 300 - i * 60, -460, 60, 60);
+				batch.draw(snakeBodySidewaysSprite, bodPos - i *funSize, snakeBodOffsetYBot - funSize,funSize,funSize);
 			}
 
 		}
@@ -1217,6 +1226,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		effect.getEmitters().first().getXScale().setHigh((int) (grid.squareSize / 1.4));
 		effect.getEmitters().first().getYScale().setLow((int) (grid.squareSize / 1.4));
 		effect.getEmitters().first().getLife().setHigh((int) ((grid.squareSize / 50.0) * 325));
+		return effect;
+	}
+
+	public ParticleEffect scaleEffect(ParticleEffect effect, int size) {
+		effect.getEmitters().first().getXScale().setHigh((int) (size / 1.4));
+		effect.getEmitters().first().getYScale().setLow((int) (size / 1.4));
+		effect.getEmitters().first().getLife().setHigh((int) ((size / 50.0) * 325));
 		return effect;
 	}
 
