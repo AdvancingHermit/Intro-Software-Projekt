@@ -17,11 +17,10 @@ public class Snake {
     private char key;
     private int[] keys;
 
-
     public boolean isDead;
     private int counter = 0;
-    private final int startMaxCounter = 8;
-    private int maxcounter = startMaxCounter;
+    private int startMaxCounter  ;
+    private int maxcounter;
 
 
 
@@ -55,7 +54,9 @@ public class Snake {
     private ParticleEffect effect = new ParticleEffect();
 
 
-    public Snake(int x, int y) {
+    public Snake(int x, int y, int maxcounter) {
+        this.maxcounter = maxcounter;
+        startMaxCounter = maxcounter;
         Vector pos = new Vector(x, y);
         positions = new ArrayList<>();
         for (int i = snakeSize; i >= 0; i--) {
@@ -81,8 +82,8 @@ public class Snake {
 
     }
 
-    public Snake(int x, int y, int[] keys) {
-        this(x, y);
+    public Snake(int x, int y, int maxcounter, int[] keys) {
+        this(x, y, maxcounter);
         this.keys = keys;
     }
 
