@@ -471,7 +471,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 				checkFruitCollsions();
 
-				leaderboardShower();
+				if (!multiplayerHandler.isEnabled()) {
+					leaderboardShower();
+				}
+				
 
 				break;
 			case Main_Restart:
