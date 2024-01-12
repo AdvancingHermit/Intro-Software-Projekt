@@ -29,6 +29,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.handlers.*;
 import com.snake.game.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import javax.sound.midi.SysexMessage;
 
 public class SnakeProjekt extends ApplicationAdapter {
 
@@ -56,7 +62,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont mainScreenFont;
 
 	Texture backArrow;
-
+	Texture settings;
 	Texture appleSprite;
 	Texture goldenAppleSprite;
 	Texture coffeeBeanSprite;
@@ -72,9 +78,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Texture snakeHeadSidewaysSprite;
 	Texture snakeHeadCoffeeSprite;
 	Texture snakeHeadCoffeeSidewaysSprite;
+	Texture PlayerOne, PlayerTwo, PlayerThree;
 	Texture timerSprite;
-
-	Pixmap pixmap;
 
 	List<Fruit> fruits = new ArrayList<>();
 	Random random = new Random();
@@ -86,14 +91,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	int screenHeight;
 	int screenWidth;
+	int maxcounter = 15;
 
 	boolean canClick = true;
 	boolean allSnakesDead;
+	boolean showControlls;
 	int frameCounter = 0;
 	InputBox inputBox;
 	int boxesHeight,
 			boxesWidth;
-	Button backButton, startButton, featureButton, restartButton, loginButton;
+	Button backButton, startButton, featureButton, controlsSettingsButton, restartButton, settingsButton, settingsRect,
+			nTextRect, mTextRect, setSizesSettingsButton, Player1, Player2, Player3, snakeSpeedRect;
+	InputBox updateSnakeSpeed, updateM, updateN;
 	Color color;
 
 	FreeTypeFontGenerator generator;
@@ -156,7 +165,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		cherry1Sprite = new Texture((Gdx.files.internal("Cherry1.png")));
 		cherry2Sprite = new Texture((Gdx.files.internal("Cherry2.png")));
 		coffeeBeanSprite = new Texture((Gdx.files.internal("CoffeeBean.png")));
-
+		settings = new Texture((Gdx.files.internal("settings.png")));
 		snakeBodySprite = new Texture((Gdx.files.internal("snakebody.png")));
 		snakeBodySidewaysSprite = new Texture((Gdx.files.internal("snakebodysideways.png")));
 		snakeBodyCornerSprite = new Texture((Gdx.files.internal("snakebodycorner.png")));
@@ -164,6 +173,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		snakeHeadSidewaysSprite = new Texture((Gdx.files.internal("snakeheadsideways.png")));
 		snakeHeadCoffeeSprite = new Texture((Gdx.files.internal("snakeheadcoffee.png")));
 		snakeHeadCoffeeSidewaysSprite = new Texture((Gdx.files.internal("snakeheadcoffeesideways.png")));
+		PlayerOne = new Texture((Gdx.files.internal("PlayerOne.png")));
+		PlayerTwo = new Texture((Gdx.files.internal("PlayerTwo.png")));
+		PlayerThree = new Texture((Gdx.files.internal("PlayerThree.png")));
 		timerSprite = new Texture((Gdx.files.internal("Timer.png")));
 
 		img = new Texture("badlogic.jpg");
@@ -210,8 +222,60 @@ public class SnakeProjekt extends ApplicationAdapter {
 		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance(), coffeeBeanHandler);
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance(), dragonFruitHandler);
 
-		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
+		// making setting scene
+		settingsRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2 + screenHeight / 8),
+				new Vector(screenWidth / 2, screenHeight / 8),
+				createFontSize((screenWidth * 4 / 10 * ("Gridsize").length()) / (102 * (screenWidth / 1920))),
+				"Gridsize");
+		nTextRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2),
+				new Vector(screenWidth / 4, screenHeight / 8),
+				createFontSize(((102 * screenWidth) / 1920)),
+				"n:");
+		mTextRect = new Button(new Vector(screenWidth / 2, screenHeight / 2),
+				new Vector(screenWidth / 4, screenHeight / 8),
+				createFontSize((102 * screenWidth) / 1920),
+				"m:");
+
+		snakeSpeedRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2 - screenHeight / 4),
+				new Vector(screenWidth / 2, screenHeight / 6),
+				createFontSize((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920))),
+				"Snake Speed:");
+		updateN = new InputBox(1, new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2),
+				new Vector(screenWidth / 8, screenHeight / 16));
+		updateM = new InputBox(1, new Vector(screenWidth / 2 + screenWidth / 8, screenHeight / 2),
+				new Vector(screenWidth / 8, screenHeight / 16));
+		updateSnakeSpeed = new InputBox(1,
+				new Vector(screenWidth / 2 + screenWidth / 24, screenHeight / 2 - screenHeight / 5),
+				new Vector(screenWidth / 5, screenHeight / 12));
+		Player1 = new Button(new Vector(screenWidth / 6, screenHeight / 2 + screenHeight / 6),
+				new Vector(screenWidth / 6, screenHeight / 12),
+				createFontSize((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920))),
+				"Player 1");
+		Player2 = new Button(new Vector(screenWidth / 2 - screenWidth / 12, screenHeight / 2 + screenHeight / 6),
+				new Vector(screenWidth / 6, screenHeight / 12),
+				createFontSize((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920))),
+				"Player 2");
+		Player3 = new Button(new Vector(screenWidth / 2 + screenWidth / 6, screenHeight / 2 + screenHeight / 6),
+				new Vector(screenWidth / 6, screenHeight / 12),
+				createFontSize((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920))),
+				"Player 3");
+
+		// Making Buttons
+		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 250),
+				new Vector(300, 100),
 				backArrow);
+		settingsButton = new Button(new Vector(screenWidth / 2 - 300, screenHeight / 2 - 300), new Vector(200, 200),
+				settings);
+		controlsSettingsButton = new Button(
+				new Vector(screenWidth / 2 - screenWidth / 4, screenHeight - screenHeight / 5),
+				new Vector(screenWidth / 2, screenHeight / 10),
+				createFontSize((screenWidth * 4 / 5 * ("Controls").length()) / (172 * (screenWidth / 1920))),
+				"Controls");
+		setSizesSettingsButton = new Button(
+				new Vector(screenWidth / 2 - screenWidth / 4, screenHeight - screenHeight / 5),
+				new Vector(screenWidth / 2, screenHeight / 10),
+				createFontSize((screenWidth * 4 / 5 * ("Gameplay").length()) / (172 * (screenWidth / 1920))),
+				"Gameplay");
 		startButton = new Button(new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2 - screenHeight / 8),
 				new Vector(screenWidth / 4, screenHeight / 4),
 				createFont((screenWidth * 4 / 5 * ("Start").length()) / (102 * (screenWidth / 1920)),
@@ -294,7 +358,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				drawMainScreen();
 
 				frameCounter++;
-
+        
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
@@ -302,6 +366,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				showButton(startButton, color);
 				color = Color.RED;
 				showButton(featureButton, color);
+				showButton(settingsButton);
 
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					if (startButton.clickedButton()) {
@@ -346,6 +411,87 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				break;
 			case Main_Setting:
+				if (!showControlls) {
+					ScreenUtils.clear(0, 0, 1, 1);
+					camera.update();
+					batch.setProjectionMatrix(camera.combined);
+					shape.begin(ShapeType.Filled);
+					showButton(backButton);
+					showButton(settingsRect, Color.YELLOW);
+					showButton(nTextRect, Color.YELLOW);
+					showButton(mTextRect, Color.YELLOW);
+					showButton(snakeSpeedRect, Color.GREEN);
+					showButton(controlsSettingsButton, color);
+					shape.end();
+					InputBoxShower(updateM);
+					InputBoxShower(updateN);
+					InputBoxShower(updateSnakeSpeed);
+					System.out.println(canClick);
+					if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+							&& !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+						canClick = true;
+					}
+					if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+							|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && canClick) {
+						canClick = false;
+						if (backButton.clickedButton()) {
+							if (!(updateM.getString().equals(""))) {
+								m = (updateM.getNumber() > 100) ? 100
+										: (updateM.getNumber() < 5) ? 5 : updateM.getNumber();
+							}
+							if (!(updateN.getString().equals(""))) {
+								n = (updateN.getNumber() > 100) ? 100
+										: (updateN.getNumber() < 5) ? 5 : updateN.getNumber();
+							}
+							if (!(updateSnakeSpeed.getString().equals(""))) {
+								System.out.println("hej");
+								maxcounter = (updateSnakeSpeed.getNumber() > 15) ? 1
+										: (updateSnakeSpeed.getNumber() < 1) ? 30 : (30 - updateSnakeSpeed.getNumber() * 2);
+							}
+							System.out.println(n + " " + m);
+							System.out.println(maxcounter);
+							currentScene = Scene.Main_Scene;
+						} else if (controlsSettingsButton.clickedButton()) {
+							canClick = false;
+							showControlls = true;
+						}
+					}
+
+				} else {
+					ScreenUtils.clear(0, 0, 1, 1);
+					camera.update();
+					batch.setProjectionMatrix(camera.combined);
+					shape.begin(ShapeType.Filled);
+					showButton(backButton);
+					showButton(setSizesSettingsButton, color);
+					showButton(Player1, color);
+					showButton(Player2, color);
+					showButton(Player3, color);
+					shape.end();
+					batch.begin();
+
+					batch.draw(PlayerOne, screenWidth / 8 - screenWidth / 2, -screenHeight / 6, screenWidth / 4,
+							screenHeight / 4);
+					batch.draw(PlayerTwo, screenWidth / 12 - screenWidth / 5, -screenHeight / 6, screenWidth / 4,
+							screenHeight / 4);
+					batch.draw(PlayerThree, screenWidth / 7, -screenHeight / 6, screenWidth / 4, screenHeight / 4);
+					batch.end();
+					if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+							&& !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+						canClick = true;
+					}
+					if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+							|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && canClick) {
+						canClick = false;
+						if (backButton.clickedButton()) {
+							currentScene = Scene.Main_Scene;
+						} else if (setSizesSettingsButton.clickedButton()) {
+							canClick = false;
+							showControlls = false;
+						}
+					}
+
+				}
 				break;
 			case Main_Enable_Features:
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -355,8 +501,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					canClick = true;
 				}
-
 				showButton(backButton);
+				showButton(settingsButton);
 				for (Button x : features) {
 					if (x.gethandler().isEnabled()) {
 						color = Color.GREEN;
@@ -373,6 +519,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 					canClick = false;
 					if (backButton.clickedButton()) {
 						currentScene = Scene.Main_Scene;
+					} else if (settingsButton.clickedButton()) {
+						currentScene = Scene.Main_Setting;
 					}
 					for (Button feature : features) {
 						if (feature.clickedButton()) {
@@ -517,7 +665,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				break;
 
 		}
-
 	}
 
 	private void drawMainScreen() {

@@ -43,6 +43,7 @@ public class Grid {
         for (Snake snake : snakes) {
             if (!snake.isDead) {
                 snake.move();
+
                 checkSnakeCollision(snakes, snake);
             }
         }
