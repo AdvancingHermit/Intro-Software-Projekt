@@ -58,8 +58,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 	BitmapFont featureFont;
 	BitmapFont loginFont;
 	BitmapFont loginContinueFont;
-
 	BitmapFont mainScreenFont;
+	BitmapFont score;
 
 	Texture backArrow;
 	Texture settings;
@@ -329,6 +329,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				loginButtonSize, loginContinueFont, "Continue");
 
 		users = new Users(json);
+
+		score = createFont(50);
 
 	}
 
@@ -859,6 +861,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	public void saveScore() {
+		System.out.println(Objects.hashCode(getFeatureHash(features)));
 		users.updateUser(new User(username, grid.snakes[0].getScore()) );
 		leaderboard.updateLeaderboard(new Highscore(username, grid.snakes[0].getScore(), getFeatureHash(features)));
 	}
@@ -1287,11 +1290,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	private void leaderboardShower() {
-		BitmapFont score;
 
 
-		int height = 150;
-		score = createFont(50);
+		int height = screenHeight / 5;
+		
 		score.setColor(Color.GOLD);
 		batch.begin();
 		score.draw(batch, "Leaderboard:", - screenWidth / 2 + 50, height);
@@ -1299,10 +1301,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 		for(int i = 0; i < leaderboard.getLeaderboard().length; i++){
 			Highscore curr = leaderboard.getLeaderboard()[i];
             if (curr.getFeatures() == getFeatureHash(features)) {
+				System.out.println("abe!");
                 score.draw(batch, leaderboard.getLeaderboard()[i].getScore() + " by: " + leaderboard.getLeaderboard()[i].getUsername(), - screenWidth / 2 + 50, height - j * 50);
 				j++;	
             }	
 		}
+
 		batch.end();
 	}
 

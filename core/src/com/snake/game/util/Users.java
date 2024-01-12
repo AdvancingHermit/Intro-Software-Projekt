@@ -33,6 +33,9 @@ public class Users {
         }
     
         public void addUser(User newUser){
+            if (newUser.getUsername().equals("")) {
+                return;
+            }
             User[] temp = new User[users.length + 1];
             for(int i = 0; i < users.length; i++){
                 temp[i] = users[i];
