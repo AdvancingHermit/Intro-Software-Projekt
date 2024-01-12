@@ -89,9 +89,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout quickTimerText;
 	GlyphLayout snakeText;
 
+
 	double screenHeight;
 	double screenWidth;
-	int maxcounter = 15;
+	int maxcounter = 8;
 
 	boolean canClick = true;
 	boolean allSnakesDead;
@@ -101,8 +102,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int boxesHeight,
 			boxesWidth;
 	Button backButton, startButton, featureButton, controlsSettingsButton, restartButton, settingsButton, settingsRect,
-			nTextRect, mTextRect, setSizesSettingsButton, Player1, Player2, Player3, snakeSpeedRect, loginButton;
-	InputBox updateSnakeSpeed, updateM, updateN;
+			nTextRect, mTextRect, setSizesSettingsButton, Player1, Player2, Player3, snakeSpeedRect, fruitAmountRect,
+			loginButton;
+	InputBox updateSnakeSpeed, updateM, updateN, updateFruitAmount;
 	Color color;
 
 	FreeTypeFontGenerator generator;
@@ -426,7 +428,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						gridsize = new Vector(n, m);
 						grid = new Grid(gridsize,
 								multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
-								(int) screenHeight);
+								(int) screenHeight, maxcounter);
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
@@ -441,16 +443,25 @@ public class SnakeProjekt extends ApplicationAdapter {
 					batch.setProjectionMatrix(camera.combined);
 					shape.begin(ShapeType.Filled);
 					showButton(backButton);
+					shape.setColor(Color.YELLOW);
+					shape.rect(screenWidth / 2 - screenWidth / 4, screenHeight / 2, screenWidth / 2, screenHeight / 8);
+					shape.setColor(Color.GREEN);
+					shape.rect(screenWidth / 2, screenHeight / 2 - screenHeight * 3 / 14,
+							screenWidth / 4, screenHeight / 6);
+					shape.setColor(Color.RED);
+					shape.rect(screenWidth / 2, screenHeight / 2 - screenHeight * 3 / 7,
+							screenWidth / 4, screenHeight / 6);
 					showButton(settingsRect, Color.YELLOW);
 					showButton(nTextRect, Color.YELLOW);
 					showButton(mTextRect, Color.YELLOW);
 					showButton(snakeSpeedRect, Color.GREEN);
 					showButton(controlsSettingsButton, color);
+					showButton(fruitAmountRect, color);
 					shape.end();
 					inputBoxShower(updateM);
 					inputBoxShower(updateN);
 					inputBoxShower(updateSnakeSpeed);
-					System.out.println(canClick);
+					inputBoxShower(updateFruitAmount);
 					if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 							&& !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 						canClick = true;
@@ -468,15 +479,36 @@ public class SnakeProjekt extends ApplicationAdapter {
 										: (updateN.getNumber() < 5) ? 5 : updateN.getNumber();
 							}
 							if (!(updateSnakeSpeed.getString().equals(""))) {
-								System.out.println("hej");
 								maxcounter = (updateSnakeSpeed.getNumber() > 15) ? 1
 										: (updateSnakeSpeed.getNumber() < 1) ? 30
 												: (30 - updateSnakeSpeed.getNumber() * 2);
 							}
-							System.out.println(n + " " + m);
-							System.out.println(maxcounter);
+							if (!(updateFruitAmount.getString().equals(""))) {
+								fruitAmount = (updateFruitAmount.getNumber() > 15) ? 15
+										: (updateFruitAmount.getNumber() < 1) ? 1
+												: updateFruitAmount.getNumber();
+							}
+
 							currentScene = Scene.Main_Scene;
 						} else if (controlsSettingsButton.clickedButton()) {
+							if (!(updateM.getString().equals(""))) {
+								m = (updateM.getNumber() > 100) ? 100
+										: (updateM.getNumber() < 5) ? 5 : updateM.getNumber();
+							}
+							if (!(updateN.getString().equals(""))) {
+								n = (updateN.getNumber() > 100) ? 100
+										: (updateN.getNumber() < 5) ? 5 : updateN.getNumber();
+							}
+							if (!(updateSnakeSpeed.getString().equals(""))) {
+								maxcounter = (updateSnakeSpeed.getNumber() > 15) ? 1
+										: (updateSnakeSpeed.getNumber() < 1) ? 30
+												: (30 - updateSnakeSpeed.getNumber() * 2);
+							}
+							if (!(updateFruitAmount.getString().equals(""))) {
+								fruitAmount = (updateFruitAmount.getNumber() > 15) ? 1
+										: (updateFruitAmount.getNumber() < 1) ? 30
+												: updateFruitAmount.getNumber();
+							}
 							canClick = false;
 							showControlls = true;
 						}
@@ -643,7 +675,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (allSnakesDead && (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
 					if (restartButton.clickedButton()) {
-						System.out.println("test");
 						allSnakesDead = false;
 						currentScene = Scene.Main_Restart;
 					}
@@ -680,7 +711,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				gridsize = new Vector(n, m);
 				grid = new Grid(gridsize,
 						multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
-						(int) screenHeight);
+						(int) screenHeight, maxcounter);
 				if (wallHandler.isEnabled()) {
 					grid.walls = grid.wallGenerator(gridsize);
 				}
@@ -828,6 +859,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		if (multiplayerHandler3.isEnabled()) {
 
 			batch.setColor(snakeReverseHandler.isEnabled() ? Color.RED : Color.CHARTREUSE);
+
 			batch.draw(snakeHeadSidewaysSprite, -funSize, 2*funSize + snakeBodOffsetYTop,funSize,funSize);
 			// top left
 			for (int i = 0; i < 6; i++) {
@@ -840,6 +872,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			// left
 			for (int i = 0; i < 12; i++) {
 				if (i < 11) {
+
 					batch.draw(snakeBodySprite, -bodPos - 2*funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
 				} else {
 					batch.draw(snakeCorner2, -bodPos -2*funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
@@ -847,6 +880,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			}
 			// bottomleft
 			for (int i = 0; i < 6; i++) {
+
 				batch.draw(snakeBodySidewaysSprite, -bodPos - funSize + i *funSize, snakeBodOffsetYBot - funSize,funSize,funSize);
 			}
 
@@ -1322,6 +1356,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	private void leaderboardShower() {
+
 
 		int height = (int) screenHeight / 5;
 
