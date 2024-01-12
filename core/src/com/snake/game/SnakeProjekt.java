@@ -74,6 +74,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	Texture snakeHeadSidewaysSprite;
 	Texture snakeHeadCoffeeSprite;
 	Texture snakeHeadCoffeeSidewaysSprite;
+	Texture timerSprite;
 
 	Pixmap pixmap;
 
@@ -156,6 +157,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		snakeHeadSidewaysSprite = new Texture((Gdx.files.internal("snakeheadsideways.png")));
 		snakeHeadCoffeeSprite = new Texture((Gdx.files.internal("snakeheadcoffee.png")));
 		snakeHeadCoffeeSidewaysSprite = new Texture((Gdx.files.internal("snakeheadcoffeesideways.png")));
+		timerSprite = new Texture((Gdx.files.internal("Timer.png")));
 
 		img = new Texture("badlogic.jpg");
 		shape = new ShapeRenderer();
@@ -533,9 +535,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 			}
 		}
+		//timer
+		if (quickTimeHandler.isEnabled()){
+			batch.draw(timerSprite, snakeReverseHandler.isEnabled() ? headspawnX+22 : headspawnX-102,200-47,150,150);
+		}
 		if (multiplayerHandler2.isEnabled()){
+
 			batch.setColor(Color.CHARTREUSE);
-			batch.draw(snakeHeadSprite, fruitX, 260, 60,60 );
+			if (coffeeBeanHandler.isEnabled() && !dragonFruitHandler.isEnabled()) {
+				batch.draw(snakeHeadCoffeeSprite, fruitX, 260, 60, 60);
+			} else {
+				batch.draw(snakeHeadSprite, fruitX, 260, 60, 60);
+			}
 			batch.draw(snakeBodySprite, fruitX, 320, 60,60 );
 		}
 		if (multiplayerHandler3.isEnabled()){
