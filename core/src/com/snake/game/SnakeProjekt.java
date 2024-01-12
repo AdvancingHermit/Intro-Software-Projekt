@@ -444,13 +444,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 					shape.begin(ShapeType.Filled);
 					showButton(backButton);
 					shape.setColor(Color.YELLOW);
-					shape.rect(screenWidth / 2 - screenWidth / 4, screenHeight / 2, screenWidth / 2, screenHeight / 8);
+					shape.rect((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2), (int) (screenWidth / 2), (int) (screenHeight / 8));
 					shape.setColor(Color.GREEN);
-					shape.rect(screenWidth / 2, screenHeight / 2 - screenHeight * 3 / 14,
-							screenWidth / 4, screenHeight / 6);
+					shape.rect((int) (screenWidth / 2), (int) (screenHeight / 2 - screenHeight * 3 / 14),
+					(int) (screenWidth / 4), (int) (screenHeight / 6));
 					shape.setColor(Color.RED);
-					shape.rect(screenWidth / 2, screenHeight / 2 - screenHeight * 3 / 7,
-							screenWidth / 4, screenHeight / 6);
+					shape.rect((int) (screenWidth / 2), (int) (screenHeight / 2 - screenHeight * 3 / 7),
+					(int) (screenWidth / 4), (int) (screenHeight / 6));
 					showButton(settingsRect, Color.YELLOW);
 					showButton(nTextRect, Color.YELLOW);
 					showButton(mTextRect, Color.YELLOW);
