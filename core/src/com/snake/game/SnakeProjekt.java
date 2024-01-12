@@ -89,7 +89,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 	GlyphLayout quickTimerText;
 	GlyphLayout snakeText;
 
-
 	double screenHeight;
 	double screenWidth;
 	int maxcounter = 8;
@@ -232,28 +231,26 @@ public class SnakeProjekt extends ApplicationAdapter {
 				createFont((int) ((screenWidth * 4 / 10 * ("Gridsize").length()) / (102 * (screenWidth / 1920)))),
 				"Gridsize");
 		nTextRect = new Button(new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2)),
-				new Vector((int) (screenWidth / 4), (int) (screenHeight / 8)),
-				createFont((int) ((102 * screenWidth) / 1920)),
+				new Vector((int) (screenWidth / 8), (int) (screenHeight / 8)),
+				createFont(((int) ((102 * screenWidth) / 1920))),
 				"n:");
 		mTextRect = new Button(new Vector((int) (screenWidth / 2), (int) (screenHeight / 2)),
-				new Vector((int) (screenWidth / 4), (int) (screenHeight / 8)),
-				createFont((int) ((102 * screenWidth) / 1920)),
+				new Vector((int) (screenWidth / 8), (int) (screenHeight / 8)),
+				createFont(((int) ((102 * screenWidth) / 1920))),
 				"m:");
 
-		// Repeat the same for the rest of the objects...
-
 		snakeSpeedRect = new Button(
-				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight / 4)),
-				new Vector((int) (screenWidth / 2), (int) (screenHeight / 6)),
+				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 14)),
+				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
 				createFont((int) ((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920)))),
 				"Snake Speed:");
 
-		updateN = new InputBox(1, new Vector((int) (screenWidth / 2 - screenWidth / 8), (int) (screenHeight / 2)),
-				new Vector((int) (screenWidth / 8), (int) (screenHeight / 16)));
-		updateM = new InputBox(1, new Vector((int) (screenWidth / 2 + screenWidth / 8), (int) (screenHeight / 2)),
-				new Vector((int) (screenWidth / 8), (int) (screenHeight / 16)));
+		updateN = new InputBox(1, new Vector((int) (screenWidth / 2 - screenWidth / 7), (int) (screenHeight / 2 + screenHeight / 32)),
+				new Vector((int) (screenWidth / 7), (int) (screenHeight / 16)));
+		updateM = new InputBox(1, new Vector((int) (screenWidth / 2 + screenWidth / 10), (int) (screenHeight / 2 + screenHeight / 32)),
+				new Vector((int) (screenWidth / 7), (int) (screenHeight / 16)));
 		updateSnakeSpeed = new InputBox(1,
-				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight / 5)),
+				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight / 6)),
 				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)));
 		Player1 = new Button(new Vector((int) (screenWidth / 6), (int) (screenHeight / 2 + screenHeight / 6)),
 				new Vector((int) (screenWidth / 6), (int) (screenHeight / 12)),
@@ -304,6 +301,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 				new Vector((int) (screenWidth / 4), (int) (screenHeight / 4)),
 				createFont((int) ((screenWidth * 4 / 15 * ("Play Again").length()) / (102 * (screenWidth / 1920)))),
 				"Play Again");
+
+		updateFruitAmount = new InputBox(1,
+				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight * 2 / 5)),
+				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)));
+		fruitAmountRect = new Button(
+				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 7)),
+				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
+				createFont((int) ((screenWidth * 4 / 15 * ("Fruit Amount:").length()) / (150 * (screenWidth / 1920)))),
+				"Fruit Amount:");
+
 		boxesWidth = (int) (screenWidth / 6);
 		boxesHeight = (int) (screenHeight / 16);
 		for (int i = 0; i < features.length; i++) {
@@ -444,13 +451,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 					shape.begin(ShapeType.Filled);
 					showButton(backButton);
 					shape.setColor(Color.YELLOW);
-					shape.rect((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2), (int) (screenWidth / 2), (int) (screenHeight / 8));
+					shape.rect((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2),
+							(int) (screenWidth / 2), (int) (screenHeight / 8));
 					shape.setColor(Color.GREEN);
 					shape.rect((int) (screenWidth / 2), (int) (screenHeight / 2 - screenHeight * 3 / 14),
-					(int) (screenWidth / 4), (int) (screenHeight / 6));
+							(int) (screenWidth / 4), (int) (screenHeight / 6));
 					shape.setColor(Color.RED);
 					shape.rect((int) (screenWidth / 2), (int) (screenHeight / 2 - screenHeight * 3 / 7),
-					(int) (screenWidth / 4), (int) (screenHeight / 6));
+							(int) (screenWidth / 4), (int) (screenHeight / 6));
 					showButton(settingsRect, Color.YELLOW);
 					showButton(nTextRect, Color.YELLOW);
 					showButton(mTextRect, Color.YELLOW);
@@ -841,73 +849,82 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		batch.draw(snakeHeadSprite1, headspawnX, snakeBodOffsetYTop + funSize, funSize, funSize);
 
-
 		// timer
 		if (quickTimeHandler.isEnabled()) {
-			batch.draw(timerSprite, snakeReverseHandler.isEnabled() ? headspawnX + funSize : headspawnX - funSize, snakeBodOffsetYTop +  funSize + (funSize - (int) (funSize * 0.8)) / 2, (int) (funSize * 0.8),
-			(int) (funSize * 0.8));
+			batch.draw(timerSprite, snakeReverseHandler.isEnabled() ? headspawnX + funSize : headspawnX - funSize,
+					snakeBodOffsetYTop + funSize + (funSize - (int) (funSize * 0.8)) / 2, (int) (funSize * 0.8),
+					(int) (funSize * 0.8));
 		}
 		if (multiplayerHandler2.isEnabled()) {
 			batch.setColor(Color.CHARTREUSE);
 			if (coffeeBeanHandler.isEnabled()) {
-				batch.draw(snakeHeadCoffeeSprite, fruitX, 2*funSize + snakeBodOffsetYTop,funSize, funSize);
+				batch.draw(snakeHeadCoffeeSprite, fruitX, 2 * funSize + snakeBodOffsetYTop, funSize, funSize);
 			} else {
-				batch.draw(snakeHeadSprite, fruitX, 2*funSize + snakeBodOffsetYTop,funSize,funSize);
+				batch.draw(snakeHeadSprite, fruitX, 2 * funSize + snakeBodOffsetYTop, funSize, funSize);
 			}
-			batch.draw(snakeBodySprite, fruitX, 3*funSize + snakeBodOffsetYTop,funSize,funSize);
+			batch.draw(snakeBodySprite, fruitX, 3 * funSize + snakeBodOffsetYTop, funSize, funSize);
 		}
 		if (multiplayerHandler3.isEnabled()) {
 
 			batch.setColor(snakeReverseHandler.isEnabled() ? Color.RED : Color.CHARTREUSE);
 
-			batch.draw(snakeHeadSidewaysSprite, -funSize, 2*funSize + snakeBodOffsetYTop,funSize,funSize);
+			batch.draw(snakeHeadSidewaysSprite, -funSize, 2 * funSize + snakeBodOffsetYTop, funSize, funSize);
 			// top left
 			for (int i = 0; i < 6; i++) {
 				if (i < 5) {
-					batch.draw(snakeBodySidewaysSprite, -2*funSize - i *funSize, snakeBodOffsetYTop  + 2*funSize,funSize,funSize);
+					batch.draw(snakeBodySidewaysSprite, -2 * funSize - i * funSize, snakeBodOffsetYTop + 2 * funSize,
+							funSize, funSize);
 				} else {
-					batch.draw(snakeCorner4, -2*funSize - i *funSize, snakeBodOffsetYTop + 2*funSize,funSize,funSize);
+					batch.draw(snakeCorner4, -2 * funSize - i * funSize, snakeBodOffsetYTop + 2 * funSize, funSize,
+							funSize);
 				}
 			}
 			// left
 			for (int i = 0; i < 12; i++) {
 				if (i < 11) {
 
-					batch.draw(snakeBodySprite, -bodPos - 2*funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
+					batch.draw(snakeBodySprite, -bodPos - 2 * funSize, funSize + snakeBodOffsetYTop - i * funSize,
+							funSize, funSize);
 				} else {
-					batch.draw(snakeCorner2, -bodPos -2*funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
+					batch.draw(snakeCorner2, -bodPos - 2 * funSize, funSize + snakeBodOffsetYTop - i * funSize, funSize,
+							funSize);
 				}
 			}
 			// bottomleft
 			for (int i = 0; i < 6; i++) {
 
-				batch.draw(snakeBodySidewaysSprite, -bodPos - funSize + i *funSize, snakeBodOffsetYBot - funSize,funSize,funSize);
+				batch.draw(snakeBodySidewaysSprite, -bodPos - funSize + i * funSize, snakeBodOffsetYBot - funSize,
+						funSize, funSize);
 			}
 
 			batch.setColor(snakeReverseHandler.isEnabled() ? Color.CHARTREUSE : Color.RED);
 			if (!snakeReverseHandler.isEnabled()) {
 				snakeHead.flip(true, false);
 			}
-			batch.draw(snakeHead, 0, snakeBodOffsetYTop + funSize*2,funSize,funSize);
+			batch.draw(snakeHead, 0, snakeBodOffsetYTop + funSize * 2, funSize, funSize);
 			// top right
 			for (int i = 0; i < 6; i++) {
 				if (i < 5) {
-					batch.draw(snakeBodySidewaysSprite,funSize + i *funSize,  snakeBodOffsetYTop + funSize*2,funSize,funSize);
+					batch.draw(snakeBodySidewaysSprite, funSize + i * funSize, snakeBodOffsetYTop + funSize * 2,
+							funSize, funSize);
 				} else {
-					batch.draw(snakeCorner3,funSize + i *funSize,  snakeBodOffsetYTop + funSize*2,funSize,funSize);
+					batch.draw(snakeCorner3, funSize + i * funSize, snakeBodOffsetYTop + funSize * 2, funSize, funSize);
 				}
 			}
 			// right
 			for (int i = 0; i < 12; i++) {
 				if (i < 11) {
-					batch.draw(snakeBodySprite, bodPos + funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
+					batch.draw(snakeBodySprite, bodPos + funSize, funSize + snakeBodOffsetYTop - i * funSize, funSize,
+							funSize);
 				} else {
-					batch.draw(snakeCorner1, bodPos + funSize, funSize + snakeBodOffsetYTop - i *funSize,funSize,funSize);
+					batch.draw(snakeCorner1, bodPos + funSize, funSize + snakeBodOffsetYTop - i * funSize, funSize,
+							funSize);
 				}
 			}
 			// bottom right
 			for (int i = 0; i < 6; i++) {
-				batch.draw(snakeBodySidewaysSprite, bodPos - i *funSize, snakeBodOffsetYBot - funSize,funSize,funSize);
+				batch.draw(snakeBodySidewaysSprite, bodPos - i * funSize, snakeBodOffsetYBot - funSize, funSize,
+						funSize);
 			}
 
 		}
@@ -1356,7 +1373,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	private void leaderboardShower() {
-
 
 		int height = (int) screenHeight / 5;
 
