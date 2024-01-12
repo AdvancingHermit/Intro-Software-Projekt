@@ -8,13 +8,15 @@ public class FruitType{
     private int score;
     private int growth;
     private int chance;
+    GameFeature handler;
 
 
-    public FruitType(Texture sprite, int score, int growth, int chance) {
+    public FruitType(Texture sprite, int score, int growth, int chance, GameFeature handler) {
         this.sprite = sprite;
         this.score = score;
         this.growth = growth;
         this.chance = chance;
+        this.handler = handler;
     }
 
     public Texture getSprite() {
@@ -37,4 +39,7 @@ public class FruitType{
         this.chance = chance;
     }
 
+    public boolean isEnabled() {
+        return handler.isEnabled();
+    }
 }

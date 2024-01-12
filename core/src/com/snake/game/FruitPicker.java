@@ -18,12 +18,13 @@ public class FruitPicker {
 
         int sum=0;
         List<FruitType> fruitTypeList = Arrays.stream(fruitTypes).filter(fruitType -> fruitType.getChance()>0).collect(Collectors.toList());
+        fruitTypeList = fruitTypeList.stream().filter(FruitType::isEnabled).collect(Collectors.toList());
         int totalWeight = fruitTypeList.stream().map(FruitType::getChance).reduce(0, Integer::sum);
         if (totalWeight <= 0){
             return defaultFruitType;
         }
         int random = new Random().nextInt(0, totalWeight) + 1;
-        for (FruitType fruitType:fruitTypes) {
+        for (FruitType fruitType:fruitTypeList) {
             if (random>sum && random<(sum+fruitType.getChance())) {
                 return fruitType;
             } else {

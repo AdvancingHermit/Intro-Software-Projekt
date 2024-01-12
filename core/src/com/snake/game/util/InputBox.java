@@ -31,6 +31,7 @@ public class InputBox {
 
     public InputBox(int type, Vector position, Vector size) {
         inputs = new ArrayList<Character>();
+        text = new GlyphLayout();
         keyUp = true;
         this.type = type;
         this.position = position;
@@ -45,8 +46,7 @@ public class InputBox {
         parameter.size = size.y;
         parameter.size = getSize().y;
         font = generator.generateFont(parameter);
-        font.setColor(Color.ORANGE);
-        text = new GlyphLayout();
+        font.setColor(Color.BLACK);
         text.setText(font, getString());
 
         sender[0] = font;
@@ -63,9 +63,11 @@ public class InputBox {
                 if (Gdx.input.getX() > position.x && Gdx.input.getX() < position.x + size.x && y > position.y
                         && y < position.y + size.y) {
                     isEnabled = !isEnabled;
+                } else {
+                    isEnabled = false;
                 }
             }
-        } else if(!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+        } else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             mouseUp = true;
         }
     }
@@ -73,14 +75,19 @@ public class InputBox {
     public void update() {
         char pressedKey = getPressedKey();
         if (isEnabled) {
-            if (pressedKey != '\0' && keyUp && isNumber(pressedKey) && type == 1) {
+            if (pressedKey != '\0' && pressedKey != '\b' && keyUp && isNumber(pressedKey) && type == 1) {
                 inputs.add(pressedKey);
                 keyUp = false;
-            } else if (pressedKey != '\0' && keyUp && type == 0) {
+            } else if (pressedKey != '\0' && pressedKey != '\b' && keyUp && type == 0) {
                 if (!isShiftPressed()) {
                     inputs.add((pressedKey + "").toLowerCase().charAt(0));
                 } else {
                     inputs.add(pressedKey);
+                }
+                keyUp = false;
+            } else if (pressedKey == '\b' && keyUp) {
+                if (inputs.size() > 0) {
+                    inputs.remove(inputs.size() - 1);
                 }
                 keyUp = false;
             } else if (pressedKey == '\0') {
@@ -92,7 +99,7 @@ public class InputBox {
     public Rectangle[] show() {
         Rectangle rect = new Rectangle(position.x, position.y, size.x, size.y);
         Rectangle curserBlink = new Rectangle(position.x + 2 + textWidth, position.y + 2, 0, 0);
-        ;
+        
         if (isEnabled) {
             textWidth = (int) text.width;
             if (counter % 60 < 30) {
@@ -247,6 +254,9 @@ public class InputBox {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_9)) {
             return '9';
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
+            return '\b';
         }
         return '\0'; // Return a null character if no key is pressed
     }

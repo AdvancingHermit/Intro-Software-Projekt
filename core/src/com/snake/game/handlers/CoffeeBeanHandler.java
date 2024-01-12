@@ -19,6 +19,8 @@ public class CoffeeBeanHandler extends GameFeature {
         super(enabled, featureName);
         this.chance = chance;
         if (!enabled) this.chance = 0;
+        this.coffeeSpeed = coffeeSpeed;
+        this.coffeDuration = coffeeDuration;
     }
 
     public int getChance() {

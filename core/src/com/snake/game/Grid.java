@@ -22,12 +22,19 @@ public class Grid {
         int max = Math.max(gridSize.x, gridSize.y);
         squareSize = (screenHeight * 70) / 100 / max;
         this.gridSize = gridSize;
-        snakes[0] = new Snake(gridSize.x / 2, gridSize.y / 2);
 
-        int[] keys = { Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT };
-        for (int i = 1; i < snakeAmount; i++) {
-
-            snakes[i] = new Snake(i * 3 + gridSize.x / 2, gridSize.y / 2, keys);
+        int[] keys = new int[] { Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D };
+        if (snakeAmount == 1) {
+            snakes[0] = new Snake(gridSize.x / 2, gridSize.y / 2, keys);
+            return;
+        }
+        for (int i = 0; i < snakeAmount; i++) {
+            snakes[i] = new Snake(gridSize.x / 2, -2 + i * 2 + gridSize.y / 2, keys);
+            if (i == 0) {
+                keys = new int[] { Input.Keys.UP, Input.Keys.LEFT, Input.Keys.DOWN, Input.Keys.RIGHT };
+            } else if (i == 1) {
+                keys = new int[] { Input.Keys.I, Input.Keys.J, Input.Keys.K, Input.Keys.L };
+            }
         }
 
     }
@@ -73,36 +80,62 @@ public class Grid {
             if (walls[i].size.y + posY > gridSize.y) {
                 walls[i].size.y = gridSize.y - posY;
             }
+            for (int l = 0; l < walls[i].size.x; l++) {
+                for (int j = 0; j < snakeAmount; j++) {
+                    for (int k = 0; k < snakes[j].getPositions().size(); k++) {
+                        if (walls[i].getSnakePos().add(new Vector(l, 0)).equals(snakes[j].getPositions().get(k))) {
+                            walls[i].size = new Vector(0, 0);
+                        }
+                        
+                    }
+                    if (walls[i].getSnakePos().add(new Vector(l, 0))
+                                .equals((snakes[j].getPositions().get(snakes[j].getPositions().size() - 1).add(new Vector(-1, 0))))) {
+                            walls[i].size = new Vector(0, 0);
+                    }
+                }
+            }
+            for (int l = 0; l < walls[i].size.y; l++) {
+                for (int j = 0; j < snakeAmount; j++) {
+                    for (int k = 0; k < snakes[j].getPositions().size(); k++) {
+                        if (walls[i].getSnakePos().add(new Vector(0, l)).equals(snakes[j].getPositions().get(k))) {
+                            walls[i].size = new Vector(0, 0);
+                        }
+                        
+                    }
+                }
+            }
+
         }
         return walls;
     }
 
     public void checkSnakeCollision(Snake[] snakes, Snake currSnake) {
-		for (Snake otherSnake : snakes) {
-			if (otherSnake != currSnake) {
-				ArrayList<Vector> positions = otherSnake.getPositions();
+        for (Snake otherSnake : snakes) {
+            if (otherSnake != currSnake) {
+                ArrayList<Vector> positions = otherSnake.getPositions();
                 Vector head = currSnake.getPositions().get(currSnake.getPositions().size() - 1);
                 Vector otherHead = otherSnake.getPositions().get(otherSnake.getPositions().size() - 1);
                 for (Vector position : positions) {
                     if (head.equals(position)) {
                         currSnake.isDead = true;
-                        if (head.equals(otherHead)){
+                        if (head.equals(otherHead)) {
                             otherSnake.isDead = true;
                         }
                         return;
                     }
 
-
                 }
                 if (otherSnake.fireActive) {
-                        otherHead = otherSnake.getPositions().get(otherSnake.getPositions().size() - 1);
-                        Vector otherVel = otherSnake.getVel();
-                        if (currSnake.checkCollision(new Vector(otherHead.x + otherVel.x, otherHead.y + otherVel.y)) ||
-							currSnake.checkCollision(new Vector(otherHead.x + otherVel.x * 2, otherHead.y + otherVel.y * 2))) {
-                            currSnake.isDead = true;
-                        }
-			}   }
-		}
+                    otherHead = otherSnake.getPositions().get(otherSnake.getPositions().size() - 1);
+                    Vector otherVel = otherSnake.getVel();
+                    if (currSnake.checkCollision(new Vector(otherHead.x + otherVel.x, otherHead.y + otherVel.y)) ||
+                            currSnake.checkCollision(
+                                    new Vector(otherHead.x + otherVel.x * 2, otherHead.y + otherVel.y * 2))) {
+                        currSnake.isDead = true;
+                    }
+                }
+            }
+        }
 
     }
 

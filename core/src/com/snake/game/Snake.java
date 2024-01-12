@@ -25,8 +25,8 @@ public class Snake {
 
 
 
-    private HashMap<Character, Vector> keyVectorMap = new HashMap<Character, Vector>();
-    public HashMap<Vector, Character> keyVectorMapReversed = new HashMap<Vector, Character>();
+    private HashMap<Character, Vector> keyVectorMap = new HashMap<>();
+    public HashMap<Vector, Character> keyVectorMapReversed = new HashMap<>();
 
     //Quick Time Event Variables
     private int quickTimeCounter = 0;
@@ -37,6 +37,7 @@ public class Snake {
     //Dragon Fruit Variables
     private int fireCounter = 0;
     boolean fireActive = false;
+    private Vector dragonOldVel;
 
     private Vector oldVel;
 
@@ -141,13 +142,16 @@ public class Snake {
     }
 
     public void quickTime(){
-        updateOldVel();
+        oldVel = vel;
         quickTimeCounter++;
     }
 
     public void dragonFruit(){
-        updateOldVel();
+        dragonOldVel = vel;
         fireCounter++;
+    }
+    public Vector getDragonOldVel(){
+        return dragonOldVel;
     }
 
     public int getFireCounter() {
@@ -155,9 +159,6 @@ public class Snake {
     }
     public void setFireCounter(int fireCounter) {
         this.fireCounter = fireCounter;
-    }
-    public void updateOldVel(){
-        oldVel = vel;
     }
 
     public void moveBack(){
