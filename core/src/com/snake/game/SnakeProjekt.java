@@ -107,7 +107,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "1 Player", 1);
 	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(false, "2 Player", 2);
 	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(false, "3 Player", 3);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 0);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 20);
 	CherryHandler cherryHandler = new CherryHandler(true, "Cherries", 80);
 	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(true, "Quicktime", 10);
 	BorderHandler borderHandler = new BorderHandler(false, "Borders");
@@ -198,12 +198,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 
 		// Fruits
-		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0);
-		goldenApple = new FruitType(goldenAppleSprite, 10, 1, goldenFruitHandler.getChance());
-		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance());
-		cherry2 = new FruitType(cherry2Sprite, 0, 0, 0);
-		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance());
-		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance());
+		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0,cherryHandler);
+		goldenApple = new FruitType(goldenAppleSprite, 10, -1, goldenFruitHandler.getChance(), goldenFruitHandler);
+		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance(), cherryHandler);
+		cherry2 = new FruitType(cherry2Sprite, 0, 0,  0,cherryHandler);
+		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance(), coffeeBeanHandler);
+		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance(), dragonFruitHandler);
 
 		backButton = new Button(new Vector(-screenWidth / 2 + 150, screenHeight / 2 - 200), new Vector(300, 100),
 				backArrow);
@@ -857,7 +857,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (validSpawn) {
 
 					if (cherry1Spawned && !cherry2Spawned) {
-
 						createFruit(cherry2, spawningPosition, rectangle);
 						cherry2Spawned = true;
 						continue;
