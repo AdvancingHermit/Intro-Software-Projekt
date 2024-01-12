@@ -91,7 +91,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	int screenHeight;
 	int screenWidth;
-	int maxcounter = 15;
+	int maxcounter = 8;
 
 	boolean canClick = true;
 	boolean allSnakesDead;
@@ -414,7 +414,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						gridsize = new Vector(n, m);
 						grid = new Grid(gridsize,
 								multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
-								screenHeight);
+								screenHeight, maxcounter);
 						if (wallHandler.isEnabled()) {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
@@ -694,7 +694,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				gridsize = new Vector(n, m);
 				grid = new Grid(gridsize,
 						multiplayerHandler.isEnabled() ? multiplayerHandler.getPlayerAmount() : 1,
-						screenHeight);
+						screenHeight, maxcounter);
 				if (wallHandler.isEnabled()) {
 					grid.walls = grid.wallGenerator(gridsize);
 				}
