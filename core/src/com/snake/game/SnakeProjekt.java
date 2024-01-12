@@ -861,7 +861,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	public void saveScore() {
-		System.out.println(Objects.hashCode(getFeatureHash(features)));
 		users.updateUser(new User(username, grid.snakes[0].getScore()) );
 		leaderboard.updateLeaderboard(new Highscore(username, grid.snakes[0].getScore(), getFeatureHash(features)));
 	}
