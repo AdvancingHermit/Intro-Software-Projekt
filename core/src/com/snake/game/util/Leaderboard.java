@@ -40,8 +40,15 @@ public class Leaderboard {
     }
 
     public void updateLeaderboard(Highscore newScore) {
-        if (board.length == maxScores) {
-            if (newScore.getScore() > board[board.length - 1].getScore()) {
+        int featureCounter = 0;
+        for(int i = 0; i < board.length; i++) {
+            if(board[i].getFeatures() == newScore.getFeatures()) {
+                featureCounter++;
+            }
+        }
+
+        if (featureCounter <= maxScores) {
+            if (newScore.getScore() > board[board.length - 1].getScore() && newScore.getFeatures() == board[board.length - 1].getFeatures()) {
                 board[board.length - 1] = newScore;
                 Arrays.sort(board, Collections.reverseOrder());
             }

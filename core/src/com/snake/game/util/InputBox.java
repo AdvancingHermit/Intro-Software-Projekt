@@ -31,6 +31,7 @@ public class InputBox {
 
     public InputBox(int type, Vector position, Vector size) {
         inputs = new ArrayList<Character>();
+        text = new GlyphLayout();
         keyUp = true;
         this.type = type;
         this.position = position;
@@ -45,8 +46,7 @@ public class InputBox {
         parameter.size = size.y;
         parameter.size = getSize().y;
         font = generator.generateFont(parameter);
-        font.setColor(Color.ORANGE);
-        text = new GlyphLayout();
+        font.setColor(Color.BLACK);
         text.setText(font, getString());
 
         sender[0] = font;
@@ -78,7 +78,7 @@ public class InputBox {
             if (pressedKey != '\0' && pressedKey != '\b' && keyUp && isNumber(pressedKey) && type == 1) {
                 inputs.add(pressedKey);
                 keyUp = false;
-            } else if (pressedKey != '\0' && keyUp && type == 0) {
+            } else if (pressedKey != '\0' && pressedKey != '\b' && keyUp && type == 0) {
                 if (!isShiftPressed()) {
                     inputs.add((pressedKey + "").toLowerCase().charAt(0));
                 } else {
@@ -99,7 +99,7 @@ public class InputBox {
     public Rectangle[] show() {
         Rectangle rect = new Rectangle(position.x, position.y, size.x, size.y);
         Rectangle curserBlink = new Rectangle(position.x + 2 + textWidth, position.y + 2, 0, 0);
-        ;
+        
         if (isEnabled) {
             textWidth = (int) text.width;
             if (counter % 60 < 30) {
