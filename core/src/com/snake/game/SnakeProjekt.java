@@ -237,7 +237,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		json = new JSON("data/data.json");
 		leaderboard = new Leaderboard(json);
-		leaderboard.setMaxScore(10 * features.length);
 
 		// Login Screen Definitions
 		loginFont = createFont((screenWidth * 4) / (102 * (screenWidth / 1920)), Color.BLACK);
