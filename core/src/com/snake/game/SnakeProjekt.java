@@ -101,8 +101,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 	int boxesHeight,
 			boxesWidth;
 	Button backButton, startButton, featureButton, controlsSettingsButton, restartButton, settingsButton, settingsRect,
-			nTextRect, mTextRect, setSizesSettingsButton, Player1, Player2, Player3, snakeSpeedRect, loginButton;
-	InputBox updateSnakeSpeed, updateM, updateN;
+			nTextRect, mTextRect, setSizesSettingsButton, Player1, Player2, Player3, snakeSpeedRect, fruitAmountRect,
+			loginButton;
+	InputBox updateSnakeSpeed, updateM, updateN, updateFruitAmount;
 	Color color;
 
 	FreeTypeFontGenerator generator;
@@ -215,10 +216,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 
 		// Fruits
-		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0,cherryHandler);
+		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0, cherryHandler);
 		goldenApple = new FruitType(goldenAppleSprite, 10, -1, goldenFruitHandler.getChance(), goldenFruitHandler);
 		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance(), cherryHandler);
-		cherry2 = new FruitType(cherry2Sprite, 0, 0,  0,cherryHandler);
+		cherry2 = new FruitType(cherry2Sprite, 0, 0, 0, cherryHandler);
 		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance(), coffeeBeanHandler);
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance(), dragonFruitHandler);
 
@@ -228,24 +229,33 @@ public class SnakeProjekt extends ApplicationAdapter {
 				createFont((screenWidth * 4 / 10 * ("Gridsize").length()) / (102 * (screenWidth / 1920))),
 				"Gridsize");
 		nTextRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2),
-				new Vector(screenWidth / 4, screenHeight / 8),
+				new Vector(screenWidth / 8, screenHeight / 8),
 				createFont(((102 * screenWidth) / 1920)),
 				"n:");
 		mTextRect = new Button(new Vector(screenWidth / 2, screenHeight / 2),
-				new Vector(screenWidth / 4, screenHeight / 8),
+				new Vector(screenWidth / 8, screenHeight / 8),
 				createFont((102 * screenWidth) / 1920),
 				"m:");
 
-		snakeSpeedRect = new Button(new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2 - screenHeight / 4),
-				new Vector(screenWidth / 2, screenHeight / 6),
+		snakeSpeedRect = new Button(
+				new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2 - screenHeight * 3 / 14),
+				new Vector(screenWidth / 3, screenHeight / 6),
 				createFont((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920))),
 				"Snake Speed:");
-		updateN = new InputBox(1, new Vector(screenWidth / 2 - screenWidth / 8, screenHeight / 2),
-				new Vector(screenWidth / 8, screenHeight / 16));
-		updateM = new InputBox(1, new Vector(screenWidth / 2 + screenWidth / 8, screenHeight / 2),
-				new Vector(screenWidth / 8, screenHeight / 16));
+		fruitAmountRect = new Button(
+				new Vector(screenWidth / 2 - screenWidth / 4, screenHeight / 2 - screenHeight * 3 / 7),
+				new Vector(screenWidth / 3, screenHeight / 6),
+				createFont((screenWidth * 4 / 15 * ("Fruit Amount:").length()) / (150 * (screenWidth / 1920))),
+				"Fruit Amount:");
+		updateN = new InputBox(1, new Vector(screenWidth / 2 - screenWidth / 7, screenHeight / 2 + screenHeight / 32),
+				new Vector(screenWidth / 7, screenHeight / 16));
+		updateM = new InputBox(1, new Vector(screenWidth / 2 + screenWidth / 10, screenHeight / 2 + screenHeight / 32),
+				new Vector(screenWidth / 7, screenHeight / 16));
 		updateSnakeSpeed = new InputBox(1,
-				new Vector(screenWidth / 2 + screenWidth / 24, screenHeight / 2 - screenHeight / 5),
+				new Vector(screenWidth / 2 + screenWidth / 24, screenHeight / 2 - screenHeight / 6),
+				new Vector(screenWidth / 5, screenHeight / 12));
+		updateFruitAmount = new InputBox(1,
+				new Vector(screenWidth / 2 + screenWidth / 24, screenHeight / 2 - screenHeight * 2 / 5),
 				new Vector(screenWidth / 5, screenHeight / 12));
 		Player1 = new Button(new Vector(screenWidth / 6, screenHeight / 2 + screenHeight / 6),
 				new Vector(screenWidth / 6, screenHeight / 12),
@@ -306,7 +316,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector(boxesWidth, boxesHeight), handlers[i]);
 			}
 		}
-    
+
 		effect.load(Gdx.files.internal("particles/fire.p"), Gdx.files.internal("particles"));
 
 		json = new JSON("data/data.json");
@@ -358,7 +368,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				drawMainScreen();
 
 				frameCounter++;
-        
+
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
@@ -419,16 +429,25 @@ public class SnakeProjekt extends ApplicationAdapter {
 					batch.setProjectionMatrix(camera.combined);
 					shape.begin(ShapeType.Filled);
 					showButton(backButton);
+					shape.setColor(Color.YELLOW);
+					shape.rect(screenWidth / 2 - screenWidth / 4, screenHeight / 2, screenWidth / 2, screenHeight / 8);
+					shape.setColor(Color.GREEN);
+					shape.rect(screenWidth / 2, screenHeight / 2 - screenHeight * 3 / 14,
+							screenWidth / 4, screenHeight / 6);
+					shape.setColor(Color.RED);
+					shape.rect(screenWidth / 2, screenHeight / 2 - screenHeight * 3 / 7,
+							screenWidth / 4, screenHeight / 6);
 					showButton(settingsRect, Color.YELLOW);
 					showButton(nTextRect, Color.YELLOW);
 					showButton(mTextRect, Color.YELLOW);
 					showButton(snakeSpeedRect, Color.GREEN);
 					showButton(controlsSettingsButton, color);
+					showButton(fruitAmountRect, color);
 					shape.end();
 					inputBoxShower(updateM);
 					inputBoxShower(updateN);
 					inputBoxShower(updateSnakeSpeed);
-					System.out.println(canClick);
+					inputBoxShower(updateFruitAmount);
 					if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 							&& !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 						canClick = true;
@@ -446,14 +465,36 @@ public class SnakeProjekt extends ApplicationAdapter {
 										: (updateN.getNumber() < 5) ? 5 : updateN.getNumber();
 							}
 							if (!(updateSnakeSpeed.getString().equals(""))) {
-								System.out.println("hej");
 								maxcounter = (updateSnakeSpeed.getNumber() > 15) ? 1
-										: (updateSnakeSpeed.getNumber() < 1) ? 30 : (30 - updateSnakeSpeed.getNumber() * 2);
+										: (updateSnakeSpeed.getNumber() < 1) ? 30
+												: (30 - updateSnakeSpeed.getNumber() * 2);
 							}
-							System.out.println(n + " " + m);
-							System.out.println(maxcounter);
+							if (!(updateFruitAmount.getString().equals(""))) {
+								fruitAmount = (updateFruitAmount.getNumber() > 15) ? 15
+										: (updateFruitAmount.getNumber() < 1) ? 1
+												: updateFruitAmount.getNumber();
+							}
+
 							currentScene = Scene.Main_Scene;
 						} else if (controlsSettingsButton.clickedButton()) {
+							if (!(updateM.getString().equals(""))) {
+								m = (updateM.getNumber() > 100) ? 100
+										: (updateM.getNumber() < 5) ? 5 : updateM.getNumber();
+							}
+							if (!(updateN.getString().equals(""))) {
+								n = (updateN.getNumber() > 100) ? 100
+										: (updateN.getNumber() < 5) ? 5 : updateN.getNumber();
+							}
+							if (!(updateSnakeSpeed.getString().equals(""))) {
+								maxcounter = (updateSnakeSpeed.getNumber() > 15) ? 1
+										: (updateSnakeSpeed.getNumber() < 1) ? 30
+												: (30 - updateSnakeSpeed.getNumber() * 2);
+							}
+							if (!(updateFruitAmount.getString().equals(""))) {
+								fruitAmount = (updateFruitAmount.getNumber() > 15) ? 1
+										: (updateFruitAmount.getNumber() < 1) ? 30
+												: updateFruitAmount.getNumber();
+							}
 							canClick = false;
 							showControlls = true;
 						}
@@ -617,7 +658,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (allSnakesDead && (Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT))) {
 					if (restartButton.clickedButton()) {
-						System.out.println("test");
 						allSnakesDead = false;
 						currentScene = Scene.Main_Restart;
 					}
@@ -641,7 +681,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (!multiplayerHandler.isEnabled()) {
 					leaderboardShower();
 				}
-				
 
 				break;
 			case Main_Restart:
@@ -793,59 +832,54 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		if (multiplayerHandler3.isEnabled()) {
 
-				batch.setColor(snakeReverseHandler.isEnabled() ? Color.RED: Color.CHARTREUSE);
-				batch.draw(snakeHeadSidewaysSprite, -60, 260, 60, 60);
-				//top left
-				for (int i = 0; i< 6; i++) {
-					if (i < 5) {
-						batch.draw(snakeBodySidewaysSprite, -120 - i * 60, 260, 60, 60);
-					} else {
-						batch.draw(snakeCorner4, -120 - i * 60, 260, 60, 60);
-					}
-				}
-				//left
-			    for (int i = 0; i< 12; i++) {
-				    if (i < 11) {
-						batch.draw(snakeBodySprite, -420, 200 - i * 60, 60, 60);
-					} else {
-						batch.draw(snakeCorner2, -420, 200 - i * 60, 60, 60);
-					}
-				}
-				//bottomleft
-			for (int i = 0; i< 6; i++) {
-					batch.draw(snakeBodySidewaysSprite, -360 + i * 60, -460, 60, 60);
-			}
-
-
-
-				batch.setColor(snakeReverseHandler.isEnabled() ? Color.CHARTREUSE: Color.RED);
-			    if (!snakeReverseHandler.isEnabled()) {
-					snakeHead.flip(true, false);
-				}
-				batch.draw(snakeHead, 0, 260, 60, 60);
-				//top right
-			for (int i = 0; i< 6; i++) {
+			batch.setColor(snakeReverseHandler.isEnabled() ? Color.RED : Color.CHARTREUSE);
+			batch.draw(snakeHeadSidewaysSprite, -60, 260, 60, 60);
+			// top left
+			for (int i = 0; i < 6; i++) {
 				if (i < 5) {
-					batch.draw(snakeBodySidewaysSprite, 60 +i * 60, 260, 60, 60);
+					batch.draw(snakeBodySidewaysSprite, -120 - i * 60, 260, 60, 60);
 				} else {
-					batch.draw(snakeCorner3,   60 +i * 60, 260, 60, 60);
+					batch.draw(snakeCorner4, -120 - i * 60, 260, 60, 60);
 				}
 			}
-			//right
-			for (int i = 0; i< 12; i++) {
+			// left
+			for (int i = 0; i < 12; i++) {
+				if (i < 11) {
+					batch.draw(snakeBodySprite, -420, 200 - i * 60, 60, 60);
+				} else {
+					batch.draw(snakeCorner2, -420, 200 - i * 60, 60, 60);
+				}
+			}
+			// bottomleft
+			for (int i = 0; i < 6; i++) {
+				batch.draw(snakeBodySidewaysSprite, -360 + i * 60, -460, 60, 60);
+			}
+
+			batch.setColor(snakeReverseHandler.isEnabled() ? Color.CHARTREUSE : Color.RED);
+			if (!snakeReverseHandler.isEnabled()) {
+				snakeHead.flip(true, false);
+			}
+			batch.draw(snakeHead, 0, 260, 60, 60);
+			// top right
+			for (int i = 0; i < 6; i++) {
+				if (i < 5) {
+					batch.draw(snakeBodySidewaysSprite, 60 + i * 60, 260, 60, 60);
+				} else {
+					batch.draw(snakeCorner3, 60 + i * 60, 260, 60, 60);
+				}
+			}
+			// right
+			for (int i = 0; i < 12; i++) {
 				if (i < 11) {
 					batch.draw(snakeBodySprite, 360, 200 - i * 60, 60, 60);
 				} else {
 					batch.draw(snakeCorner1, 360, 200 - i * 60, 60, 60);
 				}
 			}
-			//bottom right
-			for (int i = 0; i< 6; i++) {
+			// bottom right
+			for (int i = 0; i < 6; i++) {
 				batch.draw(snakeBodySidewaysSprite, 300 - i * 60, -460, 60, 60);
 			}
-
-
-
 
 		}
 
@@ -859,7 +893,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	public void saveScore() {
-		users.updateUser(new User(username, grid.snakes[0].getScore()) );
+		users.updateUser(new User(username, grid.snakes[0].getScore()));
 		leaderboard.updateLeaderboard(new Highscore(username, grid.snakes[0].getScore(), getFeatureHash(features)));
 	}
 
@@ -1279,7 +1313,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		return Objects.hashCode(vals);
 	}
 
-
 	public Vector getTextSize(BitmapFont font, String text) {
 		GlyphLayout glyph = new GlyphLayout();
 		glyph.setText(font, text);
@@ -1289,19 +1322,21 @@ public class SnakeProjekt extends ApplicationAdapter {
 	private void leaderboardShower() {
 		BitmapFont score;
 
-
 		int height = 150;
 		score = createFont(50);
 		score.setColor(Color.GOLD);
 		batch.begin();
-		score.draw(batch, "Leaderboard:", - screenWidth / 2 + 50, height);
+		score.draw(batch, "Leaderboard:", -screenWidth / 2 + 50, height);
 		int j = 1;
-		for(int i = 0; i < leaderboard.getLeaderboard().length; i++){
+		for (int i = 0; i < leaderboard.getLeaderboard().length; i++) {
 			Highscore curr = leaderboard.getLeaderboard()[i];
-            if (curr.getFeatures() == getFeatureHash(features)) {
-                score.draw(batch, leaderboard.getLeaderboard()[i].getScore() + " by: " + leaderboard.getLeaderboard()[i].getUsername(), - screenWidth / 2 + 50, height - j * 50);
-				j++;	
-            }	
+			if (curr.getFeatures() == getFeatureHash(features)) {
+				score.draw(batch,
+						leaderboard.getLeaderboard()[i].getScore() + " by: "
+								+ leaderboard.getLeaderboard()[i].getUsername(),
+						-screenWidth / 2 + 50, height - j * 50);
+				j++;
+			}
 		}
 		batch.end();
 	}
