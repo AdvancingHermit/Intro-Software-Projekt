@@ -229,15 +229,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 		settingsRect = new Button(
 				new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0 + screenHeight / 8.0)),
 				new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 8.0)),
-				createFont((int) (75 * scalingFactor)),
+				createFont((int) (70 * scalingFactor)),
 				"Gridsize");
 		nTextRect = new Button(new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
-				createFont(((int) ((75 *scalingFactor)))),
+				createFont(((int) ((66 *scalingFactor)))),
 				"n:");
 		mTextRect = new Button(new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
-				createFont(((int) ((75 *scalingFactor)))),
+				createFont(((int) ((66 *scalingFactor)))),
 				"m:");
 
 		fruitAmountRect = new Button(
@@ -340,8 +340,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		leaderboard = new Leaderboard(json);
 
 		// Login Screen Definitions
-		loginFont = createFont((int) ((screenWidth * 4) / (102 * (screenWidth / 1920))), Color.BLACK);
-		loginContinueFont = createFont((int) (31 * screenWidth / 1920.0), Color.BLACK);
+		loginFont = createFont((int) ( 55 * scalingFactor), Color.BLACK);
+		loginContinueFont = createFont((int) (31  * scalingFactor), Color.BLACK);
 		loginBoxSize = new Vector((int) (screenWidth / 2), (int) (screenHeight / 2));
 		loginBoxPos = new Vector((int) (screenWidth / 2 - loginBoxSize.x / 2),
 				(int) (screenHeight / 2 - loginBoxSize.y / 2));
@@ -359,7 +359,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		users = new Users(json);
 
-		score = createFont((int)(40 * screenWidth / 1920.0));
+		score = createFont((int)(40 * scalingFactor));
 
 	}
 
