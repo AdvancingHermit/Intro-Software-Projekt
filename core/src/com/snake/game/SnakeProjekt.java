@@ -217,7 +217,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance(), coffeeBeanHandler);
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance(), dragonFruitHandler);
 
-
 		// making setting scene (Martin)
 
 		settingsRect = new Button(
@@ -233,8 +232,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				new Vector((int) (screenWidth / 8), (int) (screenHeight / 8)),
 				createFont(((int) ((102 * screenWidth) / 1920))),
 				"m:");
-    
-    fruitAmountRect = new Button(
+
+		fruitAmountRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 7)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
 				createFont((int) ((screenWidth * 4 / 15 * ("Fruit Amount:").length()) / (150 * (screenWidth / 1920)))),
@@ -254,7 +253,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		updateSnakeSpeed = new InputBox(1,
 				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight / 6)),
 				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)), 2);
-    updateFruitAmount = new InputBox(1,
+		updateFruitAmount = new InputBox(1,
 				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight * 2 / 5)),
 				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)));
 		Player1 = new Button(new Vector((int) (screenWidth / 6), (int) (screenHeight / 2 + screenHeight / 6)),
@@ -309,8 +308,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		boxesWidth = (int) (screenWidth / 6);
 		boxesHeight = (int) (screenHeight / 16);
-    
-    // Making buttons for features[], with corresponding handlers (Martin)
+
+		// Making buttons for features[], with corresponding handlers (Martin)
 		for (int i = 0; i < features.length; i++) {
 			if (i % 2 == 0) {
 				features[i] = new Button(
@@ -376,9 +375,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 			Gdx.app.exit();
 		}
 		// Scene Management by Martin
-		switch (currentScene) { 
+		switch (currentScene) {
 			// by Martin
-			case Main_Scene: 
+			case Main_Scene:
 				fruits.clear();
 				// ScreenUtils.clear(0, 0, 1, 1);
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -701,9 +700,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 	}
 
-	//Score text made by Oscar, Quicktime text made by Oliver
+	// Score text made by Oscar, Quicktime text made by Oliver
 	private void drawTextOnScreen() {
-		//score text
+		// score text
 		for (int i = 0; i < grid.snakes.length; i++) {
 			scoreFont.setColor(Color.ORANGE);
 			colonFont.setColor(Color.ORANGE);
@@ -718,7 +717,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			scoreFont.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
 					(0.41f + 0.075f * -i) * viewport.getScreenHeight());
 
-			//quicktime text
+			// quicktime text
 			if (quickTimeHandler.isEnabled()) {
 				scoreFont.setColor(Color.RED);
 				colonFont.setColor(Color.RED);
@@ -745,7 +744,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch.end();
 	}
 
-	//made by Oliver, dragonfruit fire made by Oscar
+	// made by Oliver, dragonfruit fire made by Oscar
 	private void drawMainScreen() {
 		batch.begin();
 		batch.flush();
@@ -766,6 +765,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		int headspawnX;
 		int fruitX;
+		System.out.println(restartButton.getSize().y);
 		int funSize = (int) (startButton.getSize().x / 8);
 		if (snakeReverseHandler.isEnabled()) {
 			headspawnX = 0;
@@ -866,7 +866,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					snakeBodOffsetYTop + funSize + (funSize - (int) (funSize * 0.8)) / 2, (int) (funSize * 0.8),
 					(int) (funSize * 0.8));
 		}
-		//2 snakes
+		// 2 snakes
 		if (multiplayerHandler2.isEnabled()) {
 			batch.setColor(Color.CHARTREUSE);
 			if (coffeeBeanHandler.isEnabled()) {
@@ -876,7 +876,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			}
 			batch.draw(snakeBodySprite, fruitX, 3 * funSize + snakeBodOffsetYTop, funSize, funSize);
 		}
-		//3 snakes
+		// 3 snakes
 		if (multiplayerHandler3.isEnabled()) {
 
 			batch.setColor(snakeReverseHandler.isEnabled() ? Color.RED : Color.CHARTREUSE);
@@ -954,12 +954,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	// Made by Oscar
-	//Saves the user, and add the score to the leaderboard
+	// Saves the user, and add the score to the leaderboard
 	public void saveScore() {
 		users.updateUser(new User(username, grid.snakes[0].getScore()));
 		leaderboard.updateLeaderboard(new Highscore(username, grid.snakes[0].getScore(), getFeatureHash(features)));
 	}
-    //Made by Oliver
+
+	// Made by Oliver
 	private void checkFruitCollsions() {
 		Iterator<Fruit> fruitIterator = fruits.iterator();
 		while (fruitIterator.hasNext()) {
@@ -992,7 +993,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	}
 
-	//Made by Oliver
+	// Made by Oliver
 	private void teleportSnake(Snake snake, Fruit eatenFruit) {
 		for (Fruit fruit : fruits) {
 			if (((fruit.getSprite().equals(cherry1Sprite) && eatenFruit.getSprite().equals(cherry2Sprite))
@@ -1017,11 +1018,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Vector second = positions.get(positions.size() - 2);
 		Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1),
 				Math.max(Math.min(head.y - second.y, 1), -1));
-		
-		//Makes sure the snake velosity is now matching the new direction
+
+		// Makes sure the snake velosity is now matching the new direction
 		if (!newVel.equals(snake.getVel())) {
 			snake.setVel(newVel);
-			//Sets the last input key corresponding to the new direction
+			// Sets the last input key corresponding to the new direction
 			snake.setKey(snake.keyVectorMapReversed.get(newVel));
 		}
 	}
@@ -1036,7 +1037,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				int cx = positions.get(k).x;
 				int cy = positions.get(k).y;
 				if (positions.get(k) == positions.get(positions.size() - 1)) {
-					//Boundary collision af Christian
+					// Boundary collision af Christian
 					if (cx == grid.gridSize.x || cx == -1) {
 						if (borderHandler.isEnabled()) {
 							snake.isDead = true;
@@ -1060,7 +1061,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
 							snake.checkCollision();
 						}
-					}// End af Christians
+					} // End af Christians
 					shape.setColor(Color.BLACK);
 					Sprite sprY;
 					Sprite sprX;
@@ -1073,7 +1074,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						sprX = new Sprite(snakeHeadSidewaysSprite);
 					}
 
-					//Made by Oscar
+					// Made by Oscar
 					// Draw the snake head facing the right direction
 					// Also draws and rotates the fire effect if the dragonfruit is active
 					Vector vel = snake.getVel();
@@ -1116,7 +1117,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 
 				} else {
-					//Made by Oscar
+					// Made by Oscar
 					// Draw the snake body facing the right direction
 					Vector lastPos = (k > 0) ? positions.get(k - 1) : null;
 					Vector nextPos = positions.get(k + 1);
@@ -1159,7 +1160,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					sprX.setFlip(vel.x == 1, false);
 					Sprite spr = vel.x == 0 ? sprY : sprX;
 
-					//Draw snake body corner sprite if snake is turning
+					// Draw snake body corner sprite if snake is turning
 					if (!vel2.equals(vel)) {
 						spr = new Sprite(snakeBodyCornerSprite);
 						spr.setFlip(vel.x == 1 || vel2.x == -1, vel.y == -1 || vel2.y == 1);
@@ -1169,9 +1170,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				}
 			}
-			//Made by Oscar
-			//Quicktime Feature
-			//if enabled, kills the snake if it doesn't change direction within the time limit
+			// Made by Oscar
+			// Quicktime Feature
+			// if enabled, kills the snake if it doesn't change direction within the time
+			// limit
 			if (quickTimeHandler.isEnabled()) {
 				Vector snakeVel = snake.getVel();
 
@@ -1204,8 +1206,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	}
 
-	//Made by Oliver
-	//Spawn a random fruit in a random place on screen, that isnt occupied
+	// Made by Oliver
+	// Spawn a random fruit in a random place on screen, that isnt occupied
 	private void spawnFruit(Rectangle[][] shower) {
 		boolean cherry1Spawned = false;
 		boolean cherry2Spawned = false;
@@ -1280,7 +1282,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 	}
 
-	//Made by Oliver
+	// Made by Oliver
 	private void createFruit(FruitType fruitType, Vector spawningPosition, Rectangle rectangle) {
 		fruits.add(new Fruit(spawningPosition, fruitType.getSprite(), new Vector(
 				(int) ((rectangle.x - (Gdx.graphics.getWidth() / 2)) + grid.squareSize * spawningPosition.x),
@@ -1288,7 +1290,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				fruitType.getScore(), fruitType.getGrowth()));
 	}
 
-	//Christian
+	// Christian
 	private void inputBoxShower(InputBox inputBox) {
 		inputBox.enable((int) screenHeight);
 		inputBox.update();
@@ -1310,8 +1312,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch.end();
 	}
 
-	//Made by Oscar
-	//Scales the particle effect to a given size
+	// Made by Oscar
+	// Scales the particle effect to a given size
 	public ParticleEffect scaleEffect(ParticleEffect effect, int size) {
 		effect.getEmitters().first().getXScale().setHigh((int) (size / 1.4));
 		effect.getEmitters().first().getYScale().setLow((int) (size / 1.4));
@@ -1319,7 +1321,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		return effect;
 	}
 
-	//Christian
+	// Christian
 	private void drawWalls() {
 		batch.begin();
 		for (int i = 0; i < grid.walls.length; i++) {
@@ -1350,6 +1352,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	}
 
+	// By Martin
 	public BitmapFont createFont(int size) {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		parameter.size = size;
@@ -1358,19 +1361,21 @@ public class SnakeProjekt extends ApplicationAdapter {
 		return tempFont;
 	}
 
-	//Made by Oscar
+	// Made by Oscar
 	public BitmapFont createFont(int size, Color color) {
 		tempFont = createFont(size);
 		tempFont.setColor(color);
 		return tempFont;
 	}
 
+	// by Martin
 	public void showButton(Button temp) {
 		batch.begin();
 		batch.draw(temp.getTexture(), temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
 		batch.end();
 	}
 
+	// by Martin
 	public void showButton(Button temp, Color color) {
 		shape.setColor(color);
 		shape.rect(temp.getpos().x, temp.getpos().y, temp.getSize().x, temp.getSize().y);
@@ -1392,9 +1397,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.begin(ShapeType.Filled);
 	}
 
-	//Made by Oscar
-	//Calculates the hash of the current features enabled and settings
-	//This is used to compare highscores
+	// Made by Oscar
+	// Calculates the hash of the current features enabled and settings
+	// This is used to compare highscores
 	public int getFeatureHash(Button[] features) {
 		String vals = "";
 		for (Button button : features) {
@@ -1408,15 +1413,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 		return Objects.hashCode(vals);
 	}
 
-	//Made by Oscar
-	//Returns the size/dimensions of a given text in a given font
+	// Made by Oscar
+	// Returns the size/dimensions of a given text in a given font
 	public Vector getTextSize(BitmapFont font, String text) {
 		GlyphLayout glyph = new GlyphLayout();
 		glyph.setText(font, text);
 		return new Vector((int) glyph.width, (int) glyph.height);
 	}
 
-	//Christian
+	// Christian
 	private void leaderboardShower() {
 		int height = (int) screenHeight / 5;
 		score.setColor(Color.GOLD);

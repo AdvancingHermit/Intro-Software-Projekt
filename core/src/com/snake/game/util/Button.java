@@ -16,21 +16,23 @@ public class Button { // written by Martin
     private String text;
     private BitmapFont font;
 
-    public Button(Vector pos, Vector Size, BitmapFont font, String text) { // constructure for rect with text
+    // constructure for rect with text
+    public Button(Vector pos, Vector Size, BitmapFont font, String text) {
+        this.Size = Size;
         this.pos = pos;
         this.text = text;
         this.font = font;
 
     }
-
-    public Button(Vector pos, Vector Size, GameFeature handler) { // constructure for buttons for handlers
+    // constructure for buttons for handlers
+    public Button(Vector pos, Vector Size, GameFeature handler) { 
         this.Size = Size;
         this.pos = pos;
         this.handler = handler;
 
     }
-
-    public Button(Vector pos, Vector Size, Texture texture) {   // constructure for drawing png's
+    // constructure for drawing png's
+    public Button(Vector pos, Vector Size, Texture texture) { 
         this.Size = Size;
         this.pos = pos;
         this.texture = texture;
