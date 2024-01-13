@@ -1447,7 +1447,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				score.draw(batch,
 						leaderboard.getLeaderboard()[i].getScore() + " by: "
 								+ leaderboard.getLeaderboard()[i].getUsername(),
-						(int) (-screenWidth / 2) + 50, height - j * 50);
+						(int) (-screenWidth / 2) + 50, (int) (height - j * 50*scalingFactor));
 				j++;
 			}
 		}
