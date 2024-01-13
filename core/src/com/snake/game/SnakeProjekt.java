@@ -981,8 +981,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 
 					if (fruit.getSprite().equals(coffeeBeanSprite)) {
-						snake.setMaxcounter(coffeeBeanHandler.getCoffeeSpeed());
-						snake.setSpeedCounter(coffeeBeanHandler.getCoffeDuration());
+						caffeinate(snake);
 					}
 					snake.setHasEaten(fruit);
 					fruitIterator.remove();
@@ -992,7 +991,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	}
 
+	//Made by Oliver
+	//Speeds up snake
+	private void caffeinate(Snake snake) {
+		snake.setMaxcounter(coffeeBeanHandler.getCoffeeSpeed());
+		snake.setSpeedCounter(coffeeBeanHandler.getCoffeDuration());
+	}
+
 	// Made by Oliver
+	//Cherry logic
 	private void teleportSnake(Snake snake, Fruit eatenFruit) {
 		for (Fruit fruit : fruits) {
 			if (((fruit.getSprite().equals(cherry1Sprite) && eatenFruit.getSprite().equals(cherry2Sprite))
