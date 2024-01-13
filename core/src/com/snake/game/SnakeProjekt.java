@@ -1105,7 +1105,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 
 				} else {
-					// Make snake body sprite in the right direction
+					// Draw the snake body facing the right direction
 					Vector lastPos = (k > 0) ? positions.get(k - 1) : null;
 					Vector nextPos = positions.get(k + 1);
 					Vector currPos = positions.get(k);
