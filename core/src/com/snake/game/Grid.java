@@ -20,7 +20,6 @@ public class Grid {
     Grid(Vector gridSize, int snakeAmount, int screenHeight, int maxcounter) {
         this.snakeAmount = snakeAmount;
         snakes = new Snake[snakeAmount];
-        System.out.println(gridSize + " " + screenHeight);
         int max = Math.max(gridSize.x, gridSize.y);
         squareSize = (screenHeight * 70) / 100 / max;
         this.gridSize = gridSize;

@@ -765,7 +765,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		int headspawnX;
 		int fruitX;
-		System.out.println(restartButton.getSize().y);
 		int funSize = (int) (startButton.getSize().x / 8);
 		if (snakeReverseHandler.isEnabled()) {
 			headspawnX = 0;

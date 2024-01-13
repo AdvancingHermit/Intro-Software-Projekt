@@ -37,7 +37,6 @@ public class JSON {
             fileReader.close();
         } catch (Exception e) {
             if (e instanceof GdxRuntimeException) {
-                System.out.println("File not found");
                 String[] temp = new String[2];
                 temp[0] = "users: []";
                 temp[1] = "leaderboard: []";
@@ -82,19 +81,12 @@ public class JSON {
 
         iwannasee = new String[temp1.length];
 
-        System.out.println(temp1.length);
-
         for (int i = 0; i < temp1.length; i++) {
             iwannasee[i] = temp1[i].replace("\"", "").trim();
             if (iwannasee[i].contains("[")) {
                 iwannasee[i] += "]";
             }
         }
-
-        for (int i = 0; i < iwannasee.length; i++) {
-            System.out.println(iwannasee[i]);
-        }
-
         data = dataFromString(iwannasee);
     }
 

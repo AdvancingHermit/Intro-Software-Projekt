@@ -17,7 +17,6 @@ public class Leaderboard {
     }
 
     public Leaderboard(JSON json) {
-        System.out.println(json.getData().get("leaderboard"));
         if(json.getData().get("leaderboard").toString().equals("")){
             board = new Highscore[0];
             return;
@@ -60,16 +59,13 @@ public class Leaderboard {
             return;
         }
 
-        System.out.println("I made it here");
-        System.out.println(featureCounter);
-        System.out.println(maxScores);
+
         if (featureCounter >= maxScores) {
             if (newScore.getScore() > board[board.length - 1].getScore() && newScore.getFeatures() == board[board.length - 1].getFeatures()) {
                 board[board.length - 1] = newScore;
                 Arrays.sort(board, Collections.reverseOrder());
             }
         } else {
-            System.out.println("I made it here 2");
             Highscore[] temp = new Highscore[board.length + 1];
             for (int i = 0; i < board.length; i++) {
                 temp[i] = board[i];
