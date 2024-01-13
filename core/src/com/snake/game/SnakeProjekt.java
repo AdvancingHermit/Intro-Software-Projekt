@@ -334,7 +334,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		// Login Screen Definitions
 		loginFont = createFont((int) ((screenWidth * 4) / (102 * (screenWidth / 1920))), Color.BLACK);
-		loginContinueFont = createFont((int) ((screenWidth * 2) / (102 * (screenWidth / 1920))), Color.BLACK);
+		loginContinueFont = createFont((int) (31 * screenWidth / 1920.0), Color.BLACK);
 		loginBoxSize = new Vector((int) (screenWidth / 2), (int) (screenHeight / 2));
 		loginBoxPos = new Vector((int) (screenWidth / 2 - loginBoxSize.x / 2),
 				(int) (screenHeight / 2 - loginBoxSize.y / 2));
@@ -352,7 +352,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		users = new Users(json);
 
-		score = createFont(50);
+		score = createFont((int)(40 * screenWidth / 1920.0));
 
 	}
 
