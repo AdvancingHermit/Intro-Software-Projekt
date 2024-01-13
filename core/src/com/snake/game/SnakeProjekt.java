@@ -152,7 +152,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-
+		FreeTypeFontGenerator.setMaxTextureSize(2048);
 		batch = new SpriteBatch();
 		backArrow = new Texture(Gdx.files.internal("Arrow.png"));
 		appleSprite = new Texture((Gdx.files.internal("Apple.png")));
@@ -229,7 +229,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		settingsRect = new Button(
 				new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0 + screenHeight / 8.0)),
 				new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 8.0)),
-				createFont((int) (70 * scalingFactor)),
+				createFont((int) (72 * scalingFactor)),
 				"Gridsize");
 		nTextRect = new Button(new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
