@@ -44,9 +44,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 	ShapeRenderer shape;
 	public static OrthographicCamera camera;
 	FitViewport viewport;
-	BitmapFont font;
-	BitmapFont font2;
-	BitmapFont font3;
+	BitmapFont colonFont;
+	BitmapFont scoreFont;
+	BitmapFont tempFont;
 	BitmapFont featureFont;
 	BitmapFont loginFont;
 	BitmapFont loginContinueFont;
@@ -185,24 +185,24 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		parameter = new FreeTypeFontParameter();
 		parameter.size = 72;
-		font = generator.generateFont(parameter);
-		font.setColor(Color.ORANGE);
+		colonFont = generator.generateFont(parameter);
+		colonFont.setColor(Color.ORANGE);
 		generator.dispose();
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/snes.ttf"));
 		parameter.size = 90;
-		font2 = generator.generateFont(parameter);
-		font2.setColor(Color.ORANGE);
+		scoreFont = generator.generateFont(parameter);
+		scoreFont.setColor(Color.ORANGE);
 		generator.dispose();
 		featureFont = createFont(
 				(int) (((double) screenWidth * 4 / 5.0f * 4.0f) / (102 * ((double) screenWidth / 1920.0f))));
 		mainScreenFont = createFont(200, Color.BLACK);
 
 		scoreText = new GlyphLayout();
-		scoreText.setText(font2, "Player 1 SCORE");
+		scoreText.setText(scoreFont, "Player 1 SCORE");
 		quickTimerText = new GlyphLayout();
-		quickTimerText.setText(font2, "Player 1 Time");
+		quickTimerText.setText(scoreFont, "Player 1 Time");
 		colonText = new GlyphLayout();
-		colonText.setText(font, " : ");
+		colonText.setText(colonFont, " : ");
 		scoreNumText = new GlyphLayout();
 		snakeText = new GlyphLayout();
 
@@ -697,42 +697,42 @@ public class SnakeProjekt extends ApplicationAdapter {
 	private void drawTextOnScreen() {
 		//score text
 		for (int i = 0; i < grid.snakes.length; i++) {
-			font2.setColor(Color.ORANGE);
-			font.setColor(Color.ORANGE);
-			scoreNumText.setText(font2, "22");
-			colonText.setText(font, " : ");
-			scoreText.setText(font2, "PLAYER " + (i + 1) + " SCORE");
+			scoreFont.setColor(Color.ORANGE);
+			colonFont.setColor(Color.ORANGE);
+			scoreNumText.setText(scoreFont, "22");
+			colonText.setText(colonFont, " : ");
+			scoreText.setText(scoreFont, "PLAYER " + (i + 1) + " SCORE");
 			float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 20;
-			scoreNumText.setText(font2, "" + grid.snakes[i].getScore());
-			font2.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i) * viewport.getScreenHeight());
-			font.draw(batch, colonText, -offset + scoreText.width,
+			scoreNumText.setText(scoreFont, "" + grid.snakes[i].getScore());
+			scoreFont.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i) * viewport.getScreenHeight());
+			colonFont.draw(batch, colonText, -offset + scoreText.width,
 					(float) (0.41f + 0.075f * -i) * viewport.getScreenHeight());
-			font2.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
+			scoreFont.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
 					(0.41f + 0.075f * -i) * viewport.getScreenHeight());
 
 			//quicktime text
 			if (quickTimeHandler.isEnabled()) {
-				font2.setColor(Color.RED);
-				font.setColor(Color.RED);
-				colonText.setText(font, " : ");
-				quickTimerText.setText(font2, "PLAYER " + (i + 1) + " TIME");
-				scoreNumText.setText(font2, "" + (10 - grid.snakes[i].getQuickTimeCounter() / 30)); // 30 fps
-				font2.draw(batch, quickTimerText, i == 2 ? offset + 20 + 250 : offset + 20 + (450 * i),
+				scoreFont.setColor(Color.RED);
+				colonFont.setColor(Color.RED);
+				colonText.setText(colonFont, " : ");
+				quickTimerText.setText(scoreFont, "PLAYER " + (i + 1) + " TIME");
+				scoreNumText.setText(scoreFont, "" + (10 - grid.snakes[i].getQuickTimeCounter() / 30)); // 30 fps
+				scoreFont.draw(batch, quickTimerText, i == 2 ? offset + 20 + 250 : offset + 20 + (450 * i),
 						i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight()
 								: (0.55f + 0.075f * -1) * viewport.getScreenHeight());
-				font.draw(batch, colonText,
+				colonFont.draw(batch, colonText,
 						i == 2 ? offset + 20 + 250 + quickTimerText.width
 								: offset + 20 + quickTimerText.width + (450 * i),
 						i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight()
 								: (0.55f + 0.075f * -1) * viewport.getScreenHeight());
-				font2.draw(batch, scoreNumText,
+				scoreFont.draw(batch, scoreNumText,
 						i == 2 ? offset + 20 + 250 + quickTimerText.width + colonText.width
 								: offset + quickTimerText.width + colonText.width + (450 * i),
 						i == 2 ? (0.49f + 0.075f * -1) * viewport.getScreenHeight()
 								: (0.55f + 0.075f * -1) * viewport.getScreenHeight());
 			}
-			font2.setColor(Color.ORANGE);
-			font.setColor(Color.ORANGE);
+			scoreFont.setColor(Color.ORANGE);
+			colonFont.setColor(Color.ORANGE);
 		}
 		batch.end();
 	}
@@ -1065,6 +1065,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 						sprX = new Sprite(snakeHeadSidewaysSprite);
 					}
 
+					//Made by Oscar
+					// Draw the snake head facing the right direction
+					// Also draws and rotates the fire effect if the dragonfruit is active
 					Vector vel = snake.getVel();
 					sprY.setFlip(false, vel.y == 1);
 					sprX.setFlip(vel.x == -1, false);
@@ -1105,6 +1108,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					}
 
 				} else {
+					//Made by Oscar
 					// Draw the snake body facing the right direction
 					Vector lastPos = (k > 0) ? positions.get(k - 1) : null;
 					Vector nextPos = positions.get(k + 1);
@@ -1157,6 +1161,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				}
 			}
+			//Made by Oscar
+			//Quicktime Feature
+			//if enabled, kills the snake if it doesn't change direction within the time limit
 			if (quickTimeHandler.isEnabled()) {
 				Vector snakeVel = snake.getVel();
 
@@ -1338,15 +1345,16 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public BitmapFont createFont(int size) {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
 		parameter.size = size;
-		font3 = generator.generateFont(parameter);
-		font3.setColor(Color.ORANGE);
-		return font3;
+		tempFont = generator.generateFont(parameter);
+		tempFont.setColor(Color.ORANGE);
+		return tempFont;
 	}
 
+	//Made by Oscar
 	public BitmapFont createFont(int size, Color color) {
-		font3 = createFont(size);
-		font3.setColor(color);
-		return font3;
+		tempFont = createFont(size);
+		tempFont.setColor(color);
+		return tempFont;
 	}
 
 	public void showButton(Button temp) {
@@ -1376,6 +1384,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.begin(ShapeType.Filled);
 	}
 
+	//Made by Oscar
+	//Calculates the hash of the current features enabled and settings
+	//This is used to compare highscores
 	public int getFeatureHash(Button[] features) {
 		String vals = "";
 		for (Button button : features) {
@@ -1389,6 +1400,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		return Objects.hashCode(vals);
 	}
 
+	//Made by Oscar
+	//Returns the size/dimensions of a given text in a given font
 	public Vector getTextSize(BitmapFont font, String text) {
 		GlyphLayout glyph = new GlyphLayout();
 		glyph.setText(font, text);
@@ -1422,9 +1435,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.dispose();
 		appleSprite.dispose();
 		generator.dispose();
-		font.dispose();
-		font2.dispose();
-		font3.dispose();
+		colonFont.dispose();
+		scoreFont.dispose();
+		tempFont.dispose();
 		featureFont.dispose();
 		loginFont.dispose();
 	}
