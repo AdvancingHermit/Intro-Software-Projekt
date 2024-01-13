@@ -184,7 +184,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		heightScaling = screenHeight / 1080.0;
 		scalingFactor = (widthScaling + heightScaling) / 2;
 
-
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport((int) screenWidth, (int) screenHeight, camera);
@@ -201,8 +200,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		scoreFont.setColor(Color.ORANGE);
 		generator.dispose();
 		featureFont = createFont(
-				(int) (((double) screenWidth * 4 / 5.0f*3) / (102 * ((double) screenWidth / 1920.0f))));
-		mainScreenFont = createFont( (int)(200 * screenWidth / 1920.0), Color.BLACK);
+				(int) (((double) screenWidth * 4 / 5.0f * 3) / (102 * ((double) screenWidth / 1920.0f))));
+		mainScreenFont = createFont((int) (200 * screenWidth / 1920.0), Color.BLACK);
 
 		scoreText = new GlyphLayout();
 		scoreText.setText(scoreFont, "Player 1 SCORE");
@@ -227,17 +226,18 @@ public class SnakeProjekt extends ApplicationAdapter {
 		// making setting scene (Martin)
 
 		settingsRect = new Button(
-				new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0 + screenHeight / 8.0)),
+				new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0),
+						(int) (screenHeight / 2.0 + screenHeight / 8.0)),
 				new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 8.0)),
 				createFont((int) (72 * scalingFactor)),
 				"Gridsize");
 		nTextRect = new Button(new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
-				createFont(((int) ((66 *scalingFactor)))),
+				createFont(((int) ((66 * scalingFactor)))),
 				"n:");
 		mTextRect = new Button(new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
-				createFont(((int) ((66 *scalingFactor)))),
+				createFont(((int) ((66 * scalingFactor)))),
 				"m:");
 
 		fruitAmountRect = new Button(
@@ -248,7 +248,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		snakeSpeedRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 14)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
-				createFont((int) (45 * scalingFactor )),
+				createFont((int) (45 * scalingFactor)),
 				"Snake Speed:");
 
 		updateN = new InputBox(1,
@@ -335,13 +335,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 		effect.load(Gdx.files.internal("particles/fire.p"), Gdx.files.internal("particles"));
 
-
 		json = new JSON("data/data.json");
 		leaderboard = new Leaderboard(json);
 
 		// Login Screen Definitions
-		loginFont = createFont((int) ( 55 * scalingFactor), Color.BLACK);
-		loginContinueFont = createFont((int) (31  * scalingFactor), Color.BLACK);
+		loginFont = createFont((int) (55 * scalingFactor), Color.BLACK);
+		loginContinueFont = createFont((int) (31 * scalingFactor), Color.BLACK);
 		loginBoxSize = new Vector((int) (screenWidth / 2), (int) (screenHeight / 2));
 		loginBoxPos = new Vector((int) (screenWidth / 2 - loginBoxSize.x / 2),
 				(int) (screenHeight / 2 - loginBoxSize.y / 2));
@@ -359,7 +358,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		users = new Users(json);
 
-		score = createFont((int)(40 * scalingFactor));
+		score = createFont((int) (40 * scalingFactor));
 
 	}
 
@@ -430,7 +429,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 				showButton(loginButton, normColor(0, 118, 242, 255));
 				shape.end();
 				inputBoxShower(loginInput);
-				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+				if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+						&& !Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+					canClick = true;
+				}
+				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT))
+						&& canClick) {
 					if (loginButton.clickedButton()) {
 						username = loginInput.getString();
 						gameStartMaxCounter = maxcounter;
@@ -444,9 +448,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 						}
 					}
 				}
+
 				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && backButton.clickedButton()) {
-					currentScene = Scene.Main_Scene;
+						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && canClick) {
+					canClick = false;
+					if (backButton.clickedButton()) {
+						currentScene = Scene.Main_Scene;
+					}
 				}
 
 				break;
@@ -998,15 +1006,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	}
 
-	//Made by Oliver
-	//Speeds up snake
+	// Made by Oliver
+	// Speeds up snake
 	private void caffeinate(Snake snake) {
 		snake.setMaxcounter(coffeeBeanHandler.getCoffeeSpeed());
 		snake.setSpeedCounter(coffeeBeanHandler.getCoffeDuration());
 	}
 
 	// Made by Oliver
-	//Cherry logic
+	// Cherry logic
 	private void teleportSnake(Snake snake, Fruit eatenFruit) {
 		for (Fruit fruit : fruits) {
 			if (((fruit.getSprite().equals(cherry1Sprite) && eatenFruit.getSprite().equals(cherry2Sprite))
@@ -1447,7 +1455,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				score.draw(batch,
 						leaderboard.getLeaderboard()[i].getScore() + " by: "
 								+ leaderboard.getLeaderboard()[i].getUsername(),
-						(int) (-screenWidth / 2) + 50, (int) (height - j * 50*scalingFactor));
+						(int) (-screenWidth / 2) + 50, (int) (height - j * 50 * scalingFactor));
 				j++;
 			}
 		}
