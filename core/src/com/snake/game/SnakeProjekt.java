@@ -934,12 +934,14 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	// Made by Oscar
+	// Takes standard/normal RGBA values and converts them to a Color object
 	public Color normColor(float r, float g, float b, float a) {
 		return new Color(r / 255, g / 255, b / 255, a / 255);
 
 	}
 
 	// Made by Oscar
+	//Saves the user, and add the score to the leaderboard
 	public void saveScore() {
 		users.updateUser(new User(username, grid.snakes[0].getScore()));
 		leaderboard.updateLeaderboard(new Highscore(username, grid.snakes[0].getScore(), getFeatureHash(features)));
@@ -992,6 +994,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	}
 
 	// Primarily made by Oscar
+	// Reverses all the snakes positions, the head becomes the tail and vice versa
 	private static void reverseSnake(Snake snake) {
 		ArrayList<Vector> positions = snake.getPositions();
 		Collections.reverse(positions);
@@ -1000,9 +1003,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Vector second = positions.get(positions.size() - 2);
 		Vector newVel = new Vector(Math.max(Math.min(head.x - second.x, 1), -1),
 				Math.max(Math.min(head.y - second.y, 1), -1));
-
+		
+		//Makes sure the snake velosity is now matching the new direction
 		if (!newVel.equals(snake.getVel())) {
 			snake.setVel(newVel);
+			//Sets the last input key corresponding to the new direction
 			snake.setKey(snake.keyVectorMapReversed.get(newVel));
 		}
 	}
@@ -1120,6 +1125,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 					Sprite sprX = new Sprite(snakeBodySidewaysSprite);
 
 					snakeTeleportNext = vel2.mag() > 1;
+					// Check if snake is teleporting through border or other means (cherry)
 					boolean isBorderTeleportNext = vel2.mag() == 14;
 
 					if (snakeTeleportNext && lastPos == null) {
@@ -1134,6 +1140,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 					sprY.setFlip(false, vel.y == -1);
 					sprX.setFlip(vel.x == 1, false);
 					Sprite spr = vel.x == 0 ? sprY : sprX;
+
+					//Draw snake body corner sprite if snake is turning
 					if (!vel2.equals(vel)) {
 						spr = new Sprite(snakeBodyCornerSprite);
 						spr.setFlip(vel.x == 1 || vel2.x == -1, vel.y == -1 || vel2.y == 1);

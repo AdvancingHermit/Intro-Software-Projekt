@@ -43,6 +43,8 @@ public class InputBox {
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
         parameter = new FreeTypeFontParameter();
     }
+    //Made by Oscar
+    //Adds a max length to the input box
     public InputBox(int type, Vector position, Vector size, int maxLength) {
         this(type, position, size);
         this.maxLength = maxLength;
@@ -79,6 +81,8 @@ public class InputBox {
         }
     }
 
+    //Made by Christian with additions by Oscar (added maxLength, and backspace support)
+    //Updates the input box if it is enabled/clicked and adds the input to the arraylist if it is a valid input
     public void update() {
         char pressedKey = getPressedKey();
         if (isEnabled) {
@@ -263,7 +267,7 @@ public class InputBox {
             return '9';
         }
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
-            return '\b';
+            return '\b'; // Return a backspace character if the backspace key is pressed
         }
         return '\0'; // Return a null character if no key is pressed
     }

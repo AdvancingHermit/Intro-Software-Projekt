@@ -142,11 +142,12 @@ public class Snake {
         }
     }
 
+    //Made by Oscar
     public void quickTime(){
         oldVel = vel;
         quickTimeCounter++;
     }
-
+    //Made by Oscar
     public void dragonFruit(){
         dragonOldVel = vel;
         fireCounter++;
