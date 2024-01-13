@@ -210,11 +210,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Pixel Sans Serif.ttf"));
 
 		// Fruits
-		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0, cherryHandler);
-		goldenApple = new FruitType(goldenAppleSprite, 10, -1, goldenFruitHandler.getChance(), goldenFruitHandler);
-		cherry1 = new FruitType(cherry1Sprite, 10, 1, cherryHandler.getChance(), cherryHandler);
+		apple = new FruitType(appleSprite, 10, multiplayerHandler.isEnabled() ? 5 : 1, 0, cherryHandler);
+		goldenApple = new FruitType(goldenAppleSprite, 5, -1, goldenFruitHandler.getChance(), goldenFruitHandler);
+		cherry1 = new FruitType(cherry1Sprite, 5, 1, cherryHandler.getChance(), cherryHandler);
 		cherry2 = new FruitType(cherry2Sprite, 0, 0, 0, cherryHandler);
-		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance(), coffeeBeanHandler);
+		coffeeBean = new FruitType(coffeeBeanSprite, 15, 1, coffeeBeanHandler.getChance(), coffeeBeanHandler);
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance(), dragonFruitHandler);
 
 		// making setting scene (Martin)
