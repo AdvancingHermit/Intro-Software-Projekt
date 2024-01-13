@@ -10,8 +10,8 @@ public class Button { // written by Martin
     private Vector Size;
     private Vector pos;
     private Texture texture;
-    private int screenHeight = Gdx.graphics.getHeight();
-    private int screenWidth = Gdx.graphics.getWidth();
+    private double screenHeight = Gdx.graphics.getHeight();
+    private double screenWidth = Gdx.graphics.getWidth();
     private GameFeature handler;
     private String text;
     private BitmapFont font;

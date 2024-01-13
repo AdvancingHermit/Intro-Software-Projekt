@@ -3,6 +3,8 @@ package com.snake.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.snake.game.util.Vector;
 
+//Made by Oliver
+//All interactable objects are build from gameobjects
 public class GameObject {
 
     private Vector snakePos;
@@ -14,9 +16,6 @@ public class GameObject {
         return spritePos;
     }
 
-    public void setSpritePos(Vector spritePos) {
-        this.spritePos = spritePos;
-    }
 
     public GameObject(Vector snakePosition, Texture sprite, Vector spritePos){
         this.snakePos = snakePosition;

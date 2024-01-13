@@ -1,3 +1,5 @@
+//Christian
+
 package com.snake.game.util;
 
 import java.util.Arrays;
@@ -8,7 +10,6 @@ public class Leaderboard {
     Highscore[] board; // int er placement mellem 1 - 10, hvor 10 er bedst, og Highscore er data om
                        // scoren.
     int maxScores = 10;
-    int numScores = 0;
 
     public Leaderboard(Highscore[] board) {
         this.board = board;
@@ -16,7 +17,14 @@ public class Leaderboard {
     }
 
     public Leaderboard(JSON json) {
+        System.out.println(json.getData().get("leaderboard"));
+        if(json.getData().get("leaderboard").toString().equals("")){
+            board = new Highscore[0];
+            return;
+        }
+
         String[] temp = json.getData().get("leaderboard").toString().split("},");
+       
         board = new Highscore[temp.length];
 
         String[] temp2;
@@ -46,13 +54,22 @@ public class Leaderboard {
                 featureCounter++;
             }
         }
+        if(board.length == 0){
+            board = new Highscore[1];
+            board[0] = newScore;
+            return;
+        }
 
-        if (featureCounter <= maxScores) {
+        System.out.println("I made it here");
+        System.out.println(featureCounter);
+        System.out.println(maxScores);
+        if (featureCounter >= maxScores) {
             if (newScore.getScore() > board[board.length - 1].getScore() && newScore.getFeatures() == board[board.length - 1].getFeatures()) {
                 board[board.length - 1] = newScore;
                 Arrays.sort(board, Collections.reverseOrder());
             }
         } else {
+            System.out.println("I made it here 2");
             Highscore[] temp = new Highscore[board.length + 1];
             for (int i = 0; i < board.length; i++) {
                 temp[i] = board[i];
@@ -89,22 +106,6 @@ public class Leaderboard {
         sArr[0] += "]";
 
         return sArr;
-    }
-
-    private int findEmptyIndex(String s, int index) {
-        int i;
-        for (i = index - 1; i > 0; i--) {
-            if (s.charAt(i) == ':' || s.charAt(i) == ',') {
-                if (s.substring(i, index).contains(",") || s.substring(i, index).contains("{")) {
-                    return i + 1;
-                }
-                return i;
-            }
-        }
-        if (s.substring(0, index).contains(",") || s.substring(0, index).contains("{")) {
-            return i + 1;
-        }
-        return i;
     }
 
     private int findWordEndIndex(String s, int index) {

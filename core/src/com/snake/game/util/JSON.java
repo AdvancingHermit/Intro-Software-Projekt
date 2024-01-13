@@ -1,3 +1,5 @@
+//Christian
+
 package com.snake.game.util;
 
 import com.badlogic.gdx.Gdx;
@@ -24,6 +26,7 @@ public class JSON {
      * leaderboard: {1: Test 100,2: Test2 300,3: Test3 300}
      */
     public JSON(String path) {
+
         String info = "";
         try {
             FileHandle file = Gdx.files.internal(path);
@@ -33,44 +36,65 @@ public class JSON {
             }
             fileReader.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            if (e instanceof GdxRuntimeException) {
+                System.out.println("File not found");
+                String[] temp = new String[2];
+                temp[0] = "users: []";
+                temp[1] = "leaderboard: []";
+                data = dataFromString(temp);
+                return;
+            }
+
+            // e.printStackTrace();
         }
+
         String[] iwannasee;
         String[] temp1 = new String[0];
-        String[] temp2 = new String[0];
-        String[] temp3 = new String[0];
 
-        if(info.contains("],")){
+        if (info.contains("],")) {
             temp1 = info.substring(1, info.length() - 1).split("],");
-        }if(info.contains("},\"")){
-            temp2 = info.substring(1, info.length() - 1).split("},\"");
-        }if(info.contains("}, \"")){
-            temp3 = info.substring(1, info.length() - 1).split("}, \"");
         }
-
-        System.out.println(temp1.length + " " + temp2.length + " " + temp3.length);
-
-        iwannasee = new String[temp1.length + temp2.length + temp3.length];
 
         for (int i = 0; i < temp1.length; i++) {
-            iwannasee[i] = temp1[i];
+            if (temp1[i].contains("},\"")) {
+                String[] temp2 = temp1[i].split("},\"");
+                String[] tempArr = new String[temp1.length + 1];
+                for (int j = 0; j < temp1.length; j++) {
+                    tempArr[j] = temp1[j];
+                }
+                tempArr[i] = temp2[0] + "}";
+                tempArr[tempArr.length - 1] = temp2[1];
+                temp1 = tempArr;
+            }
         }
-        for (int i = 0; i < temp2.length; i++) {
-            iwannasee[i + temp1.length] = temp2[i];
-        }
-        for (int i = 0; i < temp3.length; i++) {
-            iwannasee[i + temp1.length + temp2.length] = temp3[i];
+        for (int i = 0; i < temp1.length; i++) {
+            if (temp1[i].contains("}, \"")) {
+                String[] temp2 = temp1[i].split("}, \"");
+                String[] tempArr = new String[temp1.length + 1];
+                for (int j = 0; j < temp1.length; j++) {
+                    tempArr[j] = temp1[j];
+                }
+                tempArr[i] = temp2[0] + "}";
+                tempArr[tempArr.length - 1] = temp2[1];
+                temp1 = tempArr;
+            }
         }
 
-        for(int i = 0; i < iwannasee.length; i++){
-                iwannasee[i] = iwannasee[i].replace("\"", "");
-        }
-        
-        for (int i = 0; i < iwannasee.length; i++) {
+        iwannasee = new String[temp1.length];
+
+        System.out.println(temp1.length);
+
+        for (int i = 0; i < temp1.length; i++) {
+            iwannasee[i] = temp1[i].replace("\"", "").trim();
             if (iwannasee[i].contains("[")) {
                 iwannasee[i] += "]";
             }
         }
+
+        for (int i = 0; i < iwannasee.length; i++) {
+            System.out.println(iwannasee[i]);
+        }
+
         data = dataFromString(iwannasee);
     }
 
@@ -122,7 +146,7 @@ public class JSON {
                 s += "[";
             }
             s += "{";
-            
+
             while (index >= 0) {
                 index1 = findEmptyIndex(tempObj, index);
                 index2 = findWordEndIndex(tempObj, index);
@@ -130,12 +154,12 @@ public class JSON {
                 String word1 = tempObj.substring(index1, index).trim();
                 String word2 = tempObj.substring(index + 1, index2).trim();
 
-                if(word1.equals(firstWord)){
+                if (word1.equals(firstWord)) {
                     s = s.substring(0, s.length() - 2) + "}, ";
                     s += "{";
                 }
 
-                if(isArr && index == tempObj.indexOf(":")){
+                if (isArr && index == tempObj.indexOf(":")) {
                     firstWord = tempObj.substring(index1, index).trim();
                 }
 
@@ -203,9 +227,9 @@ public class JSON {
         }
     }
 
-    private void rightOrder(){
+    private void rightOrder() {
         HashMap<Object, Object> temp = new HashMap<Object, Object>();
-        for(Object i : data.keySet()){
+        for (Object i : data.keySet()) {
             temp.put(i, data.get(i));
         }
         data = temp;

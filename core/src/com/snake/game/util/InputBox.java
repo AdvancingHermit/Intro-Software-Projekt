@@ -1,3 +1,5 @@
+//Christian
+
 package com.snake.game.util;
 
 import com.badlogic.gdx.Gdx;
@@ -28,6 +30,7 @@ public class InputBox {
     GlyphLayout text;
     int textWidth;
     boolean mouseUp = true;
+    int maxLength = 100;
 
     public InputBox(int type, Vector position, Vector size) {
         inputs = new ArrayList<Character>();
@@ -39,6 +42,12 @@ public class InputBox {
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
         parameter = new FreeTypeFontParameter();
+    }
+    //Made by Oscar
+    //Adds a max length to the input box
+    public InputBox(int type, Vector position, Vector size, int maxLength) {
+        this(type, position, size);
+        this.maxLength = maxLength;
     }
 
     public Object[] getFont() {
@@ -72,13 +81,15 @@ public class InputBox {
         }
     }
 
+    //Made by Christian with additions by Oscar (added maxLength, and backspace support)
+    //Updates the input box if it is enabled/clicked and adds the input to the arraylist if it is a valid input
     public void update() {
         char pressedKey = getPressedKey();
         if (isEnabled) {
-            if (pressedKey != '\0' && pressedKey != '\b' && keyUp && isNumber(pressedKey) && type == 1) {
+            if (pressedKey != '\0' && pressedKey != '\b' && keyUp && isNumber(pressedKey) && type == 1 && inputs.size() < maxLength) {
                 inputs.add(pressedKey);
                 keyUp = false;
-            } else if (pressedKey != '\0' && pressedKey != '\b' && keyUp && type == 0) {
+            } else if (pressedKey != '\0' && pressedKey != '\b' && keyUp && type == 0 && inputs.size() < maxLength) {
                 if (!isShiftPressed()) {
                     inputs.add((pressedKey + "").toLowerCase().charAt(0));
                 } else {
@@ -102,7 +113,7 @@ public class InputBox {
         
         if (isEnabled) {
             textWidth = (int) text.width;
-            if (counter % 60 < 30) {
+            if (counter % 30 < 10) {
                 curserBlink = new Rectangle(position.x + 2 + textWidth, position.y + 2, 4, size.y - 4);
             }
             counter++;
@@ -145,7 +156,7 @@ public class InputBox {
     public Vector getSize() {
         return size;
     }
-
+    
     private char getPressedKey() {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             return 'A';
@@ -256,7 +267,7 @@ public class InputBox {
             return '9';
         }
         if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
-            return '\b';
+            return '\b'; // Return a backspace character if the backspace key is pressed
         }
         return '\0'; // Return a null character if no key is pressed
     }
