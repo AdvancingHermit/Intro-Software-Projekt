@@ -87,6 +87,7 @@ public class Snake {
         this.keys = keys;
     }
 
+    //Made by Oliver and Oscar
     public void move() {
 
         if (Gdx.input.isKeyPressed(keys[0]) && !vel.equals(new Vector(0, -1))) { // Default W
@@ -132,6 +133,7 @@ public class Snake {
         counter++;
     }
 
+    //Made by Oliver
     private void handleNegativeGrowth() {
         while (grow < 0 && positions.size() > 3){
             grow++;
@@ -184,6 +186,7 @@ public class Snake {
         return false;
     }
 
+    //Made by Oliver
     public boolean checkCollision(Vector pos) {
         return (positions.get(positions.size() - 1)).equals(pos);
     }
