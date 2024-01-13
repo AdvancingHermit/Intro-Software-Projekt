@@ -368,7 +368,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 			}
 
 			for (int i = 0; i < leaderboard.forJSON().length; i++) {
-				System.out.println(leaderboard.forJSON()[i]);
+
 			}
 
 			json.addStringData(leaderboard.forJSON());
@@ -478,41 +478,38 @@ public class SnakeProjekt extends ApplicationAdapter {
 							|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && canClick) {
 						canClick = false;
 						if (backButton.clickedButton()) {
-							if (!(updateM.getString().equals(""))) {
+							if (!(updateM.getString().isEmpty())) {
 								m = (updateM.getNumber() > 100) ? 100
-										: (updateM.getNumber() < 5) ? 5 : updateM.getNumber();
+										: Math.max(updateM.getNumber(), 5);
 							}
-							if (!(updateN.getString().equals(""))) {
+							if (!(updateN.getString().isEmpty())) {
 								n = (updateN.getNumber() > 100) ? 100
-										: (updateN.getNumber() < 5) ? 5 : updateN.getNumber();
+										: Math.max(updateN.getNumber(), 5);
 							}
-							if (!(updateSnakeSpeed.getString().equals(""))) {
-								maxcounter = (updateSnakeSpeed.getNumber() > 15) ? 1
-										: (updateSnakeSpeed.getNumber() < 1) ? 30
-												: (30 - updateSnakeSpeed.getNumber() * 2);
+							if (!(updateSnakeSpeed.getString().isEmpty())) {
+								maxcounter = Math.min(12, updateSnakeSpeed.getNumber());
+								maxcounter = 30 - maxcounter * 2;
 							}
-							if (!(updateFruitAmount.getString().equals(""))) {
+							if (!(updateFruitAmount.getString().isEmpty())) {
 								fruitAmount = (updateFruitAmount.getNumber() > 15) ? 15
-										: (updateFruitAmount.getNumber() < 1) ? 1
-												: updateFruitAmount.getNumber();
+										: Math.max(updateFruitAmount.getNumber(), 1);
 							}
 
 							currentScene = Scene.Main_Scene;
 						} else if (controlsSettingsButton.clickedButton()) {
-							if (!(updateM.getString().equals(""))) {
+							if (!(updateM.getString().isEmpty())) {
 								m = (updateM.getNumber() > 100) ? 100
-										: (updateM.getNumber() < 5) ? 5 : updateM.getNumber();
+										: Math.max(updateM.getNumber(), 5);
 							}
-							if (!(updateN.getString().equals(""))) {
+							if (!(updateN.getString().isEmpty())) {
 								n = (updateN.getNumber() > 100) ? 100
-										: (updateN.getNumber() < 5) ? 5 : updateN.getNumber();
+										: Math.max(updateN.getNumber(), 5);
 							}
-							if (!(updateSnakeSpeed.getString().equals(""))) {
-								maxcounter = (updateSnakeSpeed.getNumber() > 15) ? 1
-										: (updateSnakeSpeed.getNumber() < 1) ? 30
-												: (30 - updateSnakeSpeed.getNumber() * 2);
+							if (!(updateSnakeSpeed.getString().isEmpty())) {
+								maxcounter = Math.min(12, updateSnakeSpeed.getNumber());
+								maxcounter = 30 - maxcounter * 2;
 							}
-							if (!(updateFruitAmount.getString().equals(""))) {
+							if (!(updateFruitAmount.getString().isEmpty())) {
 								fruitAmount = (updateFruitAmount.getNumber() > 15) ? 1
 										: (updateFruitAmount.getNumber() < 1) ? 30
 												: updateFruitAmount.getNumber();
