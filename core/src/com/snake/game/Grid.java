@@ -16,6 +16,7 @@ public class Grid {
 
     private int snakeAmount;
 
+    // Primarily made by Oscar
     Grid(Vector gridSize, int snakeAmount, int screenHeight, int maxcounter) {
         this.snakeAmount = snakeAmount;
         snakes = new Snake[snakeAmount];
@@ -25,10 +26,6 @@ public class Grid {
         this.gridSize = gridSize;
 
         int[] keys = new int[] { Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D };
-        if (snakeAmount == 1) {
-            snakes[0] = new Snake(gridSize.x / 2, gridSize.y / 2,maxcounter, keys);
-            return;
-        }
         for (int i = 0; i < snakeAmount; i++) {
             snakes[i] = new Snake(gridSize.x / 2, -2 + i * 2 + gridSize.y / 2, maxcounter,  keys);
             if (i == 0) {
@@ -62,6 +59,7 @@ public class Grid {
         return rects;
     }
 
+    // Primarily made by Christian
     public Wall[] wallGenerator(Vector gridSize) {
         Random random = new Random();
         Wall[] walls = new Wall[(int) Math.sqrt(gridSize.x * gridSize.y) / 5];
@@ -109,7 +107,7 @@ public class Grid {
         }
         return walls;
     }
-
+    //Made by Oscar
     public void checkSnakeCollision(Snake[] snakes, Snake currSnake) {
         for (Snake otherSnake : snakes) {
             if (otherSnake != currSnake) {

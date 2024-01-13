@@ -11,9 +11,11 @@ public class Vector{
         this.y = y;
     }
 
+    //Made by Oscar
     public Vector add(Vector other) {
         return new Vector(x + other.x, y + other.y);
     }
+    //Made by Oscar
     public Vector mult(int scalar) {
         return new Vector(x * scalar, y * scalar);
     }
@@ -36,10 +38,12 @@ public class Vector{
         return "X: " + x + " Y:" + y;
     }
 
+    //Made by Oscar
     public double angle() {
         return Math.toDegrees(Math.atan2(y, x));
     }
 
+    //Made by Oscar
     public double mag() {
         return Math.sqrt(x * x + y * y);
     }

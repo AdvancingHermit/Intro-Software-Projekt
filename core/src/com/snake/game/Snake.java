@@ -170,7 +170,7 @@ public class Snake {
         positions.remove(positions.size() - 1);
         hasDeadMoved = true;
     }
-
+    //Made by Oliver with support from Oscar
     public boolean checkCollision() {
 
         for (int i = 0; i < positions.size() - 1; i++) {
@@ -185,7 +185,7 @@ public class Snake {
     public boolean checkCollision(Vector pos) {
         return (positions.get(positions.size() - 1)).equals(pos);
     }
-
+    //Made by Oliver
     public void setHasEaten(Fruit fruit) {
         score += fruit.getScore();
         grow += fruit.getGrowth();
@@ -217,7 +217,7 @@ public class Snake {
     public void setKey(char key) {
         this.key = key;
     }
-
+    //Made by Oscar
     public ParticleEffect getEffect() {
         effect.getEmitters().first().getAngle().setHigh((int) vel.angle() -10, (int) vel.angle() + 10);
         effect.getEmitters().first().getAngle().setLow((int) vel.angle() -10, (int) vel.angle() + 10);
@@ -241,6 +241,9 @@ public class Snake {
     }
     public void setMaxcounter(int maxcounter) {
         this.maxcounter = maxcounter;
+    }
+    public int getMaxcounter() {
+        return maxcounter;
     }
 
     public void setLastRemoved(Vector lastRemoved) {

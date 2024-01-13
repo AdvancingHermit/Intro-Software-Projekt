@@ -12,14 +12,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter.Particle;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -29,12 +27,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.snake.game.handlers.*;
 import com.snake.game.util.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import javax.sound.midi.SysexMessage;
 
 public class SnakeProjekt extends ApplicationAdapter {
 
@@ -92,6 +84,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	double screenHeight;
 	double screenWidth;
 	int maxcounter = 8;
+	int gameStartMaxCounter;
 
 	boolean canClick = true;
 	boolean allSnakesDead;
@@ -245,13 +238,15 @@ public class SnakeProjekt extends ApplicationAdapter {
 				createFont((int) ((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920)))),
 				"Snake Speed:");
 
-		updateN = new InputBox(1, new Vector((int) (screenWidth / 2 - screenWidth / 7), (int) (screenHeight / 2 + screenHeight / 32)),
-				new Vector((int) (screenWidth / 7), (int) (screenHeight / 16)));
-		updateM = new InputBox(1, new Vector((int) (screenWidth / 2 + screenWidth / 10), (int) (screenHeight / 2 + screenHeight / 32)),
-				new Vector((int) (screenWidth / 7), (int) (screenHeight / 16)));
+		updateN = new InputBox(1,
+				new Vector((int) (screenWidth / 2 - screenWidth / 7), (int) (screenHeight / 2 + screenHeight / 32)),
+				new Vector((int) (screenWidth / 7), (int) (screenHeight / 16)), 3);
+		updateM = new InputBox(1,
+				new Vector((int) (screenWidth / 2 + screenWidth / 10), (int) (screenHeight / 2 + screenHeight / 32)),
+				new Vector((int) (screenWidth / 7), (int) (screenHeight / 16)), 3);
 		updateSnakeSpeed = new InputBox(1,
 				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight / 6)),
-				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)));
+				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)), 2);
 		Player1 = new Button(new Vector((int) (screenWidth / 6), (int) (screenHeight / 2 + screenHeight / 6)),
 				new Vector((int) (screenWidth / 6), (int) (screenHeight / 12)),
 				createFont((int) ((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920)))),
@@ -346,7 +341,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		Vector loginInputPos = new Vector(loginBoxPos.x + loginBoxSize.x / 2 - loginInputSize.x / 2,
 				loginBoxPos.y + loginBoxSize.y / 2 - loginInputSize.y);
 		loginInput = new InputBox(0, new Vector(loginInputPos.x, loginInputPos.y),
-				new Vector(loginInputSize.x, loginInputSize.y));
+				new Vector(loginInputSize.x, loginInputSize.y), 6);
 		Vector loginButtonSize = new Vector(loginInputSize.x / 2, loginInputSize.y);
 		loginButton = new Button(
 				new Vector(loginInputPos.x + (loginButtonSize.x / 2),
@@ -416,8 +411,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
 				shape.begin(ShapeType.Filled);
-
-				shape.setColor(Color.YELLOW);
+				showButton(backButton);
+				shape.setColor(Color.GOLD);
 				shape.rect(loginBoxPos.x, loginBoxPos.y, loginBoxSize.x, loginBoxSize.y);
 				shape.end();
 				batch.begin();
@@ -431,6 +426,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) || Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 					if (loginButton.clickedButton()) {
 						username = loginInput.getString();
+						gameStartMaxCounter = maxcounter;
 						currentScene = Scene.Main_Game;
 						gridsize = new Vector(n, m);
 						grid = new Grid(gridsize,
@@ -440,6 +436,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 							grid.walls = grid.wallGenerator(gridsize);
 						}
 					}
+				}
+				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && backButton.clickedButton()) {
+					currentScene = Scene.Main_Scene;
 				}
 
 				break;
@@ -674,6 +674,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 							grid.squareSize);
 				}
 				batch.end();
+
+				if (wallHandler.isEnabled()) {
+					drawWalls();
+				}
+
 				if (allSnakesDead) {
 					shape.begin(ShapeType.Filled);
 					showButton(restartButton, Color.RED);
@@ -694,13 +699,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 					currentScene = Scene.Main_Scene;
 					if (allSnakesDead) {
 						saveScore();
+						allSnakesDead = false;
 					}
 				}
 				batch.end();
 
-				if (wallHandler.isEnabled()) {
-					drawWalls();
-				}
 				checkFruitCollsions();
 
 				if (!multiplayerHandler.isEnabled()) {
@@ -933,11 +936,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch.end();
 	}
 
+	// Made by Oscar
 	public Color normColor(float r, float g, float b, float a) {
 		return new Color(r / 255, g / 255, b / 255, a / 255);
 
 	}
 
+	// Made by Oscar
 	public void saveScore() {
 		users.updateUser(new User(username, grid.snakes[0].getScore()));
 		leaderboard.updateLeaderboard(new Highscore(username, grid.snakes[0].getScore(), getFeatureHash(features)));
@@ -989,6 +994,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 	}
 
+	// Primarily made by Oscar
 	private static void reverseSnake(Snake snake) {
 		ArrayList<Vector> positions = snake.getPositions();
 		Collections.reverse(positions);
@@ -1004,6 +1010,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		}
 	}
 
+	// Primarily made by Oscar
 	private void snakeUpdater(Rectangle[][] shower) {
 		int deadSnakeCounter = 0;
 		for (int i = 0; i < grid.snakes.length; i++) {
@@ -1363,6 +1370,11 @@ public class SnakeProjekt extends ApplicationAdapter {
 		for (Button button : features) {
 			vals += "" + button.gethandler().isEnabled();
 		}
+		vals += gameStartMaxCounter;
+		vals += grid.gridSize.x;
+		vals += grid.gridSize.y;
+		vals += fruitAmount;
+
 		return Objects.hashCode(vals);
 	}
 
@@ -1383,7 +1395,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 		for (int i = 0; i < leaderboard.getLeaderboard().length; i++) {
 			Highscore curr = leaderboard.getLeaderboard()[i];
 			if (curr.getFeatures() == getFeatureHash(features)) {
-				System.out.println("abe!");
 				score.draw(batch,
 						leaderboard.getLeaderboard()[i].getScore() + " by: "
 								+ leaderboard.getLeaderboard()[i].getUsername(),
