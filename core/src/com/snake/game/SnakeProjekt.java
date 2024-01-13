@@ -182,7 +182,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		// camera.setToOrtho(false, 1920, 1080);
 		viewport = new FitViewport((int) screenWidth, (int) screenHeight, camera);
 
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Pixel Sans Serif.ttf"));
 		parameter = new FreeTypeFontParameter();
 		parameter.size = 72;
 		colonFont = generator.generateFont(parameter);
@@ -194,7 +194,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		scoreFont.setColor(Color.ORANGE);
 		generator.dispose();
 		featureFont = createFont(
-				(int) (((double) screenWidth * 4 / 5.0f * 4.0f) / (102 * ((double) screenWidth / 1920.0f))));
+				(int) (((double) screenWidth * 4 / 5.0f*3) / (102 * ((double) screenWidth / 1920.0f))));
 		mainScreenFont = createFont(200, Color.BLACK);
 
 		scoreText = new GlyphLayout();
@@ -207,7 +207,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		snakeText = new GlyphLayout();
 
 		inputBox = new InputBox(0, new Vector(100, 100), new Vector(100, 100));
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Pixel Sans Serif.ttf"));
 
 		// Fruits
 		apple = new FruitType(appleSprite, 1, multiplayerHandler.isEnabled() ? 5 : 1, 0, cherryHandler);
@@ -1353,7 +1353,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	// By Martin
 	public BitmapFont createFont(int size) {
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Pixel Sans Serif.ttf"));
 		parameter.size = size;
 		tempFont = generator.generateFont(parameter);
 		tempFont.setColor(Color.ORANGE);
