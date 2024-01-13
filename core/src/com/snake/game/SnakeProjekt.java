@@ -1070,7 +1070,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 						ParticleEffect effect = snake.getEffect();
 						if (snake.getFireCounter() == 0) {
-							effect = scaleEffect(effect);
+							effect = scaleEffect(effect, grid.squareSize);
 						}
 
 						effect.setPosition(
@@ -1085,7 +1085,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 								(int) snake.getVel().angle() + 10);
 						if (!snake.getVel().equals(snake.getDragonOldVel())) {
 							effect.reset();
-							effect = scaleEffect(effect);
+							effect = scaleEffect(effect, grid.squareSize);
 							effect.start();
 						}
 						effect.draw(batch, Gdx.graphics.getDeltaTime());
@@ -1286,13 +1286,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		batch.end();
 	}
 
-	public ParticleEffect scaleEffect(ParticleEffect effect) {
-		effect.getEmitters().first().getXScale().setHigh((int) (grid.squareSize / 1.4));
-		effect.getEmitters().first().getYScale().setLow((int) (grid.squareSize / 1.4));
-		effect.getEmitters().first().getLife().setHigh((int) ((grid.squareSize / 50.0) * 325));
-		return effect;
-	}
-
+	//Made by Oscar
+	//Scales the particle effect to a given size
 	public ParticleEffect scaleEffect(ParticleEffect effect, int size) {
 		effect.getEmitters().first().getXScale().setHigh((int) (size / 1.4));
 		effect.getEmitters().first().getYScale().setLow((int) (size / 1.4));
