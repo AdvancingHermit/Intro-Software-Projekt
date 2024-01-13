@@ -59,7 +59,7 @@ public class Grid {
         return rects;
     }
 
-    // Primarily made by Christian
+    //Christian
     public Wall[] wallGenerator(Vector gridSize) {
         Random random = new Random();
         Wall[] walls = new Wall[(int) Math.sqrt(gridSize.x * gridSize.y) / 5];
