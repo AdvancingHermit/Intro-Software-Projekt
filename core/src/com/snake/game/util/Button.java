@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.snake.game.GameFeature;
 
-public class Button {
+public class Button { // written by Martin
 
     private Vector Size;
     private Vector pos;
@@ -16,22 +16,21 @@ public class Button {
     private String text;
     private BitmapFont font;
 
-    public Button(Vector pos, Vector Size, BitmapFont font, String text) {
-        this.Size = Size;
+    public Button(Vector pos, Vector Size, BitmapFont font, String text) { // constructure for rect with text
         this.pos = pos;
         this.text = text;
         this.font = font;
 
     }
 
-    public Button(Vector pos, Vector Size, GameFeature handler) {
+    public Button(Vector pos, Vector Size, GameFeature handler) { // constructure for buttons for handlers
         this.Size = Size;
         this.pos = pos;
         this.handler = handler;
 
     }
 
-    public Button(Vector pos, Vector Size, Texture texture) {
+    public Button(Vector pos, Vector Size, Texture texture) {   // constructure for drawing png's
         this.Size = Size;
         this.pos = pos;
         this.texture = texture;
