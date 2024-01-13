@@ -195,7 +195,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		generator.dispose();
 		featureFont = createFont(
 				(int) (((double) screenWidth * 4 / 5.0f*3) / (102 * ((double) screenWidth / 1920.0f))));
-		mainScreenFont = createFont(200, Color.BLACK);
+		mainScreenFont = createFont( (int)(200 * screenWidth / 1920.0), Color.BLACK);
 
 		scoreText = new GlyphLayout();
 		scoreText.setText(scoreFont, "Player 1 SCORE");
