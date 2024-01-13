@@ -182,7 +182,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		screenHeight = Gdx.graphics.getHeight();
 		widthScaling = screenWidth / 1920.0;
 		heightScaling = screenHeight / 1080.0;
-		scalingFactor = Math.max(widthScaling, heightScaling);
+		scalingFactor = (widthScaling + heightScaling) / 2;
 
 
 		camera = new OrthographicCamera();
