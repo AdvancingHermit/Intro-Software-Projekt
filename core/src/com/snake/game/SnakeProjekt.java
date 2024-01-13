@@ -83,6 +83,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 	double screenHeight;
 	double screenWidth;
+	double widthScaling;
+	double heightScaling;
+	double scalingFactor;
 	int maxcounter = 8;
 	int gameStartMaxCounter;
 
@@ -177,6 +180,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
+		widthScaling = screenWidth / 1920.0;
+		heightScaling = screenHeight / 1080.0;
+		scalingFactor = Math.max(widthScaling, heightScaling);
+
 
 		camera = new OrthographicCamera();
 		// camera.setToOrtho(false, 1920, 1080);
@@ -222,26 +229,26 @@ public class SnakeProjekt extends ApplicationAdapter {
 		settingsRect = new Button(
 				new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0 + screenHeight / 8.0)),
 				new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 8.0)),
-				createFont((int) (75 * (screenWidth*screenHeight / (1920.0*1080)))),
+				createFont((int) (75 * scalingFactor)),
 				"Gridsize");
 		nTextRect = new Button(new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
-				createFont(((int) (75 * (screenWidth*screenHeight / (1920.0*1080))))),
+				createFont(((int) ((75 *scalingFactor)))),
 				"n:");
 		mTextRect = new Button(new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
-				createFont(((int) (75 * (screenWidth*screenHeight / (1920.0*1080))))),
+				createFont(((int) ((75 *scalingFactor)))),
 				"m:");
 
 		fruitAmountRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 7)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
-				createFont((int) (42 *(screenWidth*screenHeight / (1920.0*1080)))),
+				createFont((int) (42 * scalingFactor)),
 				"Fruit Amount:");
 		snakeSpeedRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 14)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
-				createFont((int) (45 * (screenWidth*screenHeight / (1920.0*1080)))),
+				createFont((int) (45 * scalingFactor )),
 				"Snake Speed:");
 
 		updateN = new InputBox(1,
