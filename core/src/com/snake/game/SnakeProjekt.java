@@ -202,7 +202,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		quickTimerText = new GlyphLayout();
 		quickTimerText.setText(scoreFont, "Player 1 Time");
 		colonText = new GlyphLayout();
-		colonText.setText(colonFont, " : ");
+		colonText.setText(colonFont, ":");
 		scoreNumText = new GlyphLayout();
 		snakeText = new GlyphLayout();
 
@@ -220,28 +220,28 @@ public class SnakeProjekt extends ApplicationAdapter {
 		// making setting scene (Martin)
 
 		settingsRect = new Button(
-				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 + screenHeight / 8)),
-				new Vector((int) (screenWidth / 2), (int) (screenHeight / 8)),
-				createFont((int) ((screenWidth * 4 / 10 * ("Gridsize").length()) / (102 * (screenWidth / 1920)))),
+				new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0 + screenHeight / 8.0)),
+				new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 8.0)),
+				createFont((int) (75 * screenWidth / 1920.0)),
 				"Gridsize");
-		nTextRect = new Button(new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2)),
-				new Vector((int) (screenWidth / 8), (int) (screenHeight / 8)),
-				createFont(((int) ((102 * screenWidth) / 1920))),
+		nTextRect = new Button(new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0)),
+				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
+				createFont(((int) ((75 * screenWidth) / 1920.0))),
 				"n:");
-		mTextRect = new Button(new Vector((int) (screenWidth / 2), (int) (screenHeight / 2)),
-				new Vector((int) (screenWidth / 8), (int) (screenHeight / 8)),
-				createFont(((int) ((102 * screenWidth) / 1920))),
+		mTextRect = new Button(new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 2.0)),
+				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
+				createFont(((int) ((75 * screenWidth) / 1920.0))),
 				"m:");
 
 		fruitAmountRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 7)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
-				createFont((int) ((screenWidth * 4 / 15 * ("Fruit Amount:").length()) / (150 * (screenWidth / 1920)))),
+				createFont((int) (42 * (screenWidth / 1920.0))),
 				"Fruit Amount:");
 		snakeSpeedRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 14)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
-				createFont((int) ((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920)))),
+				createFont((int) (45 * (screenWidth / 1920.0))),
 				"Snake Speed:");
 
 		updateN = new InputBox(1,
