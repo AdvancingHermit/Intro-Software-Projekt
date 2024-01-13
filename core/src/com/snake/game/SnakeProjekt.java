@@ -222,26 +222,26 @@ public class SnakeProjekt extends ApplicationAdapter {
 		settingsRect = new Button(
 				new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0 + screenHeight / 8.0)),
 				new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 8.0)),
-				createFont((int) (75 * screenWidth / 1920.0)),
+				createFont((int) (75 * (screenWidth*screenHeight / (1920.0*1080)))),
 				"Gridsize");
 		nTextRect = new Button(new Vector((int) (screenWidth / 2.0 - screenWidth / 4.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
-				createFont(((int) ((75 * screenWidth) / 1920.0))),
+				createFont(((int) (75 * (screenWidth*screenHeight / (1920.0*1080))))),
 				"n:");
 		mTextRect = new Button(new Vector((int) (screenWidth / 2.0), (int) (screenHeight / 2.0)),
 				new Vector((int) (screenWidth / 8.0), (int) (screenHeight / 8.0)),
-				createFont(((int) ((75 * screenWidth) / 1920.0))),
+				createFont(((int) (75 * (screenWidth*screenHeight / (1920.0*1080))))),
 				"m:");
 
 		fruitAmountRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 7)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
-				createFont((int) (42 * (screenWidth / 1920.0))),
+				createFont((int) (42 *(screenWidth*screenHeight / (1920.0*1080)))),
 				"Fruit Amount:");
 		snakeSpeedRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 14)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
-				createFont((int) (45 * (screenWidth / 1920.0))),
+				createFont((int) (45 * (screenWidth*screenHeight / (1920.0*1080)))),
 				"Snake Speed:");
 
 		updateN = new InputBox(1,
@@ -326,8 +326,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector((int) (boxesWidth), (int) (boxesHeight)), handlers[i]);
 			}
 		}
-
 		effect.load(Gdx.files.internal("particles/fire.p"), Gdx.files.internal("particles"));
+
 
 		json = new JSON("data/data.json");
 		leaderboard = new Leaderboard(json);
