@@ -217,7 +217,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		coffeeBean = new FruitType(coffeeBeanSprite, 100, 1, coffeeBeanHandler.getChance(), coffeeBeanHandler);
 		dragonFruit = new FruitType(dragonFruitSprite, 5, 0, dragonFruitHandler.getChance(), dragonFruitHandler);
 
-		// making setting scene
+
+		// making setting scene (Martin)
+
 		settingsRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 + screenHeight / 8)),
 				new Vector((int) (screenWidth / 2), (int) (screenHeight / 8)),
@@ -231,7 +233,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 				new Vector((int) (screenWidth / 8), (int) (screenHeight / 8)),
 				createFont(((int) ((102 * screenWidth) / 1920))),
 				"m:");
-
+    
+    fruitAmountRect = new Button(
+				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 7)),
+				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
+				createFont((int) ((screenWidth * 4 / 15 * ("Fruit Amount:").length()) / (150 * (screenWidth / 1920)))),
+				"Fruit Amount:");
 		snakeSpeedRect = new Button(
 				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 14)),
 				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
@@ -247,6 +254,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		updateSnakeSpeed = new InputBox(1,
 				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight / 6)),
 				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)), 2);
+    updateFruitAmount = new InputBox(1,
+				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight * 2 / 5)),
+				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)));
 		Player1 = new Button(new Vector((int) (screenWidth / 6), (int) (screenHeight / 2 + screenHeight / 6)),
 				new Vector((int) (screenWidth / 6), (int) (screenHeight / 12)),
 				createFont((int) ((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920)))),
@@ -262,7 +272,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				createFont((int) ((screenWidth * 4 / 15 * ("Snake Speed:").length()) / (150 * (screenWidth / 1920)))),
 				"Player 3");
 
-		// Making Buttons
+		// Making Buttons (Martin)
 		backButton = new Button(new Vector((int) (-screenWidth / 2 + 150), (int) (screenHeight / 2 - 250)),
 				new Vector((int) (300), (int) (100)),
 				backArrow);
@@ -297,17 +307,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 				createFont((int) ((screenWidth * 4 / 15 * ("Play Again").length()) / (102 * (screenWidth / 1920)))),
 				"Play Again");
 
-		updateFruitAmount = new InputBox(1,
-				new Vector((int) (screenWidth / 2 + screenWidth / 24), (int) (screenHeight / 2 - screenHeight * 2 / 5)),
-				new Vector((int) (screenWidth / 5), (int) (screenHeight / 12)));
-		fruitAmountRect = new Button(
-				new Vector((int) (screenWidth / 2 - screenWidth / 4), (int) (screenHeight / 2 - screenHeight * 3 / 7)),
-				new Vector((int) (screenWidth / 3), (int) (screenHeight / 6)),
-				createFont((int) ((screenWidth * 4 / 15 * ("Fruit Amount:").length()) / (150 * (screenWidth / 1920)))),
-				"Fruit Amount:");
-
 		boxesWidth = (int) (screenWidth / 6);
 		boxesHeight = (int) (screenHeight / 16);
+    
+    // Making buttons for features[], with corresponding handlers (Martin)
 		for (int i = 0; i < features.length; i++) {
 			if (i % 2 == 0) {
 				features[i] = new Button(
@@ -372,8 +375,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 			json.createFile("data/");
 			Gdx.app.exit();
 		}
-		switch (currentScene) {
-			case Main_Scene:
+		// Scene Management by Martin
+		switch (currentScene) { 
+			// by Martin
+			case Main_Scene: 
 				fruits.clear();
 				// ScreenUtils.clear(0, 0, 1, 1);
 				ScreenUtils.clear(0, 0, 1, 1);
@@ -439,6 +444,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 				break;
+			// by Martin
 			case Main_Setting:
 				if (!showControlls) {
 					ScreenUtils.clear(0, 0, 1, 1);
@@ -554,6 +560,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 				}
 				break;
+			// by Martin
 			case Main_Enable_Features:
 				ScreenUtils.clear(0, 0, 1, 1);
 				camera.update();
@@ -668,6 +675,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				}
 
 				break;
+			// by Martin
 			case Main_Restart:
 				ScreenUtils.clear(0, 0, 1, 1);
 				camera.update();
