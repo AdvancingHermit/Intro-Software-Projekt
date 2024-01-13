@@ -1,5 +1,8 @@
 package com.snake.game;
 
+
+//Made by Oliver
+//Gamefeatures/handlers, allows to easily enable and disable extra features in game.
 public class GameFeature {
     private boolean enabled;
     private String featureName;
@@ -13,9 +16,6 @@ public class GameFeature {
         return enabled;
     }
 
-    public void enable() {
-        this.enabled = true;
-    }
 
     public void disable() {
         this.enabled = false;

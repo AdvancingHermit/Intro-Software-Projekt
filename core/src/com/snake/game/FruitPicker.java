@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+//Made by Oliver
+//Picks a random fruit, from the given fruits that are enabled, defaults to apple
 
 public class FruitPicker {
     //20% chance for default

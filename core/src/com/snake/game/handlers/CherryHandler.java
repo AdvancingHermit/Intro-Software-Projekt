@@ -2,6 +2,7 @@ package com.snake.game.handlers;
 
 import com.snake.game.GameFeature;
 
+//Made by Oliver
 public class CherryHandler extends GameFeature  {
     private int chance;
 

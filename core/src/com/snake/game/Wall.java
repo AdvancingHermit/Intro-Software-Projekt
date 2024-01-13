@@ -21,10 +21,8 @@ public class Wall extends GameObject {
         return size;
     }
 
-    public int getNumberOfWalls(){
-        return size.x + size.y - 1;
-    }
 
+    //Made by Oliver
     public Set<Vector> getOccupiedTiles() {
         Set<Vector> result = new HashSet<>();
         result.add(getSnakePos());

@@ -2,6 +2,8 @@ package com.snake.game;
 
 import com.badlogic.gdx.graphics.Texture;
 
+//Made by Oliver
+//Fruitype, defines the main attributes of a fruit, that they all share.
 public class FruitType{
 
     private Texture sprite;
