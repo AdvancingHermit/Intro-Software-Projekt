@@ -163,6 +163,7 @@ public class Snake {
     }
 
     public void moveBack(){
+        //Christian
         if (hasDeadMoved){
             return;
         }

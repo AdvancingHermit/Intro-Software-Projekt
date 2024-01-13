@@ -1013,7 +1013,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				int cx = positions.get(k).x;
 				int cy = positions.get(k).y;
 				if (positions.get(k) == positions.get(positions.size() - 1)) {
-
+					//Boundary collision af Christian
 					if (cx == grid.gridSize.x || cx == -1) {
 						if (borderHandler.isEnabled()) {
 							snake.isDead = true;
@@ -1037,7 +1037,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 							cy = positions.get(k).y = grid.gridSize.y - Math.abs(cy);
 							snake.checkCollision();
 						}
-					}
+					}// End af Christians
 					shape.setColor(Color.BLACK);
 					Sprite sprY;
 					Sprite sprX;
@@ -1252,6 +1252,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				fruitType.getScore(), fruitType.getGrowth()));
 	}
 
+	//Christian
 	private void inputBoxShower(InputBox inputBox) {
 		inputBox.enable((int) screenHeight);
 		inputBox.update();
@@ -1287,6 +1288,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		return effect;
 	}
 
+	//Christian
 	private void drawWalls() {
 		batch.begin();
 		for (int i = 0; i < grid.walls.length; i++) {
@@ -1372,10 +1374,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 		return new Vector((int) glyph.width, (int) glyph.height);
 	}
 
+	//Christian
 	private void leaderboardShower() {
-
 		int height = (int) screenHeight / 5;
-
 		score.setColor(Color.GOLD);
 		batch.begin();
 		score.draw(batch, "Leaderboard:", (int) -screenWidth / 2 + 50, height);
@@ -1391,7 +1392,6 @@ public class SnakeProjekt extends ApplicationAdapter {
 				j++;
 			}
 		}
-
 		batch.end();
 	}
 

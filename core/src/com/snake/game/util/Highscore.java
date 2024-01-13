@@ -1,3 +1,4 @@
+//Christian
 package com.snake.game.util;
 
 public class Highscore implements Comparable<Highscore> {
