@@ -1469,10 +1469,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 		tempFont.dispose();
 		featureFont.dispose();
 		loginFont.dispose();
-		for (Button button : features) {
-			button.getfont().dispose();
-		}
 		mainScreenFont.dispose();
 		loginContinueFont.dispose();
+		for (Button button : features) {
+			if (button.getfont() != null) {
+				button.getfont().dispose();
+			}
+		}
+
 	}
 }
