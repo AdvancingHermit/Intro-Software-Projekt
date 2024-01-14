@@ -6,9 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class User {
-    String username;
-    int highScore;
-    String date;
+    private String username;
+    private int highScore;
+    private String date;
 
     public User(String username){
         this.username = username;
@@ -37,6 +37,7 @@ public class User {
     }
 
     public String[] forJSON(){
+        //Laver et array af strings, som kan bruges til at updatere et JSON objekt.
         String[] s = new String[3];
         s[0] = "username: " + username;
         s[1] = "highScore: " + highScore;
@@ -46,7 +47,7 @@ public class User {
 
     public void saveUser(){
         JSON json = new JSON(forJSON());
-        json.createFile("data/data.json");
+        json.createFile();
     }
     
     public String toString(){
