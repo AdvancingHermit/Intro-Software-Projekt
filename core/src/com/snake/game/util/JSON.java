@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class JSON {
 
-    HashMap<Object, Object> data;
+    private HashMap<Object, Object> data;
 
     public JSON(HashMap<Object, Object> data) {
         this.data = data;
@@ -23,7 +23,12 @@ public class JSON {
      * {date:08/01/2024,highScore: 10,username: Test2},
      * {date: 08/01/2024,highScore: 10,username: Test3}
      * ],
-     * leaderboard: {1: Test 100,2: Test2 300,3: Test3 300}
+     * leaderboard: {
+     * "placement": "76",
+     * "username": "ss",
+     * "score": "0",
+     * "features": "-2052069131"
+     * }
      */
     public JSON(String path) {
 
@@ -37,23 +42,27 @@ public class JSON {
             fileReader.close();
         } catch (Exception e) {
             if (e instanceof GdxRuntimeException) {
+                //Laver en tomt JSON object og fylder ind med tomt user og leaderboard object.
                 String[] temp = new String[2];
                 temp[0] = "users: []";
                 temp[1] = "leaderboard: []";
                 data = dataFromString(temp);
                 return;
             }
-
-            // e.printStackTrace();
+            else {
+                e.printStackTrace();
+            }
         }
 
         String[] iwannasee;
         String[] temp1 = new String[0];
 
+        //Forsøger at splitte dataen op i et array af array af objecter.
         if (info.contains("],")) {
             temp1 = info.substring(1, info.length() - 1).split("],");
         }
 
+        //Hvis der kun er et object, splitter den det op i et array af objecter.
         for (int i = 0; i < temp1.length; i++) {
             if (temp1[i].contains("},\"")) {
                 String[] temp2 = temp1[i].split("},\"");
@@ -66,6 +75,7 @@ public class JSON {
                 temp1 = tempArr;
             }
         }
+        //Samme men nogle gange er der et mellemrum
         for (int i = 0; i < temp1.length; i++) {
             if (temp1[i].contains("}, \"")) {
                 String[] temp2 = temp1[i].split("}, \"");
@@ -81,6 +91,7 @@ public class JSON {
 
         iwannasee = new String[temp1.length];
 
+        //Tilføjer mistede tegn til .split metoden.
         for (int i = 0; i < temp1.length; i++) {
             iwannasee[i] = temp1[i].replace("\"", "").trim();
             if (iwannasee[i].contains("[")) {
@@ -104,6 +115,7 @@ public class JSON {
     public HashMap<Object, Object> dataFromString(String[] stringData) {
         HashMap<Object, Object> getData = new HashMap<Object, Object>();
 
+        //Splitter dataen op i et hashmap, i det her tilfælde med to entries: leaderboard og users.
         for (int i = 0; i < stringData.length; i++) {
 
             if (stringData[i].contains("[")) {
@@ -122,6 +134,8 @@ public class JSON {
     }
 
     public String toString() {
+        //Formatterer dataen til JSON format.
+
         String s = "{";
         String firstWord = "";
         for (Object i : data.keySet()) {
@@ -168,6 +182,7 @@ public class JSON {
         return s.substring(0, s.length() - 2) + "}";
     }
 
+    //Finder starten af et ord.
     private int findEmptyIndex(String s, int index) {
         int i;
         for (i = index - 1; i > 0; i--) {
@@ -184,6 +199,7 @@ public class JSON {
         return i;
     }
 
+    //Finder slutningen af et ord.
     private int findWordEndIndex(String s, int index) {
         int i;
         for (i = index + 2; i < s.length(); i++) {
@@ -206,12 +222,10 @@ public class JSON {
         return data.get(key).toString();
     }
 
-    public void createFile(String path) {
+    //Laver selve json filen, eller overwriter den.
+    public void createFile() {
         try {
-            FileHandle file = Gdx.files.local(path + "data.json");
-            if (!file.exists()) {
-            } else {
-            }
+            FileHandle file = Gdx.files.local("data/data.json");
             file.writeString(toString(), false);
 
         } catch (GdxRuntimeException e) {
@@ -220,6 +234,7 @@ public class JSON {
     }
 
     private void rightOrder() {
+        //Var nødvendigt før. burde ikke være det mere, men jeg har ikke lyst til at fjerne det.
         HashMap<Object, Object> temp = new HashMap<Object, Object>();
         for (Object i : data.keySet()) {
             temp.put(i, data.get(i));

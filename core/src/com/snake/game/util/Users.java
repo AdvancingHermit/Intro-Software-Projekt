@@ -4,20 +4,23 @@ package com.snake.game.util;
 
 public class Users {
 
-    User[] users;
-    int numUsers = 0;
-
+    private User[] users;
+    
     public Users(User[] users) {
         this.users = users;
     }
 
     public Users(JSON json) {
-        users = new User[json.getData().get("users").toString().replace("{", "").split("}").length];
+        //Splitter user dataen op i et string array af users.
+        String[] temp = json.getData().get("users").toString().replace("{", "").split("}");
+        users = new User[temp.length];
         int i = 0;
         String uName = "";
         int uScore = 0;
         String uDate = "";
-        for (Object user : json.getData().get("users").toString().replace("{", "").split("}")) {
+
+        //Looper over de enkelte users, og splitter dem op i deres respektive data.
+        for (Object user : temp) {
             String[] valueArr = user.toString().trim().split(",");
 
             for (int j = 0; j < valueArr.length; j++) {
@@ -35,6 +38,7 @@ public class Users {
     }
 
     public void addUser(User newUser) {
+        //Placerer en ny bruger i users arrayet.
         if (newUser.getUsername().equals("")) {
             return;
         }
@@ -47,6 +51,7 @@ public class Users {
     }
 
     public void updateUser(User newUser) {
+        //Opdaterer en bruger, hvis den allerede eksisterer.
         boolean isUser = false;
         for (int i = 0; i < users.length; i++) {
             if (users[i].getUsername().equals(newUser.getUsername())) {
@@ -64,6 +69,7 @@ public class Users {
     }
 
     public String[] forJSON() {
+        //Laver et array af strings, som kan bruges til at updatere et JSON objekt.
         String[] sArr = new String[1];
         sArr[0] = "users: [";
 
