@@ -32,6 +32,7 @@ public class InputBox {
     boolean mouseUp = true;
     int maxLength = 100;
 
+
     public InputBox(int type, Vector position, Vector size) {
         inputs = new ArrayList<Character>();
         text = new GlyphLayout();
@@ -42,6 +43,11 @@ public class InputBox {
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Retroville NC.ttf"));
         parameter = new FreeTypeFontParameter();
+        parameter.size = size.y;
+        parameter.size = getSize().y;
+        font = generator.generateFont(parameter);
+        font.setColor(Color.BLACK);
+
     }
     //Made by Oscar
     //Adds a max length to the input box
@@ -50,19 +56,6 @@ public class InputBox {
         this.maxLength = maxLength;
     }
 
-    public Object[] getFont() {
-        Object[] sender = new Object[2];
-        parameter.size = size.y;
-        parameter.size = getSize().y;
-        font = generator.generateFont(parameter);
-        font.setColor(Color.BLACK);
-        text.setText(font, getString());
-
-        sender[0] = font;
-        sender[1] = text;
-
-        return sender;
-    }
 
     public void enable(int screenHeight) {
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
@@ -80,6 +73,15 @@ public class InputBox {
             mouseUp = true;
         }
     }
+
+    public BitmapFont getFont() {
+        return font;
+    }
+    public GlyphLayout getText() {
+        text.setText(font, getString());
+        return text;
+    }
+
 
     //Made by Christian with additions by Oscar (added maxLength, and backspace support)
     //Updates the input box if it is enabled/clicked and adds the input to the arraylist if it is a valid input

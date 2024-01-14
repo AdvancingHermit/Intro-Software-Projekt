@@ -1323,13 +1323,10 @@ public class SnakeProjekt extends ApplicationAdapter {
 		shape.rect(rects[1].x, rects[1].y, rects[1].width, rects[1].height);
 		shape.end();
 
-		Object[] reciever = inputBox.getFont();
-		BitmapFont fontReceived = (BitmapFont) reciever[0];
-		GlyphLayout glyphReceived = (GlyphLayout) reciever[1];
 		int posX = (int) (rects[0].x - viewport.getScreenWidth() / 2);
 		int posY = (int) (rects[0].y - viewport.getScreenHeight() / 2 + rects[0].height - 8);
 		batch.begin();
-		fontReceived.draw(batch, glyphReceived, posX, posY);
+		inputBox.getFont().draw(batch, inputBox.getText(), posX, posY);
 		batch.end();
 	}
 
@@ -1474,5 +1471,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 		tempFont.dispose();
 		featureFont.dispose();
 		loginFont.dispose();
+		for (Button button : features) {
+			button.getfont().dispose();
+		}
 	}
 }
