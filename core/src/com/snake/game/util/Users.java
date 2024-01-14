@@ -75,6 +75,10 @@ public class Users {
     }
 
     public String[] forJSON() {
+        if(users.length == 0){
+            updateUser(new User("anon", 0));
+        }
+
         //Laver et array af strings, som kan bruges til at updatere et JSON objekt.
         String[] sArr = new String[1];
         sArr[0] = "users: [";

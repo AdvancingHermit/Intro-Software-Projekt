@@ -89,6 +89,10 @@ public class Leaderboard {
     }
 
     public String[] forJSON() {
+        if(board.length == 0){
+            updateLeaderboard(new Highscore("anon", 0, 0));
+        }
+
         //Laver et string array over leaderboardet, som kan bruges til at updatere et JSON objekt.
 
         String[] sArr = new String[1];

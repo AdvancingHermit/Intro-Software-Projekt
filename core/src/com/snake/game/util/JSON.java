@@ -58,9 +58,8 @@ public class JSON {
         String[] temp1 = new String[0];
 
         //Forsøger at splitte dataen op i et array af array af objecter.
-        if (info.contains("],")) {
-            temp1 = info.substring(1, info.length() - 1).split("],");
-        }
+        temp1 = info.substring(1, info.length() - 1).split("],");
+        
 
         //Hvis der kun er et object, splitter den det op i et array af objecter.
         for (int i = 0; i < temp1.length; i++) {
@@ -214,6 +213,10 @@ public class JSON {
         return data;
     }
 
+    public void addData(Object key, Object value) {
+        data.put(key, value);
+    }
+
     public Object[] getDataValues() {
         return data.values().toArray();
     }
@@ -226,6 +229,10 @@ public class JSON {
     public void createFile() {
         try {
             FileHandle file = Gdx.files.local("data/data.json");
+            if(toString().equals("")){
+                file.writeString("{leaderboard: [], users:[]}", false);
+                return;
+            }
             file.writeString(toString(), false);
 
         } catch (GdxRuntimeException e) {

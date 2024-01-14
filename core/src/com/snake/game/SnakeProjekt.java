@@ -371,7 +371,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 	public void render() {
 
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-			if (this.grid != null) {
+			if (this.grid != null && !username.equals("") && allSnakesDead) {
 				saveScore();
 			}
 
@@ -675,7 +675,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if ((Gdx.input.isButtonPressed(Input.Buttons.LEFT)
 						|| Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) && backButton.clickedButton()) {
 					currentScene = Scene.Main_Scene;
-					if (allSnakesDead) {
+					if (!username.equals("") && allSnakesDead) {
 						saveScore();
 						allSnakesDead = false;
 					}
