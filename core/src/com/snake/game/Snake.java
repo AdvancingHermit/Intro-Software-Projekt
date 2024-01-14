@@ -77,7 +77,7 @@ public class Snake {
         keyVectorMapReversed.put(new Vector(0, -1), 'S');
         keyVectorMapReversed.put(new Vector(1, 0), 'D');
 
-		effect.load(Gdx.files.internal("particles/fire.p"), Gdx.files.internal("particles"));
+		effect.load(Gdx.files.internal("particles/fire.particle"), Gdx.files.internal("particles"));
 		effect.start();
 
     }

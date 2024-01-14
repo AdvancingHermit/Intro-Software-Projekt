@@ -333,7 +333,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 						new Vector((int) (boxesWidth), (int) (boxesHeight)), handlers[i]);
 			}
 		}
-		effect.load(Gdx.files.internal("particles/fire.p"), Gdx.files.internal("particles"));
+		effect.load(Gdx.files.internal("particles/fire.particle"), Gdx.files.internal("particles"));
 
 		json = new JSON("data/data.json");
 		leaderboard = new Leaderboard(json);
