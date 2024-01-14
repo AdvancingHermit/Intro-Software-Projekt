@@ -60,7 +60,7 @@ public class Grid {
 
     //Christian
     public Wall[] wallGenerator(Vector gridSize) {
-        Random random = new Random();
+        Random random = new Random(System.currentTimeMillis());
         Wall[] walls = new Wall[(int) Math.sqrt(gridSize.x * gridSize.y) / 5];
 
         for (int i = 0; i < walls.length; i++) {
