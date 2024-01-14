@@ -1252,14 +1252,12 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (wallHandler.isEnabled()) {
 					for (Wall wall : grid.walls) {
 						if (wall.getOccupiedTiles().contains(spawningPosition)) {
+							totalWalls += wall.getOccupiedTiles().size();
 							validSpawn = false;
 						}
 					}
 				}
-
-				if (snakeSize >= gridsize.x * gridsize.y - totalWalls) {
-					snakeCoversFullScreen = true;
-				}
+				//check if there is any space left on the grid to spawn a fruit
 				if (gridsize.x * gridsize.y - snakeSize - totalWalls - fruits.size() <= 0) {
 					snakeCoversFullScreen = true;
 				}
@@ -1267,6 +1265,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 				if (snakeCoversFullScreen) {
 					break;
 				}
+
+
 				Rectangle rectangle = shower[0][0];
 				for (Fruit fruit : fruits) {
 					if (fruit.getSnakePos().equals(spawningPosition)) {
@@ -1474,5 +1474,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 		for (Button button : features) {
 			button.getfont().dispose();
 		}
+		mainScreenFont.dispose();
+		loginContinueFont.dispose();
 	}
 }
