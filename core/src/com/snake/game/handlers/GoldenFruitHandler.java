@@ -11,7 +11,6 @@ public class GoldenFruitHandler extends GameFeature
     public GoldenFruitHandler(boolean enabled, String featureName, int chance) {
         super(enabled, featureName);
         this.chance = chance;
-        if (!enabled) this.chance = 0;
     }
 
     public int getChance() {

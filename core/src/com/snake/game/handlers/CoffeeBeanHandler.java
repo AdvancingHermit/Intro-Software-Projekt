@@ -19,7 +19,6 @@ public class CoffeeBeanHandler extends GameFeature {
     public CoffeeBeanHandler(boolean enabled, String featureName, int chance, int coffeeSpeed, int coffeeDuration) {
         super(enabled, featureName);
         this.chance = chance;
-        if (!enabled) this.chance = 0;
         this.coffeeSpeed = coffeeSpeed;
         this.coffeDuration = coffeeDuration;
     }

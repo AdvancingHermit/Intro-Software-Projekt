@@ -9,8 +9,6 @@ public class CherryHandler extends GameFeature  {
     public CherryHandler(boolean enabled, String featureName, int chance) {
         super(enabled, featureName);
         this.chance = chance;
-        if (!enabled) this.chance = 0;
-
     }
 
     @Override
