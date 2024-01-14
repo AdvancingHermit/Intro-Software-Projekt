@@ -413,6 +413,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 				shape.end();
 				break;
 			case Login:
+				//Made by Oscar
 				ScreenUtils.clear(0, 0, 1, 1);
 				camera.update();
 				batch.setProjectionMatrix(camera.combined);
