@@ -377,7 +377,7 @@ public class SnakeProjekt extends ApplicationAdapter {
 
 			json.addStringData(leaderboard.forJSON());
 			json.addStringData(users.forJSON());
-			json.createFile("data/");
+			json.createFile();
 			Gdx.app.exit();
 		}
 		// Scene Management by Martin
