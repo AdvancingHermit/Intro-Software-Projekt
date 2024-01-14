@@ -14,7 +14,6 @@ public class Users {
         //Laver et tomt array, hvis der ikke er nogen users i JSON objektet.
         if(json.getData().get("users").toString().equals("")){
             users = new User[0];
-            System.out.println("No users found");
             return;
         }
 
@@ -47,7 +46,6 @@ public class Users {
     public void addUser(User newUser) {
         //Placerer en ny bruger i users arrayet.
         if (newUser.getUsername().equals("")) {
-            System.out.println("Username is empty");
             return;
         }
         User[] temp = new User[users.length + 1];
@@ -59,7 +57,6 @@ public class Users {
     }
 
     public void updateUser(User newUser) {
-        System.out.println(newUser);
         //Opdaterer en bruger, hvis den allerede eksisterer.
         boolean isUser = false;
         for (int i = 0; i < users.length; i++) {
