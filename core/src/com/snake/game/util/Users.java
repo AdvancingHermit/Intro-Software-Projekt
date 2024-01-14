@@ -11,6 +11,12 @@ public class Users {
     }
 
     public Users(JSON json) {
+        //Laver et tomt array, hvis der ikke er nogen users i JSON objektet.
+        if(json.getData().get("users").toString().equals("")){
+            users = new User[0];
+            return;
+        }
+
         //Splitter user dataen op i et string array af users.
         String[] temp = json.getData().get("users").toString().replace("{", "").split("}");
         users = new User[temp.length];
