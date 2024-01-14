@@ -12,6 +12,7 @@ public class Grid {
     Wall[] walls;
     int squareSize;
     Vector gridSize;
+    Vector offset;
    
 
     private int snakeAmount;
@@ -35,7 +36,7 @@ public class Grid {
         }
 
     }
-
+    //Made by Oscar
     public Rectangle[][] show(float game_width, float game_height) {
         for (Snake snake : snakes) {
             if (!snake.isDead) {
@@ -45,13 +46,12 @@ public class Grid {
             }
         }
 
-        double xOffset = ((game_width / 2) - (squareSize * gridSize.x) / 2);
-        double yOffset = ((game_height / 2) - (squareSize * gridSize.y) / 2);
+        offset = new Vector( (int) ((game_width / 2) - (squareSize * gridSize.x) / 2), (int) ((game_height / 2) - (squareSize * gridSize.y) / 2));
 
         Rectangle[][] rects = new Rectangle[gridSize.x][gridSize.y];
         for (int i = 0; i < gridSize.x; i++) {
             for (int j = 0; j < gridSize.y; j++) {
-                rects[i][j] = new Rectangle(i * squareSize + (int) xOffset, j * squareSize + (int) yOffset, squareSize,
+                rects[i][j] = new Rectangle(i * squareSize + (int) offset.x, j * squareSize + (int) offset.y, squareSize,
                         squareSize);
             }
         }

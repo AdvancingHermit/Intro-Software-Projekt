@@ -726,11 +726,9 @@ public class SnakeProjekt extends ApplicationAdapter {
 			scoreText.setText(scoreFont, "PLAYER " + (i + 1) + " SCORE");
 			float offset = -(grid.gridSize.x * grid.squareSize) / 2 - 20;
 			scoreNumText.setText(scoreFont, "" + grid.snakes[i].getScore());
-			scoreFont.draw(batch, scoreText, -offset, (0.41f + 0.075f * -i) * viewport.getScreenHeight());
-			colonFont.draw(batch, colonText, -offset + scoreText.width,
-					(float) (0.41f + 0.075f * -i) * viewport.getScreenHeight());
-			scoreFont.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20,
-					(0.41f + 0.075f * -i) * viewport.getScreenHeight());
+			scoreFont.draw(batch, scoreText, -offset,(int) ((grid.offset.y - screenHeight / 2) + gridsize.y * (grid.squareSize) - i*80*scalingFactor));
+			colonFont.draw(batch, colonText, -offset + scoreText.width, (int) ((grid.offset.y - screenHeight / 2) + gridsize.y * (grid.squareSize) - i*80*scalingFactor));
+			scoreFont.draw(batch, scoreNumText, -offset + scoreText.width + colonText.width - 20, (int) ((grid.offset.y - screenHeight / 2) + gridsize.y * (grid.squareSize) - i*80*scalingFactor));
 
 			// quicktime text
 			if (quickTimeHandler.isEnabled()) {
