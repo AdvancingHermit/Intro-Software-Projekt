@@ -44,7 +44,7 @@ public class Snake {
 
     private int highscore;
 
-    private int grow = 0;
+    private int growth = 0;
     private int score = 0;
 
     private boolean hasDeadMoved = false;
@@ -119,9 +119,9 @@ public class Snake {
             }
             handleNegativeGrowth();
 
-            if (grow > 0) {
+            if (growth > 0) {
                 counter++;
-                grow--;
+                growth--;
                 return;
             }
             if (!isDead) {
@@ -135,12 +135,12 @@ public class Snake {
 
     //Made by Oliver
     private void handleNegativeGrowth() {
-        while (grow < 0 && positions.size() > 3){
-            grow++;
+        while (growth < 0 && positions.size() > 3){
+            growth++;
             positions.remove(0);
         }
-        if (grow < 0 && positions.size() == 3){
-            grow = 0;
+        if (growth < 0 && positions.size() == 3){
+            growth = 0;
         }
     }
 
@@ -193,7 +193,7 @@ public class Snake {
     //Made by Oliver
     public void setHasEaten(Fruit fruit) {
         score += fruit.getScore();
-        grow += fruit.getGrowth();
+        growth += fruit.getGrowth();
     }
 
     public ArrayList<Vector> getPositions() {
