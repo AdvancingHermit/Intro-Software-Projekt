@@ -111,13 +111,13 @@ public class SnakeProjekt extends ApplicationAdapter {
 	MultiplayerHandler multiplayerHandler = new MultiplayerHandler(false, "1 Player", 1);
 	MultiplayerHandler multiplayerHandler2 = new MultiplayerHandler(false, "2 Player", 2);
 	MultiplayerHandler multiplayerHandler3 = new MultiplayerHandler(false, "3 Player", 3);
-	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(true, "Golden Apple", 20);
-	CherryHandler cherryHandler = new CherryHandler(true, "Cherries", 80);
-	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(true, "Quicktime", 10);
+	GoldenFruitHandler goldenFruitHandler = new GoldenFruitHandler(false, "Golden Apple", 20);
+	CherryHandler cherryHandler = new CherryHandler(false, "Cherries", 80);
+	QuickTimeHandler quickTimeHandler = new QuickTimeHandler(false, "Quicktime", 6);
 	BorderHandler borderHandler = new BorderHandler(false, "Borders");
 	SnakeReverseHandler snakeReverseHandler = new SnakeReverseHandler(false, "Reverse");
-	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(true, "Coffee", 100, 3, 10);
-	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(true, "Dragon Fruit", 25, 6);
+	CoffeeBeanHandler coffeeBeanHandler = new CoffeeBeanHandler(false, "Coffee", 100, 3, 10);
+	DragonFruitHandler dragonFruitHandler = new DragonFruitHandler(false, "Dragon Fruit", 25, 6);
 
 	GameFeature[] handlers = { wallHandler, borderHandler, quickTimeHandler, snakeReverseHandler, goldenFruitHandler,
 			cherryHandler, dragonFruitHandler,
