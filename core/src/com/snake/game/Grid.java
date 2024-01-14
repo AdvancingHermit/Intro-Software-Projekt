@@ -107,6 +107,7 @@ public class Grid {
         return walls;
     }
     //Made by Oscar
+    //Checks if the given currSnake collides with another snake
     public void checkSnakeCollision(Snake[] snakes, Snake currSnake) {
         for (Snake otherSnake : snakes) {
             if (otherSnake != currSnake) {

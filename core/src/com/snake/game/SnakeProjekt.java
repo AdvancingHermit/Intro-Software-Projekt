@@ -1055,8 +1055,8 @@ public class SnakeProjekt extends ApplicationAdapter {
 			Snake snake = grid.snakes[i];
 			ArrayList<Vector> positions = snake.getPositions();
 			for (int k = 0; k < positions.size(); k++) {
-				int cx = positions.get(k).x;
-				int cy = positions.get(k).y;
+				int cx = positions.get(k).x; // Current x position of current snake part
+				int cy = positions.get(k).y; // Current y position of current snake part
 				if (positions.get(k) == positions.get(positions.size() - 1)) {
 					// Boundary collision af Christian
 					if (cx == grid.gridSize.x || cx == -1) {
